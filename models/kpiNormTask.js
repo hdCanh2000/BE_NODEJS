@@ -3,6 +3,12 @@ const db = require('../config/database')
 const { kpiNormModel, taskModel } = require("./Index.js");
 
 const kpiNormTask = db.define('kpiNormTask', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true,
+    },
     kpiNorm_id: {
         type: DataTypes.INTEGER,
     },

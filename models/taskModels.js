@@ -3,7 +3,7 @@ const db = require('../config/database');
 const {unitModel, missionModel } = require("./Index.js");
 
 const tasks = db.define('tasks', {
-    task_id  : {
+    id  : {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
@@ -60,16 +60,16 @@ const tasks = db.define('tasks', {
 });
 
 unitModel.hasMany(tasks, {
-    targetKey: 'unit_id',
+    targetKey: 'id',
     foreignKey: 'unit_id',
 });
-tasks.belongsTo(unitModel, { foreignKey: 'unit_id', targetKey: 'unit_id' });
+tasks.belongsTo(unitModel, { foreignKey: 'unit_id', targetKey: 'id' });
 
 tasks.hasMany(missionModel, {
-    targetKey: 'mission_id',
+    targetKey: 'id',
     foreignKey: 'mission_id',
 });
-missionModel.belongsTo(tasks, { foreignKey: 'mission_id', targetKey: 'mission_id' });
+missionModel.belongsTo(tasks, { foreignKey: 'mission_id', targetKey: 'id' });
 
 
 module.exports = tasks;

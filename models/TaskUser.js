@@ -3,6 +3,12 @@ const db = require('../config/database')
 const { taskModel, userModel } = require("./Index.js");
 
 const userTask = db.define('userTask', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true,
+    },
     user_id: {
         type: DataTypes.INTEGER,
     },

@@ -3,6 +3,12 @@ const db = require('../config/database')
 const { requirementModel, positionModel } = require("./Index.js");
 
 const positionRequirement = db.define('positionRequirement', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true,
+    },
     requirement_id: {
         type: DataTypes.INTEGER,
     },

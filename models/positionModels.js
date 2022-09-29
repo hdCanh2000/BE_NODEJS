@@ -3,7 +3,7 @@ const db = require('../config/database');
 const {positionLevelModel } = require("./Index.js");
 
 const positions = db.define('positions', {
-    positions_id: {
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
@@ -32,10 +32,10 @@ const positions = db.define('positions', {
 });
 
 positionLevelModel.hasMany(positions, {
-    targetKey: 'position_levels_id',
+    targetKey: 'id',
     foreignKey: 'position_levels_id',
 });
-positions.belongsTo(positionLevelModel, { foreignKey: 'position_levels_id', targetKey: 'position_levels_id' });
+positions.belongsTo(positionLevelModel, { foreignKey: 'position_levels_id', targetKey: 'id' });
 
 
 module.exports = positions;

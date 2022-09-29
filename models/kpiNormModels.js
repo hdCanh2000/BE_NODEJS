@@ -3,7 +3,7 @@ const db = require('../config/database');
 const {departmentModel, unitModel } = require("./Index.js");
 
 const kpiNorms = db.define('kpiNorms', {
-    kpiNorm_id: {
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
@@ -35,16 +35,16 @@ const kpiNorms = db.define('kpiNorms', {
 });
 
 departmentModel.hasMany(kpiNorms, {
-    targetKey: 'department_id',
+    targetKey: 'id',
     foreignKey: 'department_id',
 });
-kpiNorms.belongsTo(departmentModel, { foreignKey: 'department_id', targetKey: 'department_id' });
+kpiNorms.belongsTo(departmentModel, { foreignKey: 'department_id', targetKey: 'id' });
 
 unitModel.hasMany(kpiNorms, {
-    targetKey: 'unit_id',
+    targetKey: 'id',
     foreignKey: 'unit_id',
 });
-kpiNorms.belongsTo(unitModel, { foreignKey: 'unit_id', targetKey: 'unit_id' });
+kpiNorms.belongsTo(unitModel, { foreignKey: 'unit_id', targetKey: 'id' });
 
 
 module.exports = kpiNorms;

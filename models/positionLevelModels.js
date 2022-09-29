@@ -3,7 +3,7 @@ const db = require('../config/database');
 const { positionModel } = require("./Index.js");
 
 const positionLevels = db.define('positionLevels', {
-    position_levels_id: {
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,

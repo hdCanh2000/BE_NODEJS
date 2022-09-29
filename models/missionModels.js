@@ -3,7 +3,7 @@ const db = require('../config/database');
 const {unitModel } = require("./Index.js");
 
 const missions = db.define('missions', {
-    mission_id  : {
+    id  : {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
@@ -38,9 +38,9 @@ const missions = db.define('missions', {
 });
 
 unitModel.hasMany(missions, {
-    targetKey: 'unit_id',
+    targetKey: 'id',
     foreignKey: 'unit_id',
 });
-missions.belongsTo(unitModel, { foreignKey: 'unit_id', targetKey: 'unit_id' });
+missions.belongsTo(unitModel, { foreignKey: 'unit_id', targetKey: 'id' });
 
 module.exports = missions;

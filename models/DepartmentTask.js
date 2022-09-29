@@ -3,6 +3,12 @@ const db = require('../config/database')
 const { taskModel, departmentModel } = require("./Index.js");
 
 const taskDepartment = db.define('taskDepartment', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true,
+    },
     department_id: {
         type: DataTypes.INTEGER,
     },
