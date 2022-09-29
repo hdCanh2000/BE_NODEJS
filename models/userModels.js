@@ -26,7 +26,6 @@ const users = db.define('users',{
     },
     code:{
       type: DataTypes.TEXT,
-      allowNull: false,
       unique: true
     },
     name:{
@@ -34,15 +33,12 @@ const users = db.define('users',{
       },
     dateOfBirth:{
         type: DataTypes.DATE,
-        allowNull: false,
     },
     dateOfJoin:{
         type: DataTypes.DATE,
-        allowNull: false,
     },
     phone:{
       type: DataTypes.INTEGER,
-      allowNull: false
     },
     address:{
         type: DataTypes.TEXT,
@@ -53,7 +49,6 @@ const users = db.define('users',{
     },
     departmentId:{
         type: DataTypes.INTEGER,
-        allowNull: false,
     }
 });
 
