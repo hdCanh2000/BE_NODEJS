@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const db = require('../config/database')
-const { kpiNormModel, positionModel } = require("./index.js");
+const { kpiNormModel, positionModel } = require("./Index.js");
 
 const kpiNormPosition = db.define('kpiNormPosition', {
     kpiNorm_id: {

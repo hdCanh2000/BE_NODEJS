@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const db = require('../config/database')
-const { missionModel, departmentModel } = require("./index.js");
+const { missionModel, departmentModel } = require("./Index.js");
 
 const missionDepartment = db.define('missionDepartment', {
     department_id: {

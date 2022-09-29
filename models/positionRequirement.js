@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const db = require('../config/database')
-const { requirementModel, positionModel } = require("./index.js");
+const { requirementModel, positionModel } = require("./Index.js");
 
 const positionRequirement = db.define('positionRequirement', {
     requirement_id: {

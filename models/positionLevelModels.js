@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const db = require('../config/database');
-const { positionModel } = require("./index.js");
+const { positionModel } = require("./Index.js");
 
 const positionLevels = db.define('positionLevels', {
     position_levels_id: {

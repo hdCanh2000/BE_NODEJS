@@ -1,21 +1,21 @@
-module.exports.userModel = require('./userModels');
-module.exports.departmentModel = require('./departmentModels');
-module.exports.userDepartment = require('./userDepartment');
-module.exports.unitModel = require('./unitModels');
-module.exports.requirementModel = require('./requirementModels');
-module.exports.positionLevelModel = require('./positionLevelModels');
-module.exports.kpiNormModel = require('./kpiNormModels');
-module.exports.positionModel = require('./positionModels');
-module.exports.positionRequirement = require('./positionRequirement');
-module.exports.kpiNormPosition = require('./kpiNormPosition');
-module.exports.keyModel = require('./keyModels');
-module.exports.missionModel = require('./missionModels');
-module.exports.keyMission = require('./keyMission');
-module.exports.missionDepartment = require('./missionDepartment');
-module.exports.taskModel = require('./taskModels');
-module.exports.kpiNormTask = require('./kpiNormTask');
-module.exports.taskDepartment = require('./taskDepartment');
-module.exports.userTask = require('./userTask');
+module.exports.userModel = require('./UserModels');
+module.exports.departmentModel = require('./DepartmentModels');
+module.exports.userDepartment = require('./UserDepartment');
+module.exports.unitModel = require('./UnitModels');
+module.exports.requirementModel = require('./RequirementModels');
+module.exports.positionLevelModel = require('./PositionLevelModels');
+module.exports.kpiNormModel = require('./KPINormModels');
+module.exports.positionModel = require('./PositionModels');
+module.exports.positionRequirement = require('./PositionRequirement');
+module.exports.kpiNormPosition = require('./KPINormPosition');
+module.exports.keyModel = require('./KeyModels');
+module.exports.missionModel = require('./MissionModels');
+module.exports.keyMission = require('./KeyMission');
+module.exports.missionDepartment = require('./MissionDepartment');
+module.exports.taskModel = require('./TaskModels');
+module.exports.kpiNormTask = require('./KPINormTask');
+module.exports.taskDepartment = require('./TaskDepartment');
+module.exports.userTask = require('./UserTask');
 
 
 
