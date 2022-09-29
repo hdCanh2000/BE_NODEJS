@@ -1,6 +1,5 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 const db = require('../config/database');
-const { positionModel } = require("./Index.js");
 
 const positionLevels = db.define('positionLevels', {
     id: {
@@ -12,14 +11,13 @@ const positionLevels = db.define('positionLevels', {
     name: {
         type: DataTypes.TEXT,
         allowNull: false,
-        unique: true
+        unique: true,
     },
     code: {
         type: DataTypes.TEXT,
         allowNull: false,
-        unique: true
+        unique: true,
     },
 });
-
 
 module.exports = positionLevels;

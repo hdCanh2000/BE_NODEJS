@@ -1,9 +1,9 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 const db = require('../config/database');
-const token = require("./tokenModel");
+const token = require('./Token');
 
-const users = db.define('users',{
-    id:{
+const users = db.define('users', {
+    user_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
@@ -21,35 +21,35 @@ const users = db.define('users',{
         type: DataTypes.TEXT,
     },
     role: {
-        type: DataTypes.ENUM(["user", "admin", "manager", "super_admin"]),
-        defaultValue: "user",
+        type: DataTypes.ENUM(['user', 'admin', 'manager', 'super_admin']),
+        defaultValue: 'user',
     },
-    code:{
+    code: {
       type: DataTypes.TEXT,
-      unique: true
+      unique: true,
     },
-    name:{
+    name: {
         type: DataTypes.TEXT,
       },
-    dateOfBirth:{
+    dateOfBirth: {
         type: DataTypes.DATE,
     },
-    dateOfJoin:{
+    dateOfJoin: {
         type: DataTypes.DATE,
     },
-    phone:{
+    phone: {
       type: DataTypes.INTEGER,
     },
-    address:{
+    address: {
         type: DataTypes.TEXT,
     },
-    position:{
-        type: DataTypes.ENUM(["Nhân viên", "Quản lý"]),
-        defaultValue: "Nhân viên"
+    position: {
+        type: DataTypes.ENUM(['Nhân viên', 'Quản lý']),
+        defaultValue: 'Nhân viên',
     },
-    departmentId:{
+    departmentId: {
         type: DataTypes.INTEGER,
-    }
+    },
 });
 
 users.hasMany(token, {

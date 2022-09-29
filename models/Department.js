@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 const db = require('../config/database');
 
 const departments = db.define('departments', {
@@ -11,23 +11,23 @@ const departments = db.define('departments', {
     name: {
         type: DataTypes.TEXT,
         allowNull: false,
-        unique: true
+        unique: true,
     },
     description: {
         type: DataTypes.TEXT,
     },
-    address:{
+    address: {
         type: DataTypes.TEXT,
     },
-    slug:{
+    slug: {
         type: DataTypes.TEXT,
     },
     organizationLevel: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
     },
     isActive: {
         type: DataTypes.BOOLEAN,
-        defaultValue: true
+        defaultValue: true,
     },
 });
 

@@ -1,8 +1,10 @@
 const Sequelize = require('sequelize');
 
-const db = new Sequelize('dwt', 'postgres', 'vutuan113', {
+const db = new Sequelize('dwt', 'postgres', 'huonghuong1412', {
     host: 'localhost',
-    dialect: 'postgres'
+    dialect: 'postgres',
   });
+
 db.sync();
+
 module.exports = db;

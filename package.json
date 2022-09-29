@@ -1,10 +1,12 @@
 {
   "name": "dwt_be",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "build-dist": "./node_modules/typescript/bin/tsc",
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -19,16 +21,33 @@
   "description": "",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
     "method-override": "^3.0.0",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.20",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "pg": "^8.8.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.23.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.23",
+    "@types/express": "^4.17.1",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "eslint": "^8.24.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-node": "^4.1.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.7.1",
+    "sequelize-cli": "^6.4.1",
+    "typescript": "^4.8.4"
   }
 }

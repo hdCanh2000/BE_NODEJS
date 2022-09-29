@@ -1,27 +1,27 @@
+const bcrypt = require('bcrypt');
 const models = require('../../models/index');
-var bcrypt = require("bcrypt");
 
-exports.findUser = async (user_id) =>{
+exports.findUser = async (user_id) => {
     try {
-        const findUser = await models.userModel.findOne({where:{user_id: user_id}});
+        const findUser = await models.userModel.findOne({ where: { user_id } });
         return findUser;
     } catch (error) {
-        console.log(error);
+        return error;
     }
 };
 
-exports.updateUserById = async(email, name, address, phone, dateOfBirth, user_id) =>{
+exports.updateUserById = async (email, name, address, phone, dateOfBirth, user_id) => {
     try {
         const updateUser = await models.userModel.update({
-            email:email,
-            name: name,
-            phone: phone,
-            address: address,
-            dateOfBirth: dateOfBirth,
-          },{where: {user_id: user_id}});
+            email,
+            name,
+            phone,
+            address,
+            dateOfBirth,
+        }, { where: { user_id } });
         return updateUser;
     } catch (error) {
-        console.log(error);
+        return error;
     }
 };
 
@@ -53,15 +53,15 @@ exports.updateUserById = async(email, name, address, phone, dateOfBirth, user_id
 // };
 
 exports.createUser = async (email, password) => {
-  const salt = await bcrypt.genSalt();
-  const hashPassword = await bcrypt.hash(password, salt);
-  try {
-      const newUser = await models.userModel.create({
-          email: email,
-          password: hashPassword,
-      });
-      return newUser;
-  } catch (error) {
-      console.log(error);
-  }
+    const salt = await bcrypt.genSalt();
+    const hashPassword = await bcrypt.hash(password, salt);
+    try {
+        const newUser = await models.userModel.create({
+            email,
+            password: hashPassword,
+        });
+        return newUser;
+    } catch (error) {
+        return error;
+    }
 };

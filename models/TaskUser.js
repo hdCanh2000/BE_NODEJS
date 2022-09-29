@@ -1,6 +1,6 @@
-const { Sequelize, DataTypes } = require("sequelize");
-const db = require('../config/database')
-const { taskModel, userModel } = require("./Index.js");
+const { DataTypes } = require('sequelize');
+const db = require('../config/database');
+const { taskModel, userModel } = require('./index');
 
 const userTask = db.define('userTask', {
     id: {
@@ -13,15 +13,15 @@ const userTask = db.define('userTask', {
         type: DataTypes.INTEGER,
     },
     task_id: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
     },
     isResponsible: {
         type: DataTypes.BOOLEAN,
-        defaultValue: true
-    }
+        defaultValue: true,
+    },
 });
 
-    userModel.belongsToMany(taskModel, { through: userTask });
-    taskModel.belongsToMany(userModel, { through: userTask });
+userModel.belongsToMany(taskModel, { through: userTask });
+taskModel.belongsToMany(userModel, { through: userTask });
 
 module.exports = userTask;

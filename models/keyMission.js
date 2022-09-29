@@ -1,6 +1,6 @@
-const { Sequelize, DataTypes } = require("sequelize");
-const db = require('../config/database')
-const { missionModel, keyModel } = require("./Index.js");
+const { DataTypes } = require('sequelize');
+const db = require('../config/database');
+const { missionModel, keyModel } = require('./index');
 
 const keyMission = db.define('keyMission', {
     id: {
@@ -13,14 +13,14 @@ const keyMission = db.define('keyMission', {
         type: DataTypes.INTEGER,
     },
     mission_id: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
     },
     compare: {
-        type: DataTypes.TEXT
+        type: DataTypes.TEXT,
     },
     value: {
-        type: DataTypes.INTEGER
-    }
+        type: DataTypes.INTEGER,
+    },
 });
 
 missionModel.belongsToMany(keyModel, { through: keyMission });

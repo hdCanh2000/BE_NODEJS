@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 const db = require('../config/database');
 
 const requirements = db.define('requirements', {
@@ -11,7 +11,7 @@ const requirements = db.define('requirements', {
     name: {
         type: DataTypes.TEXT,
         allowNull: false,
-        unique: true
+        unique: true,
     },
     description: {
         type: DataTypes.TEXT,

@@ -1,9 +1,9 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 const db = require('../config/database');
-const {unitModel } = require("./Index.js");
+const { unitModel } = require('./index');
 
 const missions = db.define('missions', {
-    id  : {
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
@@ -12,29 +12,29 @@ const missions = db.define('missions', {
     name: {
         type: DataTypes.TEXT,
         allowNull: false,
-        unique: true
+        unique: true,
     },
     unit_id: {
         type: DataTypes.INTEGER,
     },
-    description:{
-        type: DataTypes.TEXT
+    description: {
+        type: DataTypes.TEXT,
     },
-    quantity:{
-        type: DataTypes.INTEGER
+    quantity: {
+        type: DataTypes.INTEGER,
     },
     kpiValue: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
     },
     startTime: {
-        type: DataTypes.DATE
+        type: DataTypes.DATE,
     },
-    endTime:{
-        type: DataTypes.DATE
+    endTime: {
+        type: DataTypes.DATE,
     },
-    manday:{
-        type: DataTypes.INTEGER
-    }
+    manday: {
+        type: DataTypes.INTEGER,
+    },
 });
 
 unitModel.hasMany(missions, {

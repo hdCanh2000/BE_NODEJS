@@ -1,6 +1,6 @@
-const { Sequelize, DataTypes } = require("sequelize");
-const db = require('../config/database')
-const { departmentModel, userModel } = require("./Index.js");
+const { DataTypes } = require('sequelize');
+const db = require('../config/database');
+const { departmentModel, userModel } = require('./index');
 
 const userDepartment = db.define('userDepartment', {
     id: {
@@ -13,11 +13,11 @@ const userDepartment = db.define('userDepartment', {
         type: DataTypes.INTEGER,
     },
     department_id: {
-        type: DataTypes.INTEGER
-    }
+        type: DataTypes.INTEGER,
+    },
 });
 
-    userModel.belongsToMany(departmentModel, { through: userDepartment });
-    departmentModel.belongsToMany(userModel, { through: userDepartment });
+userModel.belongsToMany(departmentModel, { through: userDepartment });
+departmentModel.belongsToMany(userModel, { through: userDepartment });
 
 module.exports = userDepartment;

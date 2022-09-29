@@ -1,9 +1,9 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 const db = require('../config/database');
-const {unitModel, missionModel } = require("./Index.js");
+const { unitModel, missionModel } = require('./index');
 
 const tasks = db.define('tasks', {
-    id  : {
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
@@ -12,51 +12,51 @@ const tasks = db.define('tasks', {
     name: {
         type: DataTypes.TEXT,
         allowNull: false,
-        unique: true
+        unique: true,
     },
     unit_id: {
         type: DataTypes.INTEGER,
     },
-    description:{
-        type: DataTypes.TEXT
+    description: {
+        type: DataTypes.TEXT,
     },
-    quantity:{
-        type: DataTypes.INTEGER
+    quantity: {
+        type: DataTypes.INTEGER,
     },
     kpiValue: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
     },
-    startDate:{
-        type: DataTypes.DATE
+    startDate: {
+        type: DataTypes.DATE,
     },
-    deadlineDate:{
-        type: DataTypes.DATE
+    deadlineDate: {
+        type: DataTypes.DATE,
     },
     startTime: {
-        type: DataTypes.TIME
+        type: DataTypes.TIME,
     },
-    deadlineTime:{
-        type: DataTypes.TIME
+    deadlineTime: {
+        type: DataTypes.TIME,
     },
-    manday:{
-        type: DataTypes.INTEGER
+    manday: {
+        type: DataTypes.INTEGER,
     },
     status: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
     },
-    estimateMD:{
-        type: DataTypes.INTEGER
+    estimateMD: {
+        type: DataTypes.INTEGER,
     },
-    priority:{
-        type: DataTypes.INTEGER
+    priority: {
+        type: DataTypes.INTEGER,
     },
-    note:{
-        type: DataTypes.TEXT
+    note: {
+        type: DataTypes.TEXT,
     },
     mission_id: {
         type: DataTypes.INTEGER,
-        allowNull: false
-    }
+        allowNull: false,
+    },
 });
 
 unitModel.hasMany(tasks, {
@@ -70,6 +70,5 @@ tasks.hasMany(missionModel, {
     foreignKey: 'mission_id',
 });
 missionModel.belongsTo(tasks, { foreignKey: 'mission_id', targetKey: 'id' });
-
 
 module.exports = tasks;

@@ -1,12 +1,12 @@
-const express = require ("express");
-const departmentController = require ("./departmentController");
-const auth = require ("../../middleware/auth");
+const express = require('express');
+const auth = require('../../middleware/auth');
+const departmentController = require('./departmentController');
 
 const router = express.Router();
 
-router.get('/', auth("admin"),departmentController.getAllDepartment);
-router.get('/:id', auth("admin"), departmentController.getDepartmentDetail);
-router.post('/', auth("admin"), departmentController.addDepartment);
-router.put('/:id', auth("admin"), departmentController.updateDepartment);
+router.get('/', departmentController.getAllDepartment);
+router.get('/:id', auth('admin'), departmentController.getDepartmentDetail);
+router.post('/', auth('admin'), departmentController.addDepartment);
+router.put('/:id', auth('admin'), departmentController.updateDepartment);
 
 module.exports = router;

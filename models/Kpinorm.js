@@ -1,6 +1,6 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 const db = require('../config/database');
-const {departmentModel, unitModel } = require("./Index.js");
+const { departmentModel, unitModel } = require('./index');
 
 const kpiNorms = db.define('kpiNorms', {
     id: {
@@ -12,7 +12,7 @@ const kpiNorms = db.define('kpiNorms', {
     name: {
         type: DataTypes.TEXT,
         allowNull: false,
-        unique: true
+        unique: true,
     },
     description: {
         type: DataTypes.TEXT,
@@ -20,7 +20,7 @@ const kpiNorms = db.define('kpiNorms', {
     manday: {
         type: DataTypes.INTEGER,
     },
-    hr:{
+    hr: {
         type: DataTypes.TEXT,
     },
     quantity: {
@@ -31,7 +31,7 @@ const kpiNorms = db.define('kpiNorms', {
     },
     department_id: {
         type: DataTypes.INTEGER,
-    }
+    },
 });
 
 departmentModel.hasMany(kpiNorms, {
@@ -45,6 +45,5 @@ unitModel.hasMany(kpiNorms, {
     foreignKey: 'unit_id',
 });
 kpiNorms.belongsTo(unitModel, { foreignKey: 'unit_id', targetKey: 'id' });
-
 
 module.exports = kpiNorms;

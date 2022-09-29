@@ -1,6 +1,6 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 const db = require('../config/database');
-const {positionLevelModel } = require("./Index.js");
+const { positionLevelModel } = require('./index');
 
 const positions = db.define('positions', {
     id: {
@@ -12,23 +12,23 @@ const positions = db.define('positions', {
     name: {
         type: DataTypes.TEXT,
         allowNull: false,
-        unique: true
+        unique: true,
     },
     description: {
         type: DataTypes.TEXT,
     },
     address: {
-        type: DataTypes.TEXT
+        type: DataTypes.TEXT,
     },
     manager: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
     },
     jobType: {
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
     },
-    position_levels_id:{
-        type: DataTypes.INTEGER
-    }
+    position_levels_id: {
+        type: DataTypes.INTEGER,
+    },
 });
 
 positionLevelModel.hasMany(positions, {
@@ -36,6 +36,5 @@ positionLevelModel.hasMany(positions, {
     foreignKey: 'position_levels_id',
 });
 positions.belongsTo(positionLevelModel, { foreignKey: 'position_levels_id', targetKey: 'id' });
-
 
 module.exports = positions;

@@ -1,6 +1,6 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize');
 const db = require('../config/database');
-const {unitModel } = require("./Index.js");
+const { unitModel } = require('./index');
 
 const keys = db.define('keys', {
     id: {
@@ -12,7 +12,7 @@ const keys = db.define('keys', {
     name: {
         type: DataTypes.TEXT,
         allowNull: false,
-        unique: true
+        unique: true,
     },
     unit_id: {
         type: DataTypes.INTEGER,

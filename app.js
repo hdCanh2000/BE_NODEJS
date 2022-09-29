@@ -1,41 +1,40 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-var methodOverride = require("method-override");
-const config = require('./config/passport');
+const methodOverride = require('method-override');
 const passport = require('passport');
-const db = require('./config/database'); 
 const morgan = require('morgan');
-const routes = require('./routes')
+const config = require('./config/passport');
+const db = require('./config/database');
+const routes = require('./routes.ts');
 
 const app = express();
 
-//connect database
-const testDatabase = async(req, res) => {
+// connect database
+const testDatabase = async () => {
   try {
     await db.authenticate();
-    console.log('Connection has been established successfully.');
+    // console.log('Connection has been established successfully.');
   } catch (error) {
-    console.error('Unable to connect to the database:', error);
+    // console.error('Unable to connect to the database:', error);
   }
-}
+};
 testDatabase();
 
 app.use(
-    methodOverride((req, res) => {
-    if (req.body && typeof req.body === "object" && "_method" in req.body) {
-      const method = req.body._method;
-      delete req.body._method;
+  methodOverride((req) => {
+    if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+      const { method } = req.body;
+      delete req.body.method;
       return method;
     }
-  })
+    return null;
+  }),
 );
+
 app.use(express.json());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
-//api routes
+// api routes
 app.use('/api', routes);
 
 app.use(passport.initialize());

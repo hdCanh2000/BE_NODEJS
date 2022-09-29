@@ -1,6 +1,6 @@
-const { Sequelize, DataTypes } = require("sequelize");
-const db = require('../config/database')
-const { kpiNormModel, taskModel } = require("./Index.js");
+const { DataTypes } = require('sequelize');
+const db = require('../config/database');
+const { kpiNormModel, taskModel } = require('./index');
 
 const kpiNormTask = db.define('kpiNormTask', {
     id: {
@@ -13,8 +13,8 @@ const kpiNormTask = db.define('kpiNormTask', {
         type: DataTypes.INTEGER,
     },
     task_id: {
-        type: DataTypes.INTEGER
-    }
+        type: DataTypes.INTEGER,
+    },
 });
 
 kpiNormModel.belongsToMany(taskModel, { through: kpiNormTask });

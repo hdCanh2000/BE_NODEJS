@@ -1,8 +1,8 @@
 const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
-var dotenv = require("dotenv");
-const userModel = require("../models/userModels");
-dotenv.config();
+const dotenv = require('dotenv');
+const userModel = require('../models/User');
 
+dotenv.config();
 
 const jwtOptions = {
     secretOrKey: process.env.ACCESS_TOKEN_SECRET,
@@ -11,7 +11,7 @@ const jwtOptions = {
 
   const jwtVerify = async (payload, done) => {
     try {
-      const user = await userModel.findOne({ where: {user_id: payload.user_id} });
+      const user = await userModel.findOne({ where: { user_id: payload.user_id } });
       if (!user) {
         return done(null, false);
       }
