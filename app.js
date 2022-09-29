@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 var methodOverride = require("method-override");
 const config = require('./config/passport');
+const index = require('./models/index');
 const passport = require('passport');
 const db = require('./config/database'); 
 const morgan = require('morgan');
