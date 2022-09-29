@@ -1,0 +1,28 @@
+{
+  "name": "dwt_be",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chutrunghieu/DWT_BE.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chutrunghieu/DWT_BE/issues"
+  },
+  "homepage": "https://github.com/chutrunghieu/DWT_BE#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^4.18.1",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.20",
+    "passport-jwt": "^4.0.0",
+    "pg": "^8.8.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.23.2"
+  }
+}
