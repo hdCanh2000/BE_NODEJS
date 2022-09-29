@@ -5,7 +5,7 @@ const verifyCallback = (req, resolve, reject, roleRights) => async (err, user) =
     return reject('Please authenticate !!!');
   }
   req.user = user;
-  if (!roleRights || roleRights !== user.role) {
+  if (!roleRights || !roleRights.includes(user.role)) {
     if (!user.role === 'user') {
       return reject('You must be logged in with User permission to view this page.');
     } else if((!user.role === 'manager') ){

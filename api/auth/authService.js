@@ -1,8 +1,7 @@
-const model = require('../models/index');
-const bcrypt = require("bcrypt");
+const model = require('../../models/index');
 const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv");
 const { Op } = require("sequelize");
+const dotenv = require("dotenv");
 dotenv.config();
 
 
@@ -41,17 +40,4 @@ exports.destroyToken = async (value) => {
     }
 };
 
-exports.createUser = async (email, password) => {
-    const salt = await bcrypt.genSalt();
-    const hashPassword = await bcrypt.hash(password, salt);
-    try {
-        const newUser = await model.userModel.create({
-            email: email,
-            password: hashPassword,
-        });
-        return newUser;
-    } catch (error) {
-        console.log(error);
-    }
-};
 

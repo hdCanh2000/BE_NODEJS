@@ -5,7 +5,7 @@ const config = require('./config/passport');
 const passport = require('passport');
 const db = require('./config/database'); 
 const morgan = require('morgan');
-
+const routes = require('./routes')
 
 const app = express();
 
@@ -34,6 +34,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
+
+//api routes
+app.use('/api', routes);
 
 app.use(passport.initialize());
 passport.use('jwt', config.jwtStrategy);
