@@ -1,7 +1,8 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const db = require('../config/database');
+const { positionModel } = require("./Index.js");
 
-const departments = db.define('departments', {
+const positionLevels = db.define('positionLevels', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -13,22 +14,12 @@ const departments = db.define('departments', {
         allowNull: false,
         unique: true
     },
-    description: {
+    code: {
         type: DataTypes.TEXT,
-    },
-    address:{
-        type: DataTypes.TEXT,
-    },
-    slug:{
-        type: DataTypes.TEXT,
-    },
-    organizationLevel: {
-        type: DataTypes.INTEGER
-    },
-    isActive: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true
+        allowNull: false,
+        unique: true
     },
 });
 
-module.exports = departments;
+
+module.exports = positionLevels;

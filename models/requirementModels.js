@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const db = require('../config/database');
 
-const departments = db.define('departments', {
+const requirements = db.define('requirements', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -16,19 +16,6 @@ const departments = db.define('departments', {
     description: {
         type: DataTypes.TEXT,
     },
-    address:{
-        type: DataTypes.TEXT,
-    },
-    slug:{
-        type: DataTypes.TEXT,
-    },
-    organizationLevel: {
-        type: DataTypes.INTEGER
-    },
-    isActive: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true
-    },
 });
 
-module.exports = departments;
+module.exports = requirements;

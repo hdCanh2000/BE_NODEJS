@@ -3,7 +3,7 @@ const db = require('../config/database');
 const token = require("./tokenModel");
 
 const users = db.define('users',{
-    user_id:{
+    id:{
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
