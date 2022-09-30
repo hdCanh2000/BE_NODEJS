@@ -3,7 +3,7 @@ const db = require('../config/database');
 const token = require('./token.model');
 
 const users = db.define('users', {
-    user_id: {
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
@@ -47,15 +47,12 @@ const users = db.define('users', {
         type: DataTypes.ENUM(['Nhân viên', 'Quản lý']),
         defaultValue: 'Nhân viên',
     },
-    departmentId: {
-        type: DataTypes.INTEGER,
-    },
 });
 
 users.hasMany(token, {
-    targetKey: 'user_id',
+    targetKey: 'id',
     foreignKey: 'user_id',
   });
-token.belongsTo(users, { foreignKey: 'user_id', targetKey: 'user_id' });
+token.belongsTo(users, { foreignKey: 'user_id', targetKey: 'id' });
 
 module.exports = users;
