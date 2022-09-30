@@ -18,17 +18,15 @@ exports.createDepartment = async (name, description, slug, address) => {
     }
 };
 
-exports.updateDepartmentById = async (department_id, name, description, slug, address) => {
+exports.updateDepartmentById = async (id, name, description, slug, address) => {
     try {
-        const update = await model.productModel.update({
+        const update = await model.departmentModel.update({
             name,
             description,
             slug,
             address,
         }, {
-            where: {
-                department_id,
-            },
+            where: { id },
         });
         return update;
     } catch (error) {
@@ -39,7 +37,7 @@ exports.updateDepartmentById = async (department_id, name, description, slug, ad
 exports.detailDepartment = async (id) => {
     try {
         const detail = await model.departmentModel.findOne({
-            where: { department_id: id },
+            where: { id },
         });
         return detail;
     } catch (error) {

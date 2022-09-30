@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
+const jwt = require('jsonwebtoken');
 const model = require('../../models/index');
 const authService = require('./auth.service');
 
@@ -30,7 +31,7 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: 'Wrong Password', data: {} });
     }
     const { accessToken, refreshToken } = await authService.signToken(user);
-    // const newToken = await model.tokenModel.create({ data_token: refreshToken, user_id: user.user_id });
+    await model.tokenModel.create({ data_token: refreshToken, user_id: user.id });
     return res.status(200).json({ message: 'Success!', data: [accessToken, refreshToken] });
   } catch (error) {
     return res.status(404).json({ message: 'Error!' });
@@ -57,18 +58,19 @@ exports.refreshToken = async (req, res) => {
       },
     });
     if (!token) return res.sendStatus(403).json({ message: 'Token not found!' });
-    // jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, decoded) => {
-    //   console.log('--------------------------------------------', decoded);
-    //   if (err) return res.sendStatus(403).json({ message: 'Expired' });
-    //   const accessToken = jwt.sign({ user_id: decoded.user_id, email: decoded.email, role: decoded.role }, process.env.ACCESS_TOKEN_SECRET, {
-    //     expiresIn: '1h',
-    //   });
-    //   const refreshToken = jwt.sign({ user_id: decoded.user_id, email: decoded.email, role: decoded.role }, process.env.REFRESH_TOKEN_SECRET, {
-    //     expiresIn: '1d',
-    //   });
-    //   const newToken = await model.tokenModel.update({ data_token: refreshToken }, { where: { token_id: token.token_id } });
-    //   return res.status(200).json({ message: 'Success!!', data: [accessToken, refreshToken]});
-    // });
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, decoded) => {
+      // eslint-disable-next-line no-console
+      console.log('--------------------------------------------', decoded);
+      if (err) return res.sendStatus(403).json({ message: 'Expired' });
+      const accessToken = jwt.sign({ user_id: decoded.user_id, email: decoded.email, role: decoded.role }, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: '1h',
+      });
+      const reFreshToken = jwt.sign({ user_id: decoded.user_id, email: decoded.email, role: decoded.role }, process.env.REFRESH_TOKEN_SECRET, {
+        expiresIn: '1d',
+      });
+      await model.tokenModel.update({ data_token: refreshToken }, { where: { token_id: token.id } });
+      return res.status(200).json({ message: 'Success!!', data: [accessToken, reFreshToken] });
+    });
   } catch (error) {
     return res.status(404).json({ message: 'Error!' });
   }

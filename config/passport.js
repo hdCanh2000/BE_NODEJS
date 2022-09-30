@@ -1,6 +1,6 @@
 const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
 const dotenv = require('dotenv');
-const userModel = require('../models/user.model');
+const models = require('../models/index');
 
 dotenv.config();
 
@@ -11,7 +11,7 @@ const jwtOptions = {
 
   const jwtVerify = async (payload, done) => {
     try {
-      const user = await userModel.findOne({ where: { user_id: payload.user_id } });
+      const user = await models.userModel.findOne({ where: { id: payload.id } });
       if (!user) {
         return done(null, false);
       }

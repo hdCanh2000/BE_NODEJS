@@ -23,9 +23,6 @@ const kpiNorms = db.define('kpiNorms', {
     hr: {
         type: DataTypes.TEXT,
     },
-    quantity: {
-        type: DataTypes.INTEGER,
-    },
     unit_id: {
         type: DataTypes.INTEGER,
     },
