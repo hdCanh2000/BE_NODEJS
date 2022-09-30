@@ -29,7 +29,7 @@ const departments = db.define('departments', {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
     },
-    parentId: {
+    parent_id: {
         type: DataTypes.INTEGER,
     },
 });
