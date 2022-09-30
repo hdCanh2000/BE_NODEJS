@@ -29,6 +29,9 @@ const departments = db.define('departments', {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
     },
+    parentId: {
+        type: DataTypes.INTEGER,
+    },
 });
 
 module.exports = departments;
