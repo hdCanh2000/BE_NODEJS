@@ -1,5 +1,5 @@
 const model = require('../../models/index');
-const userService = require('./userService');
+const userService = require('./user.service');
 
 exports.addUser = async (req, res) => {
     const { email, password, confPassword } = req.body;

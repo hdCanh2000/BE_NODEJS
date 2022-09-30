@@ -4,7 +4,7 @@ const passport = require('passport');
 const morgan = require('morgan');
 const config = require('./config/passport');
 const db = require('./config/database');
-const routes = require('./routes.ts');
+const routes = require('./routes');
 
 const app = express();
 

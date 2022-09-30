@@ -1,4 +1,4 @@
-const departmentService = require('./departmentService');
+const departmentService = require('./department.service');
 const model = require('../../models/index');
 
 exports.addDepartment = async (req, res) => {

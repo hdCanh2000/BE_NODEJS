@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/database');
-const token = require('./Token');
+const token = require('./token.model');
 
 const users = db.define('users', {
     user_id: {
