@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const db = require('../config/database');
 
 const token = db.define('token', {
-    token_id: {
+    id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         allowNull: false,
