@@ -1,4 +1,1 @@
-module.exports.compareTwoNumber = (a: number, b: number) => {
-    console.log(a+b);
-    return a - b;
-}
+module.exports.compareTwoNumber = (a: number, b: number) => a - b;
