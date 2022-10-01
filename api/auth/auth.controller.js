@@ -7,9 +7,11 @@ const authService = require('./auth.service');
 dotenv.config();
 
 exports.signup = async (req, res) => {
+  const salt = await bcrypt.genSalt();
+  const hashPassword = await bcrypt.hash('123456', salt);
   const user = await model.userModel.create({
     email: 'Steven.tran@tbht.vn',
-    password: '123456',
+    password: hashPassword,
     role: 'admin',
   });
   return res.send(user);
