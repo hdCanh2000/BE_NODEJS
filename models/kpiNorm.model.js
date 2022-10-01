@@ -49,10 +49,4 @@ unitModel.hasMany(kpiNorms, {
 });
 kpiNorms.belongsTo(unitModel, { foreignKey: 'unit_id', targetKey: 'id' });
 
-positionModel.hasMany(kpiNorms, {
-    targetKey: 'id',
-    foreignKey: 'position_id',
-});
-kpiNorms.belongsTo(positionModel, { foreignKey: 'position_id', targetKey: 'id' });
-
 module.exports = kpiNorms;

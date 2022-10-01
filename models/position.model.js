@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/database');
-const { positionLevelModel } = require('./index');
+const { positionLevelModel, kpiNormModel } = require('./index');
 
 const positions = db.define('positions', {
     id: {
@@ -36,5 +36,11 @@ positionLevelModel.hasMany(positions, {
     foreignKey: 'position_levels_id',
 });
 positions.belongsTo(positionLevelModel, { foreignKey: 'position_levels_id', targetKey: 'id' });
+
+positions.hasMany(kpiNormModel, {
+    targetKey: 'id',
+    foreignKey: 'position_id',
+});
+kpiNormModel.belongsTo(positions, { foreignKey: 'position_id', targetKey: 'id' });
 
 module.exports = positions;
