@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/database');
+const { userModel } = require('./index');
 
 const departments = db.define('departments', {
     id: {
@@ -33,5 +34,11 @@ const departments = db.define('departments', {
         type: DataTypes.INTEGER,
     },
 });
+
+departments.hasMany(userModel, {
+    targetKey: 'id',
+    foreignKey: 'department_id',
+  });
+userModel.belongsTo(departments, { foreignKey: 'department_id', targetKey: 'id' });
 
 module.exports = departments;

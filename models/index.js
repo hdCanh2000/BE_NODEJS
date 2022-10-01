@@ -1,7 +1,6 @@
 module.exports.tokenModel = require('./token.model');
 module.exports.userModel = require('./user.model');
 module.exports.departmentModel = require('./department.model');
-module.exports.userDepartment = require('./departmentUser.model');
 module.exports.unitModel = require('./unit.model');
 module.exports.requirementModel = require('./requirement.model');
 module.exports.positionLevelModel = require('./positionLevel.model');

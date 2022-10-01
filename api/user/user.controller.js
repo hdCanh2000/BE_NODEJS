@@ -55,10 +55,11 @@ exports.getUserDetail = async (req, res) => {
 
 exports.getAllUser = async (req, res) => {
     try {
-        const data = await model.userModel.findAll({
-            attributes: ['email', 'role', 'name', 'dateOfBirth', 'dateOfJoin', 'phone', 'address', 'position'],
+        const getUserById = await model.userModel.findOne({ where: { id: req.user.id } });
+        const allUser = await model.userModel.findAll({ where: { department_id: getUserById.department_id } }, {
+            attributes: ['email', 'role', 'name', 'dateOfBirth', 'dateOfJoin', 'phone', 'address', 'position', 'department_id'],
         });
-        return res.status(200).json({ message: 'Get All User Success!', data: [data] });
+        return res.status(200).json({ message: 'Get All User Success!', data: allUser });
     } catch (error) {
         return res.status(404).json({ message: 'Error!' });
     }
