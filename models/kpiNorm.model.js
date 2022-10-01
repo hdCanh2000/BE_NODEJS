@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/database');
-const { departmentModel, unitModel, positionModel } = require('./index');
+const { departmentModel, unitModel } = require('./index');
 
 const kpiNorms = db.define('kpiNorms', {
     id: {
