@@ -8,7 +8,6 @@ module.exports.positionLevelModel = require('./positionLevel.model');
 module.exports.kpiNormModel = require('./kpiNorm.model');
 module.exports.positionModel = require('./position.model');
 module.exports.positionRequirement = require('./positionRequirement.model');
-module.exports.kpiNormPosition = require('./kpiNormPosition.model');
 module.exports.keyModel = require('./key.model');
 module.exports.missionModel = require('./mission.model');
 module.exports.keyMission = require('./keyMission.model');

@@ -1,22 +1,21 @@
 const kpiNormService = require('./kpiNorm.service');
-const model = require('../../models/index');
 
 exports.addKpiNorm = async (req, res) => {
-    const { name, description, manday, hr, unit_id, department_id, position_id } = req.body;
+    const { name, description, manday, hr, unit_id, department_id, parent_id, position_id } = req.body;
     try {
-        const kpiNorm = await kpiNormService.createKpiNorm(name, description, manday, hr, unit_id, department_id);
-        const positionKpi = await model.kpiNormPosition.create({ kpiNorm_id: kpiNorm.id, positions_id: position_id });
-        return res.status(200).json({ message: 'Create KpiNorm Success!', data: [kpiNorm, positionKpi] });
+        const kpiNorm = await kpiNormService.createKpiNorm(name, description, manday, hr, unit_id, department_id, parent_id, position_id);
+        return res.status(200).json({ message: 'Create KpiNorm Success!', data: [kpiNorm] });
     } catch (error) {
         return res.status(404).json({ message: 'Error!' });
     }
 };
 
 exports.updateKpiNorm = async (req, res) => {
-    const { name, description, manday, hr, unit_id, department_id } = req.body;
-    const { id } = req.params;
+    const { name, description, manday, hr, unit_id, department_id, parent_id, position_id } = req.body;
+    const { id } = req.body;
     try {
-        const updateItem = await kpiNormService.updateKpiNormById(id, name, description, manday, hr, unit_id, department_id);
+        const getKpiNormById = await kpiNormService.detailKpiNorm(id);
+        const updateItem = await kpiNormService.updateKpiNormById(getKpiNormById.id, name, description, manday, hr, unit_id, department_id, parent_id, position_id);
         return res.status(200).json({ message: 'Update KpiNorm Success!!', data: [updateItem] });
     } catch (error) {
         return res.status(404).json({ message: 'Error!' });
