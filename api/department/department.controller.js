@@ -2,9 +2,9 @@ const departmentService = require('./department.service');
 const model = require('../../models/index');
 
 exports.addDepartment = async (req, res) => {
-  const { name, description, slug, address } = req.body;
+  const { name, description, slug, address, parent_id } = req.body;
   try {
-    const departments = await departmentService.createDepartment(name, description, slug, address);
+    const departments = await departmentService.createDepartment(name, description, slug, address, parent_id);
     return res.status(200).json({ msg: 'Create Department Success!', data: [departments] });
   } catch (error) {
     return res.status(404).json({ message: 'Error!' });
@@ -12,10 +12,10 @@ exports.addDepartment = async (req, res) => {
 };
 
 exports.updateDepartment = async (req, res) => {
-  const { department_id, name, description, slug, address } = req.body;
+  const { id, name, description, slug, address, parent_id } = req.body;
   try {
-    const updateItem = await departmentService.updateDepartmentById(department_id, name, description, slug, address);
-    return res.status(200).json({ message: 'Update Product Success!!', data: [updateItem] });
+    const updateItem = await departmentService.updateDepartmentById(id, name, description, slug, address, parent_id);
+    return res.status(200).json({ message: 'Update Department Success!!', data: [updateItem] });
   } catch (error) {
     return res.status(404).json({ message: 'Error!' });
   }
@@ -36,7 +36,7 @@ exports.getDepartmentDetail = async (req, res) => {
   const { id } = req.params;
   try {
     const departmentDetail = await departmentService.detailDepartment(id);
-    return res.status(200).json({ message: 'Get Detail Question Success!!', data: [departmentDetail] });
+    return res.status(200).json({ message: 'Get Detail Department Success!!', data: [departmentDetail] });
   } catch (error) {
     return res.status(404).json({ message: 'Error!' });
   }

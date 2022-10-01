@@ -5,6 +5,6 @@ const db = new Sequelize('dwt', 'postgres', 'acevip123', {
     dialect: 'postgres',
   });
 
-db.sync();
+// db.sync();
 
 module.exports = db;

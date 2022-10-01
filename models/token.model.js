@@ -7,6 +7,8 @@ const token = db.define('token', {
         primaryKey: true,
         allowNull: false,
         autoIncrement: true,
+        // truncate: true,
+        // restartIdentity: true,
     },
     data_token: {
         type: DataTypes.TEXT,
