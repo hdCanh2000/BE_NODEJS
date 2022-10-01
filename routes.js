@@ -5,6 +5,7 @@ const userRoutes = require('./api/user/user.routes');
 const positionLevelRouter = require('./api/positionLevel/positionLevel.routes');
 const unitRoutes = require('./api/unit/unit.routes');
 const missionRouters = require('./api/misson/mission.routes');
+const worktrackRoutes = require('./api/worktrack/worktrack.routes');
 
 const router = express.Router();
 
@@ -14,5 +15,6 @@ router.use('/auth', authRoutes);
 router.use('/positionLevels', positionLevelRouter);
 router.use('/unit', unitRoutes);
 router.use('/mission', missionRouters);
+router.use('/worktracks', worktrackRoutes);
 
 module.exports = router;

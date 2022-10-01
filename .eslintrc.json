@@ -29,6 +29,7 @@
         "object-curly-newline": "off",
         "indent": "off",
         "comma-dangle": "warn",
-        "@typescript-eslint/no-var-requires": "off"
+        "@typescript-eslint/no-var-requires": "off",
+        "linebreak-style": "off"
     }
 }
