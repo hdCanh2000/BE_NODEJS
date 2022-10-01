@@ -7,12 +7,11 @@ const authService = require('./auth.service');
 dotenv.config();
 
 exports.signup = async (req, res) => {
-  const user = model.userModel.create({
+  const user = await model.userModel.create({
     email: 'Steven.tran@tbht.vn',
     password: '123456',
     role: 'admin',
   });
-  await user.save();
   return res.send(user);
 };
 
