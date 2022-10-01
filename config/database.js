@@ -3,7 +3,12 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const db = new Sequelize(process.env.DATABASE_URL);
+const db = new Sequelize({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+});
 
 db.sync();
 
