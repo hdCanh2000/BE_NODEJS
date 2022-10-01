@@ -59,10 +59,4 @@ users.hasMany(token, {
   });
 token.belongsTo(users, { foreignKey: 'user_id', targetKey: 'id' });
 
-departmentModel.hasMany(users, {
-    targetKey: 'id',
-    foreignKey: 'department_id',
-  });
-users.belongsTo(departmentModel, { foreignKey: 'department_id', targetKey: 'id' });
-
 module.exports = users;
