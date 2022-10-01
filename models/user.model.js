@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/database');
 const token = require('./token.model');
+const { departmentModel } = require('./index');
 
 const users = db.define('users', {
     id: {
@@ -47,6 +48,9 @@ const users = db.define('users', {
         type: DataTypes.ENUM(['Nhân viên', 'Quản lý']),
         defaultValue: 'Nhân viên',
     },
+    department_id: {
+        type: DataTypes.INTEGER,
+    },
 });
 
 users.hasMany(token, {
@@ -54,5 +58,11 @@ users.hasMany(token, {
     foreignKey: 'user_id',
   });
 token.belongsTo(users, { foreignKey: 'user_id', targetKey: 'id' });
+
+departmentModel.hasMany(users, {
+    targetKey: 'id',
+    foreignKey: 'department_id',
+  });
+users.belongsTo(departmentModel, { foreignKey: 'department_id', targetKey: 'id' });
 
 module.exports = users;
