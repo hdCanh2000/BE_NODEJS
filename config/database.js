@@ -5,6 +5,7 @@ dotenv.config();
 
 const db = new Sequelize({
   connectionString: process.env.DATABASE_URL,
+  dialect: 'postgres',
   ssl: {
     rejectUnauthorized: false,
   },
