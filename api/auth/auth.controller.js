@@ -36,7 +36,7 @@ exports.login = async (req, res) => {
     await model.tokenModel.create({ data_token: refreshToken, user_id: user.id });
     return res.status(200).json({ message: 'Success!', data: { accessToken, refreshToken, email: user.email, name: user.name, userId: user.id, role: [user.role] } });
   } catch (error) {
-    return res.status(404).json({ message: 'Error!' });
+    return res.status(404).json({ message: 'Error!', error });
   }
 };
 
@@ -46,7 +46,7 @@ exports.logout = async (req, res) => {
     const data = await authService.destroyToken(refreshToken);
     return res.status(200).json({ message: 'Success!', data });
   } catch (error) {
-    return res.status(404).json({ message: 'Error!' });
+    return res.status(404).json({ message: 'Error!', error });
   }
 };
 
@@ -70,10 +70,10 @@ exports.refreshToken = async (req, res) => {
       const reFreshToken = jwt.sign({ id: decoded.id, email: decoded.email, role: decoded.role }, process.env.REFRESH_TOKEN_SECRET, {
         expiresIn: '1d',
       });
-      await model.tokenModel.update({ data_token: refreshToken }, { where: { token_id: token.id } });
-      return res.status(200).json({ message: 'Success!!', data: [accessToken, reFreshToken] });
+      await model.tokenModel.update({ data_token: reFreshToken }, { where: { id: token.id } });
+      return res.status(200).json({ message: 'Success!!', data: { accessToken, reFreshToken } });
     });
   } catch (error) {
-    return res.status(404).json({ message: 'Error!' });
+    return res.status(404).json({ message: 'Error!', error });
   }
 };

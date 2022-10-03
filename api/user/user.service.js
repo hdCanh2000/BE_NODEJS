@@ -3,9 +3,7 @@ const model = require('../../models/index');
 
 exports.findUser = async (id) => {
     try {
-        const findUser = await model.userModel.findOne({ where: { id },
-            attributes: ['email', 'role', 'name', 'dateOfBirth', 'dateOfJoin', 'phone', 'address', 'position'],
-        });
+        const findUser = await model.userModel.findOne({ where: { id } });
         return findUser;
     } catch (error) {
         return error;
@@ -57,13 +55,14 @@ exports.changePassword = async (oldPassword, newPassword, newPassword2, id) => {
     }
 };
 
-exports.createUser = async (email, password, department_id) => {
+exports.createUser = async (email, password, role, department_id) => {
     const salt = await bcrypt.genSalt();
     const hashPassword = await bcrypt.hash(password, salt);
     try {
         const newUser = await model.userModel.create({
             email,
             password: hashPassword,
+            role,
             department_id,
         });
         return newUser;

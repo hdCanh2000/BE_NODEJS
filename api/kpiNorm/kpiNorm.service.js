@@ -1,19 +1,9 @@
 const model = require('../../models/index');
 
-exports.createKpiNorm = async (name, description, manday, hr, unit_id, department_id, parent_id, position_id) => {
+exports.createKpiNorm = async (data) => {
     try {
-        const kpiNorm = {
-            name,
-            description,
-            manday,
-            hr,
-            unit_id,
-            department_id,
-            parent_id,
-            position_id,
-        };
-        const createKpi = await model.kpiNormModel.create(kpiNorm);
-        return createKpi;
+        const result = model.kpiNormModel.create(data);
+        return result;
     } catch (error) {
         return error;
     }
@@ -52,9 +42,7 @@ exports.detailKpiNorm = async (id) => {
 
 exports.allKpiNorm = async () => {
     try {
-        const data = await model.kpiNormModel.findAll({
-            attributes: ['name', 'description', 'manday', 'hr', 'unit_id', 'department_id', 'parent_id', 'position_id'],
-        });
+        const data = await model.kpiNormModel.findAll({});
         return data;
     } catch (error) {
         return error;

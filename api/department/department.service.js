@@ -3,17 +3,10 @@ const model = require('../../models/index');
 
 dotenv.config();
 
-exports.createDepartment = async (name, description, slug, address, parent_id) => {
+exports.createDepartment = async (data) => {
     try {
-        const department = {
-            name,
-            description,
-            slug,
-            address,
-            parent_id,
-        };
-        const createDepartment = await model.departmentModel.create(department);
-        return createDepartment;
+        const result = model.departmentModel.create(data);
+        return result;
     } catch (error) {
         return error;
     }
@@ -31,6 +24,19 @@ exports.updateDepartmentById = async (id, name, description, slug, address, pare
             where: { id },
         });
         return update;
+    } catch (error) {
+        return error;
+    }
+};
+
+exports.allDepartment = async () => {
+    try {
+        const data = await model.departmentModel.findAll({
+            include: {
+                model: model.userModel,
+            },
+        });
+        return data;
     } catch (error) {
         return error;
     }
