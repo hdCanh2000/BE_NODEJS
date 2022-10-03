@@ -7,6 +7,6 @@ const router = express.Router();
 router.get('/', auth(['admin', 'manager']), departmentController.getAllDepartment);
 router.get('/:id', auth('admin'), departmentController.getDepartmentDetail);
 router.post('/', auth('admin'), departmentController.addDepartment);
-router.put('/', auth('admin'), departmentController.updateDepartment);
+router.put('/:id', auth('admin'), departmentController.updateDepartment);
 
 module.exports = router;

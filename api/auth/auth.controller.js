@@ -70,8 +70,8 @@ exports.refreshToken = async (req, res) => {
       const reFreshToken = jwt.sign({ id: decoded.id, email: decoded.email, role: decoded.role }, process.env.REFRESH_TOKEN_SECRET, {
         expiresIn: '1d',
       });
-      await model.tokenModel.update({ data_token: refreshToken }, { where: { token_id: token.id } });
-      return res.status(200).json({ message: 'Success!!', data: [accessToken, reFreshToken] });
+      await model.tokenModel.update({ data_token: reFreshToken }, { where: { id: token.id } });
+      return res.status(200).json({ message: 'Success!!', data: { accessToken, reFreshToken } });
     });
   } catch (error) {
     return res.status(404).json({ message: 'Error!' });
