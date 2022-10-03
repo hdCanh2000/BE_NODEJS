@@ -64,10 +64,10 @@ exports.refreshToken = async (req, res) => {
       // eslint-disable-next-line no-console
       console.log('--------------------------------------------', decoded);
       if (err) return res.sendStatus(403).json({ message: 'Expired' });
-      const accessToken = jwt.sign({ user_id: decoded.user_id, email: decoded.email, role: decoded.role }, process.env.ACCESS_TOKEN_SECRET, {
+      const accessToken = jwt.sign({ id: decoded.id, email: decoded.email, role: decoded.role }, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: '1h',
       });
-      const reFreshToken = jwt.sign({ user_id: decoded.user_id, email: decoded.email, role: decoded.role }, process.env.REFRESH_TOKEN_SECRET, {
+      const reFreshToken = jwt.sign({ id: decoded.id, email: decoded.email, role: decoded.role }, process.env.REFRESH_TOKEN_SECRET, {
         expiresIn: '1d',
       });
       await model.tokenModel.update({ data_token: refreshToken }, { where: { token_id: token.id } });
