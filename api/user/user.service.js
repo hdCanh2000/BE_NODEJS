@@ -12,7 +12,7 @@ exports.findUser = async (id) => {
     }
 };
 
-exports.updateUserById = async (email, name, address, phone, dateOfBirth, id) => {
+exports.updateUserById = async (email, name, address, phone, dateOfBirth, dateOfJoin, position, department_id, id) => {
     try {
         const updateUser = await model.userModel.update({
             email,
@@ -20,6 +20,9 @@ exports.updateUserById = async (email, name, address, phone, dateOfBirth, id) =>
             phone,
             address,
             dateOfBirth,
+            dateOfJoin,
+            position,
+            department_id,
         }, { where: { id } });
         return updateUser;
     } catch (error) {

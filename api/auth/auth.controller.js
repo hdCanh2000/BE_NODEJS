@@ -34,7 +34,7 @@ exports.login = async (req, res) => {
     }
     const { accessToken, refreshToken } = await authService.signToken(user);
     await model.tokenModel.create({ data_token: refreshToken, user_id: user.id });
-    return res.status(200).json({ message: 'Success!', data: [accessToken, refreshToken] });
+    return res.status(200).json({ message: 'Success!', data: { accessToken, refreshToken, email: user.email, name: user.name, userId: user.id, role: [user.role] } });
   } catch (error) {
     return res.status(404).json({ message: 'Error!' });
   }

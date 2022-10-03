@@ -22,11 +22,11 @@ exports.addUser = async (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-    const { email, name, address, phone, dateOfBirth } = req.body;
-    const { id } = req.params;
+    const { email, name, address, phone, dateOfBirth, dateOfJoin, position, department_id } = req.body;
+    const { id } = req.params || req.body;
     try {
-        const updateInfo = await userService.updateUserById(email, name, address, phone, dateOfBirth, id);
-        return res.status(200).json({ message: 'Update Profile success!!', data: updateInfo });
+        const updateInfo = await userService.updateUserById(email, name, address, phone, dateOfBirth, dateOfJoin, position, department_id, id);
+        return res.status(200).json({ msg: 'Update Profile success!!', data: updateInfo });
     } catch (error) {
         return res.status(404).json({ message: 'Error!' });
     }
