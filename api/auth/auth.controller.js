@@ -12,8 +12,8 @@ exports.signup = async (req, res) => {
   const user = await model.userModel.create({
     email: 'Steven.tran@tbht.vn',
     password: hashPassword,
+    name: 'MTT',
     role: 'admin',
-    position: 'Quản lý',
   });
   return res.send(user);
 };
@@ -36,7 +36,7 @@ exports.login = async (req, res) => {
     await model.tokenModel.create({ data_token: refreshToken, user_id: user.id });
     return res.status(200).json({ message: 'Success!', data: { accessToken, refreshToken, email: user.email, name: user.name, userId: user.id, role: [user.role] } });
   } catch (error) {
-    return res.status(404).json({ message: 'Error!' });
+    return res.status(404).json({ message: 'Error!', error });
   }
 };
 
@@ -46,7 +46,7 @@ exports.logout = async (req, res) => {
     const data = await authService.destroyToken(refreshToken);
     return res.status(200).json({ message: 'Success!', data });
   } catch (error) {
-    return res.status(404).json({ message: 'Error!' });
+    return res.status(404).json({ message: 'Error!', error });
   }
 };
 
@@ -74,6 +74,6 @@ exports.refreshToken = async (req, res) => {
       return res.status(200).json({ message: 'Success!!', data: { accessToken, reFreshToken } });
     });
   } catch (error) {
-    return res.status(404).json({ message: 'Error!' });
+    return res.status(404).json({ message: 'Error!', error });
   }
 };

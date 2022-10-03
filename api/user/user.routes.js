@@ -7,6 +7,7 @@ const router = express.Router();
 router.post('/', auth('admin'), userController.addUser);
 router.get('/', auth(['admin', 'user']), userController.getAllUser);
 router.get('/:id', auth(['admin', 'user']), userController.getUserDetail);
-router.put('/profile', auth(['admin', 'manager', 'user']), userController.updateProfile);
+router.put('/profile', auth(['admin', 'user', 'manager']), userController.updateProfile);
+router.put('/changePassword', auth(['admin', 'user', 'manager']), userController.changePassword);
 
 module.exports = router;

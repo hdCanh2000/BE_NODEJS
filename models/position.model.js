@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/database');
-const { positionLevelModel, kpiNormModel } = require('./index');
+const { positionLevelModel, kpiNormModel, departmentModel, userModel } = require('./index');
 
 const positions = db.define('positions', {
     id: {
@@ -23,10 +23,10 @@ const positions = db.define('positions', {
     manager: {
         type: DataTypes.INTEGER,
     },
-    jobType: {
+    position_levels_id: {
         type: DataTypes.INTEGER,
     },
-    position_levels_id: {
+    department_id: {
         type: DataTypes.INTEGER,
     },
 });
@@ -42,5 +42,17 @@ positions.hasMany(kpiNormModel, {
     foreignKey: 'position_id',
 });
 kpiNormModel.belongsTo(positions, { foreignKey: 'position_id', targetKey: 'id' });
+
+departmentModel.hasMany(positions, {
+    targetKey: 'id',
+    foreignKey: 'department_id',
+});
+positions.belongsTo(departmentModel, { foreignKey: 'department_id', targetKey: 'id' });
+
+positions.hasMany(userModel, {
+    targetKey: 'id',
+    foreignKey: 'position_id',
+  });
+userModel.belongsTo(positions, { foreignKey: 'position_id', targetKey: 'id' });
 
 module.exports = positions;
