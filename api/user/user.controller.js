@@ -2,19 +2,17 @@ const model = require('../../models/index');
 const userService = require('./user.service');
 
 exports.addUser = async (req, res) => {
-    const { email, password, confPassword, role, department_id } = req.body;
+    const data = req.body;
     try {
         const user = await model.userModel.findOne({
             where: {
-                email,
+                email: data.email,
             },
         });
         if (user) {
             return res.status(400).json({ message: 'Email has already existed !' });
-        } if (password !== confPassword) {
-            return res.status(400).json({ message: 'Confirm Password Error!' });
         }
-        const newUser = await userService.createUser(email, password, role, department_id);
+        const newUser = await userService.createUser({ ...data });
         return res.status(200).json({ message: 'Register success!', data: newUser });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
@@ -56,9 +54,14 @@ exports.getAllUser = async (req, res) => {
         const getUserById = await model.userModel.findOne({ where: { id: req.user.id } });
         if (getUserById.role === 'admin') {
             const allUser = await model.userModel.findAll({
-                include: {
-                    model: model.departmentModel,
-                },
+                include: [
+                    {
+                        model: model.departmentModel,
+                    },
+                    {
+                        model: model.positionModel,
+                    },
+                ],
             });
             return res.status(200).json({ message: 'Get All User Success!', data: allUser });
         }

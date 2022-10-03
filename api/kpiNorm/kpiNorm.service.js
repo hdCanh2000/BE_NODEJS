@@ -42,7 +42,19 @@ exports.detailKpiNorm = async (id) => {
 
 exports.allKpiNorm = async () => {
     try {
-        const data = await model.kpiNormModel.findAll({});
+        const data = await model.kpiNormModel.findAll({
+            include: [
+                {
+                    model: model.unitModel,
+                },
+                {
+                    model: model.departmentModel,
+                },
+                {
+                    model: model.positionModel,
+                },
+            ],
+        });
         return data;
     } catch (error) {
         return error;

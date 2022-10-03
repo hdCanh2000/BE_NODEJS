@@ -36,7 +36,16 @@ exports.updateById = async (id, name, description, address, manager, position_le
 
 exports.allPosition = async () => {
     try {
-        const data = await model.positionModel.findAll({});
+        const data = await model.positionModel.findAll({
+            include: [
+                {
+                    model: model.positionLevelModel,
+                },
+                {
+                    model: model.departmentModel,
+                },
+            ],
+        });
         return data;
     } catch (error) {
         return error;

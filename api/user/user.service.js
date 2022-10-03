@@ -55,15 +55,13 @@ exports.changePassword = async (oldPassword, newPassword, newPassword2, id) => {
     }
 };
 
-exports.createUser = async (email, password, role, department_id) => {
+exports.createUser = async (data) => {
     const salt = await bcrypt.genSalt();
-    const hashPassword = await bcrypt.hash(password, salt);
+    const hashPassword = await bcrypt.hash(data.password, salt);
     try {
         const newUser = await model.userModel.create({
-            email,
+            ...data,
             password: hashPassword,
-            role,
-            department_id,
         });
         return newUser;
     } catch (error) {
