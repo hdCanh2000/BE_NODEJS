@@ -13,7 +13,7 @@ exports.signup = async (req, res) => {
     email: 'Steven.tran@tbht.vn',
     password: hashPassword,
     role: 'admin',
-    position: 'Quản lý',
+    name: 'Admin',
   });
   return res.send(user);
 };
