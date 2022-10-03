@@ -1,6 +1,6 @@
 const model = require('../../models/index');
 
-exports.createKpiNorm = async (name, description, manday, hr, unit_id, department_id) => {
+exports.createKpiNorm = async (name, description, manday, hr, unit_id, department_id, parent_id, position_id) => {
     try {
         const kpiNorm = {
             name,
@@ -9,6 +9,8 @@ exports.createKpiNorm = async (name, description, manday, hr, unit_id, departmen
             hr,
             unit_id,
             department_id,
+            parent_id,
+            position_id,
         };
         const createKpi = await model.kpiNormModel.create(kpiNorm);
         return createKpi;
@@ -17,7 +19,7 @@ exports.createKpiNorm = async (name, description, manday, hr, unit_id, departmen
     }
 };
 
-exports.updateKpiNormById = async (id, name, description, manday, hr, unit_id, department_id) => {
+exports.updateKpiNormById = async (id, name, description, manday, hr, unit_id, department_id, parent_id, position_id) => {
     try {
         const update = await model.kpiNormModel.update({
             name,
@@ -26,6 +28,8 @@ exports.updateKpiNormById = async (id, name, description, manday, hr, unit_id, d
             hr,
             unit_id,
             department_id,
+            parent_id,
+            position_id,
         }, {
             where: { id },
         });
@@ -49,7 +53,7 @@ exports.detailKpiNorm = async (id) => {
 exports.allKpiNorm = async () => {
     try {
         const data = await model.kpiNormModel.findAll({
-            attributes: ['name', 'description', 'manday', 'hr', 'unit_id', 'department_id'],
+            attributes: ['name', 'description', 'manday', 'hr', 'unit_id', 'department_id', 'parent_id', 'position_id'],
         });
         return data;
     } catch (error) {

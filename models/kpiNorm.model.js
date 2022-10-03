@@ -32,6 +32,9 @@ const kpiNorms = db.define('kpiNorms', {
     parent_id: {
         type: DataTypes.INTEGER,
     },
+    position_id: {
+        type: DataTypes.INTEGER,
+    },
 });
 
 departmentModel.hasMany(kpiNorms, {

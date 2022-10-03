@@ -47,6 +47,9 @@ const users = db.define('users', {
         type: DataTypes.ENUM(['Nhân viên', 'Quản lý']),
         defaultValue: 'Nhân viên',
     },
+    department_id: {
+        type: DataTypes.INTEGER,
+    },
 });
 
 users.hasMany(token, {
