@@ -30,30 +30,6 @@ exports.updateUserById = async (email, name, address, phone, dateOfBirth, dateOf
     }
 };
 
-// exports.changePassword = async (oldPassword, newPassword, newPassword2, id) => {
-//     try {
-//         const changePassword = bcrypt.compare(oldPassword, user.password, async (same) => {
-//             if (same) {
-//               if (user === newPassword) {
-//                 console.log('Same old password');
-//               } else if (newPassword.length < 4) {
-//                 console.log('Password must be at least 4 characters !!!');
-//               } else if (newPassword !== newPassword2) {
-//                 console.log('Confirm password wrong !');
-//               } else {
-//                 await model.userModel.update({ password: newPassword }, { where: { id } });
-//                 console.log('Change Password Success !');
-//               }
-//             } else {
-//                 console.log('Wrong Current Password !');
-//             }
-//           });
-//         return changePassword;
-//     } catch (error) {
-//         return (error);
-//     }
-// };
-
 exports.createUser = async (email, password) => {
     const salt = await bcrypt.genSalt();
     const hashPassword = await bcrypt.hash(password, salt);

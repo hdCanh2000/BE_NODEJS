@@ -32,17 +32,6 @@ exports.updateProfile = async (req, res) => {
     }
 };
 
-exports.changePassword = async (req, res) => {
-    const { oldPassword, newPassword, newPassword2 } = req.body;
-    const { id } = req.user.id;
-    try {
-        const changePassword = await userService.changePassword(oldPassword, newPassword, newPassword2, id);
-        return res.status(200).json({ msg: 'Success', data: changePassword });
-    } catch (error) {
-        return res.status(400).json({ error });
-    }
-};
-
 exports.getUserDetail = async (req, res) => {
     const { id } = req.params;
     try {
