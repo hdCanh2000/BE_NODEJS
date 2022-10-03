@@ -6,7 +6,7 @@ const getAll = async (req, res) => {
         const worktracks = await worktrackService.getAllResource();
         return res.status(200).json({ message: 'Success!', data: worktracks });
     } catch (error) {
-        return res.status(404).json({ message: 'Error!' });
+        return res.status(404).json({ message: 'Error!', error });
     }
 };
 
@@ -19,7 +19,7 @@ const getById = async (req, res) => {
         }
         return res.status(200).json({ message: 'Success!', data: worktrack });
     } catch (error) {
-        return res.status(404).json({ message: 'Not Found!' });
+        return res.status(404).json({ message: 'Not Found!', error });
     }
 };
 
@@ -32,7 +32,7 @@ const getAllByWorktrackId = async (req, res) => {
         }
         return res.status(200).json({ message: 'Success!', data: worktracks });
     } catch (error) {
-        return res.status(404).json({ message: 'Not Found!' });
+        return res.status(404).json({ message: 'Not Found!', error });
     }
 };
 
@@ -41,7 +41,7 @@ const create = async (req, res) => {
         const worktrack = await worktrackService.createResource(req.body);
         return res.status(200).json({ message: 'Success!', data: worktrack });
     } catch (error) {
-        return res.status(404).json({ message: 'Error!' });
+        return res.status(404).json({ message: 'Error!', error });
     }
 };
 
@@ -51,7 +51,7 @@ const updateById = async (req, res) => {
         const worktrack = await worktrackService.updateResourceById(id, req.body);
         return res.status(200).json({ message: 'Success!', data: worktrack });
     } catch (error) {
-        return res.status(404).json({ message: 'Error!' });
+        return res.status(404).json({ message: 'Error!', error });
     }
 };
 
@@ -61,7 +61,7 @@ const deleteById = async (req, res) => {
         const worktrack = await worktrackService.deleteResourceById(id);
         return res.status(200).json({ message: 'Success!', data: worktrack });
     } catch (error) {
-        return res.status(404).json({ message: 'Error!' });
+        return res.status(404).json({ message: 'Error!', error });
     }
 };
 
