@@ -3,11 +3,11 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const db = new Sequelize('dwt', 'postgres', 'acevip123', {
-  host: 'localhost',
+const db = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+  host: process.env.DB_HOST,
   dialect: 'postgres',
 });
 
-// db.sync();
+db.sync();
 
 module.exports = db;
