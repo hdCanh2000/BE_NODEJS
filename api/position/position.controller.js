@@ -1,9 +1,12 @@
 const positionService = require('./position.service');
+// const model = require('../../models/index');
 
 exports.addPosition = async (req, res) => {
+    const { name, description, address, manager, position_levels_id, department_id } = req.body;
     try {
-        const positions = await positionService.createPosition(req.body);
-        return res.status(200).json({ msg: 'Create Position Success!', data: positions });
+        const positions = await positionService.createPosition(name, description, address, manager, position_levels_id, department_id);
+        // const requiment = await model.positionRequirement.bulkCreate([{ requirement_id: req.body.requirement_id, positions_id: positions.id }]);
+        return res.status(200).json({ message: 'Create Position Success!', data: positions });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
     }

@@ -12,8 +12,8 @@ exports.signup = async (req, res) => {
   const user = await model.userModel.create({
     email: 'Steven.tran@tbht.vn',
     password: hashPassword,
-    name: 'MTT',
     role: 'admin',
+    name: 'Admin',
   });
   return res.send(user);
 };
