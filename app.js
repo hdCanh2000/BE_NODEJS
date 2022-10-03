@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const methodOverride = require('method-override');
 const passport = require('passport');
 const morgan = require('morgan');
@@ -7,6 +8,28 @@ const db = require('./config/database');
 const routes = require('./routes');
 
 const app = express();
+
+// const whitelist = [
+//   'http://localhost',
+//   'http://localhost:3000/',
+//   'https://dwt-one.vercel.app/',
+// ];
+
+// const corsOptions = {
+//   credentials: true,
+//   origin: (origin, callback) => {
+//     const originIsWhitelisted = whitelist.indexOf(origin) !== -1;
+//     callback(null, originIsWhitelisted);
+//   },
+//   methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
+//   allowedHeaders: '*',
+// };
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
+app.use(cors(corsOptions));
 
 // connect database
 const testDatabase = async () => {
