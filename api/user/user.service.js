@@ -30,37 +30,41 @@ exports.updateUserById = async (email, name, address, phone, dateOfBirth, dateOf
     }
 };
 
-// exports.changePassword = async (oldPassword, newPassword, newPassword2, id) => {
-//     try {
-//         const changePassword = bcrypt.compare(oldPassword, user.password, async (same) => {
-//             if (same) {
-//               if (user === newPassword) {
-//                 console.log('Same old password');
-//               } else if (newPassword.length < 4) {
-//                 console.log('Password must be at least 4 characters !!!');
-//               } else if (newPassword !== newPassword2) {
-//                 console.log('Confirm password wrong !');
-//               } else {
-//                 await model.userModel.update({ password: newPassword }, { where: { id } });
-//                 console.log('Change Password Success !');
-//               }
-//             } else {
-//                 console.log('Wrong Current Password !');
-//             }
-//           });
-//         return changePassword;
-//     } catch (error) {
-//         return (error);
-//     }
-// };
+exports.changePassword = async (oldPassword, newPassword, newPassword2, id) => {
+    const salt = await bcrypt.genSalt();
+    const hashNewPassword = await bcrypt.hash(newPassword, salt);
+    try {
+        const findUser = await model.userModel.findOne({ where: { id } });
+        if (findUser) {
+            const changePassword = await bcrypt.compare(oldPassword, findUser.password);
+                if (changePassword === true) {
+                  if (findUser.password === newPassword) {
+                    return ('Same old password');
+                  } if (newPassword.length < 4) {
+                    return ('Password must be at least 4 characters !!!');
+                  } if (newPassword !== newPassword2) {
+                    return ('Confirm password wrong !');
+                  }
+                    await model.userModel.update({ password: hashNewPassword }, { where: { id } });
+                    return ('Change Password Success !', changePassword);
+                }
+                if (changePassword === false) {
+                    return ('Wrong Current Password !');
+                }
+        }
+    } catch (error) {
+        return (error);
+    }
+};
 
-exports.createUser = async (email, password) => {
+exports.createUser = async (email, password, department_id) => {
     const salt = await bcrypt.genSalt();
     const hashPassword = await bcrypt.hash(password, salt);
     try {
         const newUser = await model.userModel.create({
             email,
             password: hashPassword,
+            department_id,
         });
         return newUser;
     } catch (error) {

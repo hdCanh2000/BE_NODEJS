@@ -8,6 +8,6 @@ router.post('/', auth('admin'), userController.addUser);
 router.get('/', auth(['admin', 'user']), userController.getAllUser);
 router.get('/:id', auth(['admin', 'user']), userController.getUserDetail);
 router.put('/profile/:id', auth('user'), userController.updateProfile);
-// router.put('/password', auth("user"), userController.changePassword);
+router.put('/changePassword', auth(['admin', 'user', 'manager', 'super_admin']), userController.changePassword);
 
 module.exports = router;
