@@ -8,6 +8,7 @@ const missionRouters = require('./api/misson/mission.routes');
 const worktrackRoutes = require('./api/worktrack/worktrack.routes');
 const worktrackLogRoutes = require('./api/worktrackLog/worktrackLog.routes');
 const kpiNormRoutes = require('./api/kpiNorm/kpiNorm.routes');
+const requirementRoutes = require('./api/requirement/requirement.routes');
 
 const router = express.Router();
 
@@ -15,10 +16,11 @@ router.use('/departments', departmentRoutes);
 router.use('/users', userRoutes);
 router.use('/auth', authRoutes);
 router.use('/positionLevels', positionLevelRouter);
-router.use('/unit', unitRoutes);
+router.use('/units', unitRoutes);
 router.use('/mission', missionRouters);
 router.use('/worktracks', worktrackRoutes);
 router.use('/worktrackLogs', worktrackLogRoutes);
 router.use('/kpiNorms', kpiNormRoutes);
+router.use('/requirements', requirementRoutes);
 
 module.exports = router;

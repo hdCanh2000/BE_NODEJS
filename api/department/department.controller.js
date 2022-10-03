@@ -24,7 +24,9 @@ exports.updateDepartment = async (req, res) => {
 exports.getAllDepartment = async (req, res) => {
   try {
     const result = await model.departmentModel.findAll({
-      attributes: ['name', 'description', 'slug', 'address', 'parent_id'],
+      include: {
+        model: model.userModel,
+      },
     });
     return res.status(200).json({ message: 'Get All Department Success!', data: result });
   } catch (error) {
