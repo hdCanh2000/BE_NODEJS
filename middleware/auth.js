@@ -1,6 +1,6 @@
 const passport = require('passport');
 
-const verifyCallback = (req, resolve, reject, ...roleRights) => async (err, user) => {
+const verifyCallback = (req, resolve, reject, roleRights) => async (err, user) => {
   if (err || !user) {
     return reject('Please authenticate !!!');
   }
@@ -17,7 +17,7 @@ const verifyCallback = (req, resolve, reject, ...roleRights) => async (err, user
 };
 
 const auth = (roleRights) => async (req, res, next) => new Promise((resolve, reject) => {
-    passport.authenticate('jwt', { session: false }, verifyCallback(req, resolve, reject, ...roleRights))(req, res, next);
+    passport.authenticate('jwt', { session: false }, verifyCallback(req, resolve, reject, roleRights))(req, res, next);
   })
   .then(() => next())
   .catch((err) => next(err));
