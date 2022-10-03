@@ -21,7 +21,7 @@ const users = db.define('users', {
         type: DataTypes.TEXT,
     },
     role: {
-        type: DataTypes.ENUM(['user', 'admin', 'manager', 'super_admin']),
+        type: DataTypes.ENUM(['user', 'admin', 'manager']),
         defaultValue: 'user',
     },
     code: {
@@ -43,11 +43,10 @@ const users = db.define('users', {
     address: {
         type: DataTypes.TEXT,
     },
-    position: {
-        type: DataTypes.ENUM(['Nhân viên', 'Quản lý']),
-        defaultValue: 'Nhân viên',
-    },
     department_id: {
+        type: DataTypes.INTEGER,
+    },
+    position_id: {
         type: DataTypes.INTEGER,
     },
 });
