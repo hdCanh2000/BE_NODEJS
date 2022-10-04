@@ -9,25 +9,29 @@ const routes = require('./routes');
 
 const app = express();
 
-// const whitelist = [
-//   'http://localhost',
-//   'http://localhost:3000/',
-//   'https://dwt-one.vercel.app/',
-// ];
+const whitelist = [
+  'http://localhost',
+  'http://localhost:3000',
+  'https://dwt-one.vercel.app',
+  'https://dwt.tbht.vn',
+  'http://localhost:3000/',
+  'https://dwt-one.vercel.app/',
+  'https://dwt.tbht.vn/',
+];
 
-// const corsOptions = {
-//   credentials: true,
-//   origin: (origin, callback) => {
-//     const originIsWhitelisted = whitelist.indexOf(origin) !== -1;
-//     callback(null, originIsWhitelisted);
-//   },
-//   methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
-//   allowedHeaders: '*',
-// };
 const corsOptions = {
-  origin: 'http://localhost:3000',
-  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  credentials: true,
+  origin: (origin, callback) => {
+    const originIsWhitelisted = whitelist.indexOf(origin) !== -1;
+    callback(null, originIsWhitelisted);
+  },
+  methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
+  allowedHeaders: '*',
 };
+// const corsOptions = {
+//   origin: 'http://localhost:3000',
+//   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+// };
 
 app.use(cors(corsOptions));
 
