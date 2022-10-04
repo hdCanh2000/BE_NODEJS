@@ -3,18 +3,6 @@ const db = require('../config/database');
 const { missionModel, keyModel } = require('./index');
 
 const keyMission = db.define('keyMission', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false,
-        autoIncrement: true,
-    },
-    key_id: {
-        type: DataTypes.INTEGER,
-    },
-    mission_id: {
-        type: DataTypes.INTEGER,
-    },
     compare: {
         type: DataTypes.TEXT,
     },

@@ -9,12 +9,6 @@ const missionDepartment = db.define('missionDepartment', {
         allowNull: false,
         autoIncrement: true,
     },
-    department_id: {
-        type: DataTypes.INTEGER,
-    },
-    mission_id: {
-        type: DataTypes.INTEGER,
-    },
     isResponsible: {
         type: DataTypes.BOOLEAN,
     },
