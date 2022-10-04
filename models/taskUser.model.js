@@ -9,12 +9,6 @@ const userTask = db.define('userTask', {
         allowNull: false,
         autoIncrement: true,
     },
-    user_id: {
-        type: DataTypes.INTEGER,
-    },
-    task_id: {
-        type: DataTypes.INTEGER,
-    },
     isResponsible: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,

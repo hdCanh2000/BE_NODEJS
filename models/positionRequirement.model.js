@@ -9,12 +9,6 @@ const positionRequirement = db.define('positionRequirement', {
         allowNull: false,
         autoIncrement: true,
     },
-    requirement_id: {
-        type: DataTypes.INTEGER,
-    },
-    positions_id: {
-        type: DataTypes.INTEGER,
-    },
 });
 
 requirementModel.belongsToMany(positionModel, { through: positionRequirement });

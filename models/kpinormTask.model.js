@@ -9,12 +9,6 @@ const kpiNormTask = db.define('kpiNormTask', {
         allowNull: false,
         autoIncrement: true,
     },
-    kpiNorm_id: {
-        type: DataTypes.INTEGER,
-    },
-    task_id: {
-        type: DataTypes.INTEGER,
-    },
 });
 
 kpiNormModel.belongsToMany(taskModel, { through: kpiNormTask });

@@ -17,3 +17,4 @@ module.exports.taskDepartment = require('./departmentTask.model');
 module.exports.userTask = require('./taskUser.model');
 module.exports.workTrackModel = require('./workTrack.model');
 module.exports.workTrackLogModel = require('./workTrackLog.model');
+module.exports.kpiNormWorkTrack = require('./kpiNormWorkTrack.model');
