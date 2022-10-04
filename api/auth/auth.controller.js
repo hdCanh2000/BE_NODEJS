@@ -15,6 +15,12 @@ exports.signup = async (req, res) => {
     role: 'admin',
     name: 'Admin',
   });
+  // const department = await model.departmentModel.create({
+  //   organizationLevel: 4,
+  //   name: 'Công ty Thái Hưng',
+  //   description: 'Công ty Thái Hưng',
+  //   address: 'Công ty Thái Hưng',
+  // });
   return res.send(user);
 };
 

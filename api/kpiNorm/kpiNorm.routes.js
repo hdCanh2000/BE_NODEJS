@@ -4,9 +4,9 @@ const kpiNormController = require('./kpiNorm.controller');
 
 const router = express.Router();
 
-router.post('/', auth('admin'), kpiNormController.addKpiNorm);
-router.get('/', auth('admin'), kpiNormController.getAllKpiNorm);
-router.get('/:id', auth('admin'), kpiNormController.getKpiNormDetail);
-router.put('/:id', auth('admin'), kpiNormController.updateKpiNorm);
+router.post('/', auth(['admin', 'manager']), kpiNormController.addKpiNorm);
+router.get('/', auth(['admin', 'manager']), kpiNormController.getAllKpiNorm);
+router.get('/:id', auth(['admin', 'manager']), kpiNormController.getKpiNormDetail);
+router.put('/:id', auth(['admin', 'manager']), kpiNormController.updateKpiNorm);
 
 module.exports = router;
