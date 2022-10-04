@@ -52,10 +52,21 @@ exports.allPosition = async () => {
     }
 };
 
-exports.getDetail = async (id) => {
+exports.getPositionById = async (id) => {
     try {
         const detail = await model.positionModel.findOne({
             where: { id },
+            include: [
+                {
+                    model: model.positionLevelModel,
+                },
+                {
+                    model: model.departmentModel,
+                },
+                {
+                    model: model.requirementModel,
+                },
+            ],
         });
         return detail;
     } catch (error) {
