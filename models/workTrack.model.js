@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('../config/database');
-const { userModel } = require('./index');
+const { userModel, kpiNormModel, missionModel } = require('./index');
 
 const workTracks = db.define('workTracks', {
     id: {
@@ -10,13 +10,28 @@ const workTracks = db.define('workTracks', {
         autoIncrement: true,
     },
     kpiNorm_id: {
-       type: DataTypes.INTEGER,
+        type: DataTypes.INTEGER,
     },
-    note: {
-        type: DataTypes.TEXT,
+    parent_id: {
+        type: DataTypes.INTEGER,
+    },
+    mission_id: {
+        type: DataTypes.INTEGER,
     },
     quantity: {
         type: DataTypes.INTEGER,
+    },
+    user_id: {
+        type: DataTypes.INTEGER,
+    },
+    priority: {
+        type: DataTypes.INTEGER,
+    },
+    review: {
+        type: DataTypes.TEXT,
+    },
+    note: {
+        type: DataTypes.TEXT,
     },
     description: {
         type: DataTypes.TEXT,
@@ -24,15 +39,28 @@ const workTracks = db.define('workTracks', {
     deadline: {
         type: DataTypes.DATE,
     },
-    user_id: {
-        type: DataTypes.INTEGER,
+    startDate: {
+        type: DataTypes.DATE,
     },
 });
 
 userModel.hasMany(workTracks, {
     targetKey: 'id',
     foreignKey: 'user_id',
-  });
+});
+
+kpiNormModel.hasMany(workTracks, {
+    targetKey: 'id',
+    foreignKey: 'kpiNorm_id',
+});
+
+missionModel.hasMany(workTracks, {
+    targetKey: 'id',
+    foreignKey: 'mission_id',
+});
+
 workTracks.belongsTo(userModel, { foreignKey: 'user_id', targetKey: 'id' });
+workTracks.belongsTo(kpiNormModel, { foreignKey: 'kpiNorm_id', targetKey: 'id' });
+workTracks.belongsTo(missionModel, { foreignKey: 'mission_id', targetKey: 'id' });
 
 module.exports = workTracks;

@@ -10,6 +10,7 @@ const worktrackLogRoutes = require('./api/worktrackLog/worktrackLog.routes');
 const kpiNormRoutes = require('./api/kpiNorm/kpiNorm.routes');
 const requirementRoutes = require('./api/requirement/requirement.routes');
 const positionRoutes = require('./api/position/position.routes');
+const worktrackKpiNormRoutes = require('./api/worktrackKpiNorm/worktrackKpiNorm.routes');
 
 const router = express.Router();
 
@@ -24,5 +25,6 @@ router.use('/worktrackLogs', worktrackLogRoutes);
 router.use('/kpiNorms', kpiNormRoutes);
 router.use('/requirements', requirementRoutes);
 router.use('/positions', positionRoutes);
+router.use('/worktrackKpiNorms', worktrackKpiNormRoutes);
 
 module.exports = router;
