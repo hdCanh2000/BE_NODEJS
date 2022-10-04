@@ -16,7 +16,7 @@ exports.createPosition = async (name, description, address, manager, position_le
     }
 };
 
-exports.updateById = async (id, name, description, address, manager, position_levels_id) => {
+exports.updateById = async (id, name, description, address, manager, position_levels_id, department_id) => {
     try {
         const update = await model.positionModel.update({
             id,
@@ -25,6 +25,7 @@ exports.updateById = async (id, name, description, address, manager, position_le
             address,
             manager,
             position_levels_id,
+            department_id,
         }, {
             where: { id },
         });
@@ -43,6 +44,9 @@ exports.allPosition = async () => {
                 },
                 {
                     model: model.departmentModel,
+                },
+                {
+                    model: model.requirementModel,
                 },
             ],
         });
