@@ -9,12 +9,6 @@ const taskDepartment = db.define('taskDepartment', {
         allowNull: false,
         autoIncrement: true,
     },
-    department_id: {
-        type: DataTypes.INTEGER,
-    },
-    task_id: {
-        type: DataTypes.INTEGER,
-    },
     isResponsible: {
         type: DataTypes.BOOLEAN,
         defaultValue: true,
