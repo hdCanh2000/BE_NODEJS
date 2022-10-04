@@ -20,7 +20,7 @@ const departments = db.define('departments', {
     address: {
         type: DataTypes.TEXT,
     },
-    slug: {
+    code: {
         type: DataTypes.TEXT,
     },
     organizationLevel: {
