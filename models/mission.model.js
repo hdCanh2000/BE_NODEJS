@@ -27,10 +27,10 @@ const missions = db.define('missions', {
         type: DataTypes.INTEGER,
     },
     startTime: {
-        type: DataTypes.DATE,
+        type: DataTypes.TEXT,
     },
     endTime: {
-        type: DataTypes.DATE,
+        type: DataTypes.TEXT,
     },
     manday: {
         type: DataTypes.INTEGER,

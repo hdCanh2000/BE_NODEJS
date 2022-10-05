@@ -29,7 +29,7 @@ exports.getMission = async (req, res) => {
 
 exports.getDetailMission = async (req, res) => {
     try {
-        const getDetailMission = await missionService.getMissionById(req.params.id);
+        const getDetailMission = await missionService.getMissionDetail(req.params.id);
         return res.status(200).json({ msg: 'Success!', data: getDetailMission });
     } catch (error) {
         return res.status(400).json({ message: error });
@@ -62,6 +62,19 @@ exports.updateMission = async (req, res) => {
             }
         }
         return res.status(200).json({ msg: 'Success!', data: updateMission });
+    } catch (error) {
+        return res.status(400).json({ message: error });
+    }
+};
+
+exports.deleteMission = async (req, res) => {
+    const { id } = req.body;
+    try {
+        const getMissionById = await missionService.getMissionById(id);
+        const findDepartmentMission = await missionService.getDepartmentMission(getMissionById.id);
+        const deleteMissionById = await missionService.deleteMission(getMissionById.id);
+        await missionService.deleteMultiDepartmentMission(findDepartmentMission.id);
+        return res.status(200).json({ msg: 'Success!', data: deleteMissionById });
     } catch (error) {
         return res.status(400).json({ message: error });
     }
