@@ -14,7 +14,7 @@ const workTrackLogs = db.define('workTrackLogs', {
         defaultValue: 'inProgress',
     },
     date: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
     },
     note: {
         type: DataTypes.TEXT,

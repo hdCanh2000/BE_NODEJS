@@ -27,16 +27,16 @@ const tasks = db.define('tasks', {
         type: DataTypes.INTEGER,
     },
     startDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.TEXT,
     },
     deadlineDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.TEXT,
     },
     startTime: {
-        type: DataTypes.TIME,
+        type: DataTypes.TEXT,
     },
     deadlineTime: {
-        type: DataTypes.TIME,
+        type: DataTypes.TEXT,
     },
     manday: {
         type: DataTypes.INTEGER,
