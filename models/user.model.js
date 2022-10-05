@@ -32,10 +32,10 @@ const users = db.define('users', {
         type: DataTypes.TEXT,
       },
     dateOfBirth: {
-        type: DataTypes.DATE,
+        type: DataTypes.TEXT,
     },
     dateOfJoin: {
-        type: DataTypes.DATE,
+        type: DataTypes.TEXT,
     },
     phone: {
       type: DataTypes.INTEGER,

@@ -37,10 +37,10 @@ const workTracks = db.define('workTracks', {
         type: DataTypes.TEXT,
     },
     deadline: {
-        type: DataTypes.DATE,
+        type: DataTypes.TEXT,
     },
     startDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.TEXT,
     },
 });
 

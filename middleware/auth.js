@@ -8,10 +8,11 @@ const verifyCallback = (req, resolve, reject, roleRights) => async (err, user) =
   if (!roleRights || !roleRights.includes(user.role)) {
     if (!(user.role === 'user')) {
       return reject('You must be logged in with User permission to view this page.');
-    } if ((!user.role === 'manager')) {
+    } if (!(user.role === 'manager')) {
       return reject('You must be logged in with Manager permission to view this page.');
+    } if (!(user.role === 'admin')) {
+      return reject('You must be logged in with Admin permission to view this page.');
     }
-    return reject('You must be logged in with Admin permission to view this page.');
   }
   resolve();
 };

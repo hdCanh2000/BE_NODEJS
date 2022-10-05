@@ -23,7 +23,7 @@ exports.updateKpiNorm = async (req, res) => {
 
 exports.getAllKpiNorm = async (req, res) => {
     try {
-        const result = await kpiNormService.allKpiNorm();
+        const result = await kpiNormService.allKpiNorm(req.user.id);
         return res.status(200).json({ message: 'Get All KpiNorm Success!', data: result });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });

@@ -40,22 +40,42 @@ exports.detailKpiNorm = async (id) => {
     }
 };
 
-exports.allKpiNorm = async () => {
+exports.allKpiNorm = async (id) => {
+    const getUserById = await model.userModel.findOne({ where: { id } });
     try {
-        const data = await model.kpiNormModel.findAll({
-            include: [
-                {
-                    model: model.unitModel,
-                },
-                {
-                    model: model.departmentModel,
-                },
-                {
-                    model: model.positionModel,
-                },
-            ],
-        });
-        return data;
+        if (getUserById.role === 'admin') {
+            const data = await model.kpiNormModel.findAll({
+                include: [
+                    {
+                        model: model.unitModel,
+                    },
+                    {
+                        model: model.departmentModel,
+                    },
+                    {
+                        model: model.positionModel,
+                    },
+                ],
+            });
+            return data;
+        }
+        if (getUserById.role === 'manager') {
+            const data = await model.kpiNormModel.findAll({
+                include: [
+                    {
+                        model: model.unitModel,
+                    },
+                    {
+                        model: model.departmentModel,
+                    },
+                    {
+                        model: model.positionModel,
+                    },
+                ],
+                where: { department_id: getUserById.department_id },
+            });
+            return data;
+        }
     } catch (error) {
         return error;
     }
