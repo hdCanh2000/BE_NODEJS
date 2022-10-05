@@ -36,9 +36,12 @@ exports.updateMission = async (id, name, unit_id, description, quantity, kpiValu
 
 exports.getMissionById = async (id) => {
     try {
-        const getMissionById = await model.missionModel.findOne({
+        const getMissionById = await model.missionModel.findOne(
+        { include: model.departmentModel },
+        {
             where: { id },
-        });
+        },
+        );
         return getMissionById;
     } catch (error) {
         return error;
