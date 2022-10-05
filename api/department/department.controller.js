@@ -10,10 +10,10 @@ exports.addDepartment = async (req, res) => {
 };
 
 exports.updateDepartment = async (req, res) => {
-  const { name, description, slug, address, parent_id } = req.body;
+  const { name, description, address, parent_id } = req.body;
   const { id } = req.params;
   try {
-    const updateItem = await departmentService.updateDepartmentById(id, name, description, slug, address, parent_id);
+    const updateItem = await departmentService.updateDepartmentById(id, name, description, address, parent_id);
     return res.status(200).json({ message: 'Update Department Success!!', data: updateItem });
   } catch (error) {
     return res.status(404).json({ message: 'Error!', error });

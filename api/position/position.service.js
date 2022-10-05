@@ -16,7 +16,7 @@ exports.createPosition = async (name, description, address, manager, position_le
     }
 };
 
-exports.updateById = async (id, name, description, address, manager, position_levels_id) => {
+exports.updateById = async (id, name, description, address, manager, position_levels_id, department_id) => {
     try {
         const update = await model.positionModel.update({
             id,
@@ -25,6 +25,7 @@ exports.updateById = async (id, name, description, address, manager, position_le
             address,
             manager,
             position_levels_id,
+            department_id,
         }, {
             where: { id },
         });
@@ -44,6 +45,9 @@ exports.allPosition = async () => {
                 {
                     model: model.departmentModel,
                 },
+                {
+                    model: model.requirementModel,
+                },
             ],
         });
         return data;
@@ -52,10 +56,21 @@ exports.allPosition = async () => {
     }
 };
 
-exports.getDetail = async (id) => {
+exports.getPositionById = async (id) => {
     try {
         const detail = await model.positionModel.findOne({
             where: { id },
+            include: [
+                {
+                    model: model.positionLevelModel,
+                },
+                {
+                    model: model.departmentModel,
+                },
+                {
+                    model: model.requirementModel,
+                },
+            ],
         });
         return detail;
     } catch (error) {

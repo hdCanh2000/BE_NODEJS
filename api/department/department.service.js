@@ -17,7 +17,6 @@ exports.updateDepartmentById = async (id, name, description, slug, address, pare
         const update = await model.departmentModel.update({
             name,
             description,
-            slug,
             address,
             parent_id,
         }, {
