@@ -37,13 +37,7 @@ const createResource = async (data) => {
 };
 
 const updateResourceById = async (id, data) => {
-    const result = await worktrackLogModel.update({
-        kpiNorm_id: data.kpiNorm_id,
-        note: data.note,
-        quantity: data.quantity,
-        description: data.description,
-        user_id: data.user_id,
-    }, {
+    const result = await worktrackLogModel.update(data, {
         where: {
             id,
         },
