@@ -1,13 +1,13 @@
 const worktrackModel = require('../../models/workTrack.model');
 const userModel = require('../../models/user.model');
 const ApiError = require('../../utils/ApiError');
-const { workTrackKpiNormModel, kpiNormModel } = require('../../models');
+const { kpiNormModel, missionModel, workTrackLogModel } = require('../../models');
 
 const getAllResource = async () => {
     const data = await worktrackModel.findAll({
-        include: {
-            model: workTrackKpiNormModel,
-        },
+        // include: {
+        //     model: workTrackKpiNormModel,
+        // },
     });
     return data;
 };
@@ -32,15 +32,16 @@ const getAllResourceByUserId = async (user_id) => {
         where: {
             user_id: user.id,
         },
-        include: [{
-            model: workTrackKpiNormModel,
-            include: {
+        include: [
+            {
                 model: kpiNormModel,
             },
-        },
-        {
-            model: kpiNormModel,
-        }],
+            {
+                model: missionModel,
+            },
+            {
+                model: workTrackLogModel,
+            }],
     });
     return data;
 };

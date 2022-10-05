@@ -38,10 +38,12 @@ const whitelist = [
   'http://localhost',
   'http://localhost:3000',
   'https://dwt-one.vercel.app',
+  'https://dwt-dev.vercel.app',
   'https://dwt.tbht.vn',
   'http://localhost:3000/',
   'https://dwt-one.vercel.app/',
   'https://dwt.tbht.vn/',
+  'https://dwt-dev.vercel.app/',
 ];
 app.use(cors({
   origin(origin, callback) {

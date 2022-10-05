@@ -61,6 +61,39 @@ exports.getAllUser = async (req, res) => {
                     {
                         model: model.positionModel,
                     },
+                    {
+                        model: model.workTrackModel,
+                    },
+                ],
+            });
+            return res.status(200).json({ message: 'Get All User Success!', data: allUser });
+        }
+        if (getUserById.role !== 'admin') {
+            const allUser = await model.userModel.findAll({ where: { department_id: getUserById.department_id } });
+            return res.status(200).json({ message: 'Get All User Success!', data: allUser });
+        }
+    } catch (error) {
+        return res.status(404).json({ message: 'Error!', error });
+    }
+};
+
+exports.getAllUserByDepartmentId = async (req, res) => {
+    const { department_id } = req.params;
+    try {
+        const getUserById = await model.userModel.findOne({ where: { id: req.user.id } });
+        if (getUserById.role === 'admin') {
+            const allUser = await model.userModel.findAll({
+                where: { department_id },
+                include: [
+                    {
+                        model: model.departmentModel,
+                    },
+                    {
+                        model: model.positionModel,
+                    },
+                    {
+                        model: model.workTrackModel,
+                    },
                 ],
             });
             return res.status(200).json({ message: 'Get All User Success!', data: allUser });
