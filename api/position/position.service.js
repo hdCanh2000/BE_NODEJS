@@ -48,6 +48,9 @@ exports.allPosition = async () => {
                 {
                     model: model.requirementModel,
                 },
+                {
+                    model: model.kpiNormModel,
+                },
             ],
         });
         return data;
@@ -62,13 +65,10 @@ exports.getPositionById = async (id) => {
             where: { id },
             include: [
                 {
-                    model: model.positionLevelModel,
-                },
-                {
-                    model: model.departmentModel,
-                },
-                {
                     model: model.requirementModel,
+                },
+                {
+                    model: model.kpiNormModel,
                 },
             ],
         });

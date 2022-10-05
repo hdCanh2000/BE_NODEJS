@@ -12,13 +12,15 @@ exports.createDepartment = async (data) => {
     }
 };
 
-exports.updateDepartmentById = async (id, name, description, slug, address, parent_id) => {
+exports.updateDepartmentById = async (id, name, description, address, parent_id, code, organizationLevel) => {
     try {
         const update = await model.departmentModel.update({
             name,
             description,
             address,
             parent_id,
+            code,
+            organizationLevel,
         }, {
             where: { id },
         });
