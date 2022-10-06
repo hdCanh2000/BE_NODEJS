@@ -41,7 +41,7 @@ const kpiNorms = db.define('kpiNorms', {
     kpi_value: {
         type: DataTypes.INTEGER,
     },
-    descriptionKpiValue: {
+    descriptionkpivalue: {
         type: DataTypes.TEXT,
     },
     quantity: {
