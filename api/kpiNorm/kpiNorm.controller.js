@@ -39,3 +39,13 @@ exports.getKpiNormDetail = async (req, res) => {
         return res.status(404).json({ message: 'Error!', error });
     }
 };
+
+exports.deleteKpiNorm = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const deletekpi = await kpiNormService.deleteById(id);
+        return res.status(200).json({ message: 'Success!', data: deletekpi });
+    } catch (error) {
+        return res.status(404).json({ message: 'Error!', error });
+    }
+};

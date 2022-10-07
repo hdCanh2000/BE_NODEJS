@@ -1,4 +1,5 @@
 const model = require('../../models/index');
+const ApiError = require('../../utils/ApiError');
 
 exports.createKpiNorm = async (data) => {
     try {
@@ -79,4 +80,15 @@ exports.allKpiNorm = async (id) => {
     } catch (error) {
         return error;
     }
+};
+
+exports.deleteById = async (id) => {
+    const resource = await model.kpiNormModel.findOne({
+        where: { id },
+    });
+    if (!resource) {
+        throw new ApiError(404, 'Not Found!');
+    }
+    await resource.destroy();
+    return resource;
 };

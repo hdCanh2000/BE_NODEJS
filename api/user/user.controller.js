@@ -43,7 +43,7 @@ exports.changePassword = async (req, res) => {
 exports.getUserDetail = async (req, res) => {
     const { id } = req.params;
     try {
-        const userDetail = await userService.findUser(id);
+        const userDetail = await userService.findUser(id, false);
         return res.status(200).json({ message: 'Get User Detail Success!!', data: userDetail });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
@@ -52,7 +52,7 @@ exports.getUserDetail = async (req, res) => {
 
 exports.getAllUser = async (req, res) => {
     try {
-        const getUserById = await model.userModel.findOne({ where: { id: req.user.id } });
+        const getUserById = await model.userModel.findOne({ where: { id: req.user.id, isDelete: false } });
         if (getUserById.role === 'admin') {
             const allUser = await model.userModel.findAll({
                 include: [
@@ -66,6 +66,7 @@ exports.getAllUser = async (req, res) => {
                         model: model.workTrackModel,
                     },
                 ],
+                where: { isDelete: false },
             });
             return res.status(200).json({ message: 'Get All User Success!', data: allUser });
         }
@@ -82,7 +83,7 @@ exports.getAllUser = async (req, res) => {
                         model: model.workTrackModel,
                     },
                 ],
-                where: { department_id: getUserById.department_id },
+                where: { department_id: getUserById.department_id, isDelete: false },
             });
             return res.status(200).json({ message: 'Get All User Success!', data: allUser });
         }
@@ -94,10 +95,10 @@ exports.getAllUser = async (req, res) => {
 exports.getAllUserByDepartmentId = async (req, res) => {
     const { department_id } = req.params;
     try {
-        const getUserById = await model.userModel.findOne({ where: { id: req.user.id } });
+        const getUserById = await model.userModel.findOne({ where: { id: req.user.id, isDelete: false } });
         if (getUserById.role === 'admin') {
             const allUser = await model.userModel.findAll({
-                where: { department_id },
+                where: { department_id, isDelete: false },
                 include: [
                     {
                         model: model.departmentModel,
@@ -113,9 +114,19 @@ exports.getAllUserByDepartmentId = async (req, res) => {
             return res.status(200).json({ message: 'Get All User Success!', data: allUser });
         }
         if (getUserById.role !== 'admin') {
-            const allUser = await model.userModel.findAll({ where: { department_id: getUserById.department_id } });
+            const allUser = await model.userModel.findAll({ where: { department_id: getUserById.department_id, isDelete: false } });
             return res.status(200).json({ message: 'Get All User Success!', data: allUser });
         }
+    } catch (error) {
+        return res.status(404).json({ message: 'Error!', error });
+    }
+};
+
+exports.deleteUser = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const destroyUser = await userService.deleteById(id);
+        return res.status(200).json({ message: 'Delete User Success!', data: destroyUser });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
     }
