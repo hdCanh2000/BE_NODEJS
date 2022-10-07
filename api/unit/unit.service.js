@@ -1,23 +1,17 @@
 const model = require('../../models/index');
 
-exports.createUnit = async (name, code) => {
+exports.createUnit = async (data) => {
     try {
-        const department = {
-            name,
-            code,
-        };
-        const createDepartment = await model.unitModel.create(department);
+        const createDepartment = await model.unitModel.create(data);
         return createDepartment;
     } catch (error) {
         return error;
     }
 };
 
-exports.updateUnitById = async (id, name, code) => {
+exports.updateUnitById = async (id, data) => {
     try {
-        const update = await model.unitModel.update({
-            name,
-            code,
+        const update = await model.unitModel.update(data, {
         }, {
             where: {
                 id,

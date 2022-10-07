@@ -21,18 +21,9 @@ exports.findUser = async (id, idDelete) => {
     }
 };
 
-exports.updateUserById = async (id, email, name, address, phone, role, dateOfBirth, dateOfJoin, position_id, department_id) => {
+exports.updateUserById = async (id, data) => {
     try {
-        const updateUser = await model.userModel.update({
-            email,
-            name,
-            phone,
-            role,
-            address,
-            dateOfBirth,
-            dateOfJoin,
-            position_id,
-            department_id,
+        const updateUser = await model.userModel.update(data, {
         }, { where: { id } });
         return updateUser;
     } catch (error) {

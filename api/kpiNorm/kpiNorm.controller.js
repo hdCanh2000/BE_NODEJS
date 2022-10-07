@@ -10,11 +10,9 @@ exports.addKpiNorm = async (req, res) => {
 };
 
 exports.updateKpiNorm = async (req, res) => {
-    const { name, description, manday, hr, unit_id, department_id, parent_id, position_id } = req.body;
     const { id } = req.params;
     try {
-        const getKpiNormById = await kpiNormService.detailKpiNorm(id);
-        const updateItem = await kpiNormService.updateKpiNormById(getKpiNormById.id, name, description, manday, hr, unit_id, department_id, parent_id, position_id);
+        const updateItem = await kpiNormService.updateKpiNormById(id, req.body);
         return res.status(200).json({ message: 'Update KpiNorm Success!!', data: updateItem });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });

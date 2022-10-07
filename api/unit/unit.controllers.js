@@ -2,9 +2,8 @@ const unitService = require('./unit.service');
 const model = require('../../models/index');
 
 exports.addUnit = async (req, res) => {
-    const { name, code } = req.body;
     try {
-        const addUnit = await unitService.createUnit(name, code);
+        const addUnit = await unitService.createUnit(req.body);
         return res.status(200).json({ msg: 'Create Unit Success!', data: addUnit });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
@@ -12,9 +11,9 @@ exports.addUnit = async (req, res) => {
 };
 
 exports.updateUnit = async (req, res) => {
-    const { id, code, name } = req.body;
+    const { id } = req.params;
     try {
-        const updateUnit = await unitService.updateUnitById(id, name, code);
+        const updateUnit = await unitService.updateUnitById(id, req.body);
         return res.status(200).json({ msg: 'Update Unit Success!', data: updateUnit });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });

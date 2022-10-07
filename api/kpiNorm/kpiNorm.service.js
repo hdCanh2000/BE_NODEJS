@@ -10,17 +10,9 @@ exports.createKpiNorm = async (data) => {
     }
 };
 
-exports.updateKpiNormById = async (id, name, description, manday, hr, unit_id, department_id, parent_id, position_id) => {
+exports.updateKpiNormById = async (id, data) => {
     try {
-        const update = await model.kpiNormModel.update({
-            name,
-            description,
-            manday,
-            hr,
-            unit_id,
-            department_id,
-            parent_id,
-            position_id,
+        const update = await model.kpiNormModel.update(data, {
         }, {
             where: { id },
         });

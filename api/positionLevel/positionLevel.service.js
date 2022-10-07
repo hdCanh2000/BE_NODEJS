@@ -33,10 +33,7 @@ const createResource = async (data) => {
 };
 
 const updateResourceById = async (id, data) => {
-    const result = await positionLevelModel.update({
-        name: data.name,
-        // description: data.description,
-        code: data.code,
+    const result = await positionLevelModel.update(data, {
     }, {
         where: {
             id,

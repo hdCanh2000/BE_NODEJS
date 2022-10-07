@@ -20,10 +20,9 @@ exports.addUser = async (req, res) => {
 };
 
 exports.updateProfile = async (req, res) => {
-    const { email, name, address, phone, role, dateOfBirth, dateOfJoin, position_id, department_id } = req.body;
     const { id } = req.params;
     try {
-        const updateInfo = await userService.updateUserById(id, email, name, address, phone, role, dateOfBirth, dateOfJoin, position_id, department_id);
+        const updateInfo = await userService.updateUserById(id, req.body);
         return res.status(200).json({ msg: 'Update Profile success!!', data: updateInfo });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
