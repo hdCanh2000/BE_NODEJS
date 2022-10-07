@@ -1,15 +1,56 @@
 const worktrackModel = require('../../models/workTrack.model');
 const userModel = require('../../models/user.model');
 const ApiError = require('../../utils/ApiError');
-const { kpiNormModel, missionModel, workTrackLogModel } = require('../../models');
+const { kpiNormModel, missionModel, workTrackLogModel, departmentModel } = require('../../models');
 
-const getAllResource = async () => {
-    const data = await worktrackModel.findAll({
-        // include: {
-        //     model: workTrackKpiNormModel,
-        // },
-    });
-    return data;
+const getAllResource = async (id) => {
+    const getUserById = await userModel.findOne({ where: { id } });
+    try {
+        if (getUserById.role === 'admin') {
+            const data = await worktrackModel.findAll({
+                include: [
+                    {
+                        model: kpiNormModel,
+                    },
+                    {
+                        model: userModel,
+                        include: {
+                            model: departmentModel,
+                        },
+                    },
+                    {
+                        model: missionModel,
+                    },
+                    {
+                        model: workTrackLogModel,
+                    }],
+            });
+            return data;
+        }
+        if (getUserById.role === 'manager') {
+            const data = await worktrackModel.findAll({
+                include: [
+                    {
+                        model: kpiNormModel,
+                    },
+                    {
+                        model: userModel,
+                        include: {
+                            model: departmentModel,
+                        },
+                    },
+                    {
+                        model: missionModel,
+                    },
+                    {
+                        model: workTrackLogModel,
+                    }],
+            });
+            return data;
+        }
+    } catch (error) {
+        return error;
+    }
 };
 
 const getResourceById = async (id) => {

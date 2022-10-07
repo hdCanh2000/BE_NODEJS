@@ -35,6 +35,18 @@ const kpiNorms = db.define('kpiNorms', {
     position_id: {
         type: DataTypes.INTEGER,
     },
+    tasktype: {
+        type: DataTypes.TEXT,
+    },
+    kpi_value: {
+        type: DataTypes.INTEGER,
+    },
+    descriptionkpivalue: {
+        type: DataTypes.TEXT,
+    },
+    quantity: {
+        type: DataTypes.INTEGER,
+    },
 });
 
 departmentModel.hasMany(kpiNorms, {

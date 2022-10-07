@@ -3,7 +3,7 @@ const ApiError = require('../../utils/ApiError');
 
 const getAll = async (req, res) => {
     try {
-        const worktracks = await worktrackService.getAllResource();
+        const worktracks = await worktrackService.getAllResource(req.user.id);
         return res.status(200).json({ message: 'Success!', data: worktracks });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
