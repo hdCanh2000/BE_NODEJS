@@ -23,8 +23,7 @@ exports.findUser = async (id, idDelete) => {
 
 exports.updateUserById = async (id, data) => {
     try {
-        const updateUser = await model.userModel.update(data, {
-        }, { where: { id } });
+        const updateUser = await model.userModel.update(data, { where: { id } });
         return updateUser;
     } catch (error) {
         return error;

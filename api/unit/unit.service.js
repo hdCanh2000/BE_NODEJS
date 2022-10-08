@@ -12,7 +12,6 @@ exports.createUnit = async (data) => {
 exports.updateUnitById = async (id, data) => {
     try {
         const update = await model.unitModel.update(data, {
-        }, {
             where: {
                 id,
             },

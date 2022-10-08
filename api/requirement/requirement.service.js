@@ -22,7 +22,6 @@ const createResource = async (data) => {
 
 const updateResourceById = async (id, data) => {
     const result = await requirementModel.update(data, {
-    }, {
         where: {
             id,
         },

@@ -19,7 +19,6 @@ exports.createPosition = async (name, description, address, manager, position_le
 exports.updateById = async (id, data) => {
     try {
         const update = await model.positionModel.update(data, {
-        }, {
             where: { id },
         });
         return update;
