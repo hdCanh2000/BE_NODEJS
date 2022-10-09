@@ -1,10 +1,11 @@
 const bcrypt = require('bcrypt');
 const model = require('../../models/index');
+const ApiError = require('../../utils/ApiError');
 
-exports.findUser = async (id) => {
+exports.findUser = async (id, idDelete) => {
     try {
         const findUser = await model.userModel.findOne({
-            where: { id },
+            where: { id, idDelete },
             include: [
                 {
                     model: model.departmentModel,
@@ -20,19 +21,9 @@ exports.findUser = async (id) => {
     }
 };
 
-exports.updateUserById = async (id, email, name, address, phone, role, dateOfBirth, dateOfJoin, position_id, department_id) => {
+exports.updateUserById = async (id, data) => {
     try {
-        const updateUser = await model.userModel.update({
-            email,
-            name,
-            phone,
-            role,
-            address,
-            dateOfBirth,
-            dateOfJoin,
-            position_id,
-            department_id,
-        }, { where: { id } });
+        const updateUser = await model.userModel.update(data, { where: { id } });
         return updateUser;
     } catch (error) {
         return error;
@@ -75,6 +66,21 @@ exports.createUser = async (data) => {
             password: hashPassword,
         });
         return newUser;
+    } catch (error) {
+        return error;
+    }
+};
+
+exports.deleteById = async (id) => {
+    try {
+        const resource = await model.userModel.update({
+            isDelete: true,
+        }, { where: { id } });
+        if (!resource) {
+            throw new ApiError(404, 'Not Found!');
+        }
+        // await resource.update();
+        return resource;
     } catch (error) {
         return error;
     }

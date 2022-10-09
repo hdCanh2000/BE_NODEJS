@@ -23,10 +23,9 @@ exports.addPosition = async (req, res) => {
 };
 
 exports.updatePosition = async (req, res) => {
-    const { name, description, address, manager, position_levels_id, department_id } = req.body;
     const { id } = req.params;
     try {
-        const updateItem = await positionService.updateById(id, name, description, address, manager, position_levels_id, department_id);
+        const updateItem = await positionService.updateById(id, req.body);
         return res.status(200).json({ message: 'Update Position Success!!', data: updateItem });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });

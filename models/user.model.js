@@ -49,6 +49,10 @@ const users = db.define('users', {
     position_id: {
         type: DataTypes.INTEGER,
     },
+    isDelete: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
 });
 
 users.hasMany(token, {

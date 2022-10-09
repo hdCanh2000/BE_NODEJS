@@ -6,7 +6,7 @@ const getAll = async (req, res) => {
         const requirements = await requirementService.getAllResource();
         return res.status(200).json({ message: 'Success!', data: requirements });
     } catch (error) {
-        return res.status(404).json({ message: 'Error!' });
+        return res.status(400).json({ message: error });
     }
 };
 
@@ -15,11 +15,11 @@ const getById = async (req, res) => {
     try {
         const requirement = await requirementService.getResourceById(id);
         if (!requirement) {
-            throw new ApiError(404, 'Requirement not found');
+            throw new ApiError(400, 'Requirement not found');
         }
         return res.status(200).json({ message: 'Success!', data: requirement });
     } catch (error) {
-        return res.status(404).json({ message: 'Requirement not found!' });
+        return res.status(400).json({ message: error });
     }
 };
 
@@ -28,7 +28,7 @@ const create = async (req, res) => {
         const requirement = await requirementService.createResource(req.body);
         return res.status(200).json({ message: 'Success!', data: requirement });
     } catch (error) {
-        return res.status(404).json({ message: error });
+        return res.status(400).json({ message: error });
     }
 };
 
@@ -38,7 +38,8 @@ const updateById = async (req, res) => {
         const requirement = await requirementService.updateResourceById(id, req.body);
         return res.status(200).json({ message: 'Success!', data: requirement });
     } catch (error) {
-        return res.status(404).json({ message: 'Error!' });
+        console.log({ error });
+        return res.status(400).json({ message: error });
     }
 };
 
@@ -48,7 +49,7 @@ const deleteById = async (req, res) => {
         const requirement = await requirementService.deleteResourceById(id);
         return res.status(200).json({ message: 'Success!', data: requirement });
     } catch (error) {
-        return res.status(404).json({ message: 'Error!' });
+        return res.status(400).json({ message: error });
     }
 };
 
