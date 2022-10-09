@@ -58,6 +58,16 @@ const getResourceById = async (id) => {
         where: {
             id,
         },
+        include: [
+            {
+                model: kpiNormModel,
+            },
+            {
+                model: missionModel,
+            },
+            {
+                model: workTrackLogModel,
+            }],
     });
     return data;
 };
