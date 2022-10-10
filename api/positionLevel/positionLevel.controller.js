@@ -36,14 +36,17 @@ const updateById = async (req, res) => {
     const { id } = req.params;
     try {
         const positionLevel = await positionLevelService.updateResourceById(id, req.body);
-        return res.status(200).json({ message: 'Success!', data: positionLevel });
+        if (positionLevel) {
+            const result = await positionLevelService.getResourceById(id);
+            return res.status(200).json({ message: 'Success!', data: result });
+        }
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
     }
 };
 
 const deleteById = async (req, res) => {
-    const { id } = req.params;
+    const { id } = req.body;
     try {
         const positionLevel = await positionLevelService.deleteResourceById(id);
         return res.status(200).json({ message: 'Success!', data: positionLevel });

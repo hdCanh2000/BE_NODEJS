@@ -9,6 +9,6 @@ router.get('/:id', auth(['admin', 'manager', 'user']), worktrackController.getBy
 router.get('/user/:user_id', auth(['admin', 'manager', 'user']), worktrackController.getAllByUserId);
 router.post('/', auth(['admin', 'manager', 'user']), worktrackController.create);
 router.put('/:id', auth(['admin', 'manager', 'user']), worktrackController.updateById);
-router.delete('/:id', auth(['admin', 'manager', 'user']), worktrackController.deleteById);
+router.delete('/', auth(['admin', 'manager', 'user']), worktrackController.deleteById);
 
 module.exports = router;

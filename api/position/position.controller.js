@@ -3,9 +3,9 @@ const requirementService = require('../requirement/requirement.service');
 // const kpiNormService = require('../kpiNorm/kpiNorm.service');
 
 exports.addPosition = async (req, res) => {
-    const { name, description, address, manager, position_levels_id, department_id, requirement_id } = req.body;
+    const { requirement_id } = req.body;
     try {
-        const addPosition = await positionService.createPosition(name, description, address, manager, position_levels_id, department_id);
+        const addPosition = await positionService.createPosition(req.body);
 
         const addRequirementForPosition = async (id) => {
             const findRequirement = await requirementService.getResourceById(id);
@@ -23,11 +23,13 @@ exports.addPosition = async (req, res) => {
 };
 
 exports.updatePosition = async (req, res) => {
-    const { name, description, address, manager, position_levels_id, department_id } = req.body;
     const { id } = req.params;
     try {
-        const updateItem = await positionService.updateById(id, name, description, address, manager, position_levels_id, department_id);
-        return res.status(200).json({ message: 'Update Position Success!!', data: updateItem });
+        const updateItem = await positionService.updateById(id, req.body);
+        if (updateItem) {
+            const result = await positionService.getPositionById(id);
+            return res.status(200).json({ message: 'Update Position Success!', data: result });
+        }
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
     }
@@ -46,7 +48,6 @@ exports.getPositionDetail = async (req, res) => {
     const { id } = req.params;
     try {
         const detail = await positionService.getPositionById(id);
-        // const findKpiByPosition = await kpiNormService.allKpiNorm({ position_id: detail.id });
         return res.status(200).json({ message: 'Get Detail Position Success!!', data: detail });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });

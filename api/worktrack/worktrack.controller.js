@@ -56,7 +56,7 @@ const updateById = async (req, res) => {
 };
 
 const deleteById = async (req, res) => {
-    const { id } = req.params;
+    const { id } = req.body;
     try {
         const worktrack = await worktrackService.deleteResourceById(id);
         return res.status(200).json({ message: 'Success!', data: worktrack });

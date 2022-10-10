@@ -10,12 +10,13 @@ exports.addKpiNorm = async (req, res) => {
 };
 
 exports.updateKpiNorm = async (req, res) => {
-    const { name, description, manday, hr, unit_id, department_id, parent_id, position_id } = req.body;
     const { id } = req.params;
     try {
-        const getKpiNormById = await kpiNormService.detailKpiNorm(id);
-        const updateItem = await kpiNormService.updateKpiNormById(getKpiNormById.id, name, description, manday, hr, unit_id, department_id, parent_id, position_id);
-        return res.status(200).json({ message: 'Update KpiNorm Success!!', data: updateItem });
+        const updateItem = await kpiNormService.updateKpiNormById(id, req.body);
+        if (updateItem) {
+            const result = await kpiNormService.detailKpiNorm(id);
+            return res.status(200).json({ message: 'Update KpiNorm Success!', data: result });
+        }
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
     }
@@ -35,6 +36,16 @@ exports.getKpiNormDetail = async (req, res) => {
     try {
         const kpiNormDetail = await kpiNormService.detailKpiNorm(id);
         return res.status(200).json({ message: 'Get Detail KpiNorm Success!!', data: kpiNormDetail });
+    } catch (error) {
+        return res.status(404).json({ message: 'Error!', error });
+    }
+};
+
+exports.deleteKpiNorm = async (req, res) => {
+    const { id } = req.body;
+    try {
+        const deletekpi = await kpiNormService.deleteById(id);
+        return res.status(200).json({ message: 'Success!', data: deletekpi });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
     }

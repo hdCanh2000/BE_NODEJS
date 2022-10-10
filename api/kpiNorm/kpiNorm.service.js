@@ -1,4 +1,5 @@
 const model = require('../../models/index');
+const ApiError = require('../../utils/ApiError');
 
 exports.createKpiNorm = async (data) => {
     try {
@@ -9,17 +10,9 @@ exports.createKpiNorm = async (data) => {
     }
 };
 
-exports.updateKpiNormById = async (id, name, description, manday, hr, unit_id, department_id, parent_id, position_id) => {
+exports.updateKpiNormById = async (id, data) => {
     try {
-        const update = await model.kpiNormModel.update({
-            name,
-            description,
-            manday,
-            hr,
-            unit_id,
-            department_id,
-            parent_id,
-            position_id,
+        const update = await model.kpiNormModel.update(data, {
         }, {
             where: { id },
         });
@@ -79,4 +72,15 @@ exports.allKpiNorm = async (id) => {
     } catch (error) {
         return error;
     }
+};
+
+exports.deleteById = async (id) => {
+    const resource = await model.kpiNormModel.findOne({
+        where: { id },
+    });
+    if (!resource) {
+        throw new ApiError(404, 'Not Found!');
+    }
+    await resource.destroy();
+    return resource;
 };

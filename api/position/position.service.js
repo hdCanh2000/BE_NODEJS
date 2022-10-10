@@ -1,32 +1,17 @@
 const model = require('../../models/index');
 
-exports.createPosition = async (name, description, address, manager, position_levels_id, department_id) => {
+exports.createPosition = async (data) => {
     try {
-        const create = await model.positionModel.create({
-            name,
-            description,
-            address,
-            manager,
-            position_levels_id,
-            department_id,
-        });
+        const create = await model.positionModel.create(data);
         return create;
     } catch (error) {
         return error;
     }
 };
 
-exports.updateById = async (id, name, description, address, manager, position_levels_id, department_id) => {
+exports.updateById = async (id, data) => {
     try {
-        const update = await model.positionModel.update({
-            id,
-            name,
-            description,
-            address,
-            manager,
-            position_levels_id,
-            department_id,
-        }, {
+        const update = await model.positionModel.update(data, {
             where: { id },
         });
         return update;

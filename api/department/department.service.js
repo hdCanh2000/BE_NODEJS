@@ -12,16 +12,9 @@ exports.createDepartment = async (data) => {
     }
 };
 
-exports.updateDepartmentById = async (id, name, description, address, parent_id, code, organizationLevel) => {
+exports.updateDepartmentById = async (id, data) => {
     try {
-        const update = await model.departmentModel.update({
-            name,
-            description,
-            address,
-            parent_id,
-            code,
-            organizationLevel,
-        }, {
+        const update = await model.departmentModel.update(data, {
             where: { id },
         });
         return update;
@@ -33,9 +26,10 @@ exports.updateDepartmentById = async (id, name, description, address, parent_id,
 exports.allDepartment = async () => {
     try {
         const data = await model.departmentModel.findAll({
-            include: {
+            include: [{
                 model: model.userModel,
-            },
+                // where: { isDelete: false },
+            }],
         });
         return data;
     } catch (error) {

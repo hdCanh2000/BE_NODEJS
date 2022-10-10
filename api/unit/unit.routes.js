@@ -5,7 +5,7 @@ const userController = require('./unit.controllers');
 const router = express.Router();
 
 router.post('/', auth(['admin', 'manager']), userController.addUnit);
-router.put('/', auth(['admin', 'manager']), userController.updateUnit);
+router.put('/:id', auth(['admin', 'manager']), userController.updateUnit);
 router.delete('/', auth(['admin', 'manager']), userController.deleteUnit);
 router.get('/', auth(['admin', 'manager']), userController.getAllUnit);
 
