@@ -30,6 +30,8 @@
         "indent": "off",
         "comma-dangle": "warn",
         "@typescript-eslint/no-var-requires": "off",
-        "linebreak-style": "off"
+        "linebreak-style": "off",
+        "import/no-dynamic-require": "off",
+        "global-require": "off"
     }
 }

@@ -1,66 +1,40 @@
-const { DataTypes } = require('sequelize');
-const db = require('../config/database');
-const { userModel, kpiNormModel, missionModel } = require('./index');
+'use strict';
+const {
+    Model,
+} = require('sequelize');
 
-const workTracks = db.define('workTracks', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false,
-        autoIncrement: true,
-    },
-    kpiNorm_id: {
-        type: DataTypes.INTEGER,
-    },
-    parent_id: {
-        type: DataTypes.INTEGER,
-    },
-    mission_id: {
-        type: DataTypes.INTEGER,
-    },
-    quantity: {
-        type: DataTypes.INTEGER,
-    },
-    user_id: {
-        type: DataTypes.INTEGER,
-    },
-    priority: {
-        type: DataTypes.INTEGER,
-    },
-    review: {
-        type: DataTypes.TEXT,
-    },
-    note: {
-        type: DataTypes.TEXT,
-    },
-    description: {
-        type: DataTypes.TEXT,
-    },
-    deadline: {
-        type: DataTypes.TEXT,
-    },
-    startDate: {
-        type: DataTypes.TEXT,
-    },
-});
-
-userModel.hasMany(workTracks, {
-    targetKey: 'id',
-    foreignKey: 'user_id',
-});
-
-kpiNormModel.hasMany(workTracks, {
-    targetKey: 'id',
-    foreignKey: 'kpiNorm_id',
-});
-
-missionModel.hasMany(workTracks, {
-    targetKey: 'id',
-    foreignKey: 'mission_id',
-});
-
-workTracks.belongsTo(userModel, { foreignKey: 'user_id', targetKey: 'id' });
-workTracks.belongsTo(kpiNormModel, { foreignKey: 'kpiNorm_id', targetKey: 'id' });
-workTracks.belongsTo(missionModel, { foreignKey: 'mission_id', targetKey: 'id' });
-
-module.exports = workTracks;
+module.exports = (sequelize, DataTypes) => {
+    class workTracks extends Model {
+        /**
+         * Helper method for defining associations.
+         * This method is not a part of Sequelize lifecycle.
+         * The `models/index` file will call this method automatically.
+         */
+        static associate(models) {
+            // define association here
+            workTracks.belongsTo(models.users, { foreignKey: 'user_id', targetKey: 'id' });
+            workTracks.belongsTo(models.kpiNorms, { foreignKey: 'kpiNorm_id', targetKey: 'id' });
+            workTracks.belongsTo(models.missions, { foreignKey: 'mission_id', targetKey: 'id' });
+            workTracks.hasMany(models.workTrackLogs, {
+                targetKey: 'id',
+                foreignKey: 'workTrack_id',
+              });
+        }
+    }
+    workTracks.init({
+        kpiNorm_id: DataTypes.INTEGER,
+        parent_id: DataTypes.INTEGER,
+        mission_id: DataTypes.INTEGER,
+        quantity: DataTypes.INTEGER,
+        priority: DataTypes.INTEGER,
+        review: DataTypes.STRING,
+        node: DataTypes.STRING,
+        description: DataTypes.STRING,
+        deadline: DataTypes.STRING,
+        startDate: DataTypes.STRING,
+    }, {
+        sequelize,
+        modelName: 'workTracks',
+    });
+    return workTracks;
+};

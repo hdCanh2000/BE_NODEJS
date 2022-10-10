@@ -1,52 +1,43 @@
-const { DataTypes } = require('sequelize');
-const db = require('../config/database');
-const { departmentModel, unitModel } = require('./index');
+'use strict';
+const {
+    Model,
+} = require('sequelize');
 
-const kpiNorms = db.define('kpiNorms', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false,
-        autoIncrement: true,
-    },
-    name: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-        unique: true,
-    },
-    description: {
-        type: DataTypes.TEXT,
-    },
-    manday: {
-        type: DataTypes.INTEGER,
-    },
-    hr: {
-        type: DataTypes.TEXT,
-    },
-    unit_id: {
-        type: DataTypes.INTEGER,
-    },
-    department_id: {
-        type: DataTypes.INTEGER,
-    },
-    parent_id: {
-        type: DataTypes.INTEGER,
-    },
-    position_id: {
-        type: DataTypes.INTEGER,
-    },
-});
+module.exports = (sequelize, DataTypes) => {
+    class kpiNorms extends Model {
+        /**
+         * Helper method for defining associations.
+         * This method is not a part of Sequelize lifecycle.
+         * The `models/index` file will call this method automatically.
+         */
+        static associate(models) {
+            // define association here
+            kpiNorms.belongsTo(models.departments, { foreignKey: 'department_id', targetKey: 'id' });
+            kpiNorms.belongsTo(models.units, { foreignKey: 'unit_id', targetKey: 'id' });
+            kpiNorms.belongsTo(models.positions, { foreignKey: 'position_id', targetKey: 'id' });
+            kpiNorms.hasMany(models.workTracks, {
+                targetKey: 'id',
+                foreignKey: 'kpiNorm_id',
+            });
+        }
+    }
+    kpiNorms.init({
+        name: DataTypes.STRING,
+        description: DataTypes.STRING,
+        hr: DataTypes.STRING,
+        quantity: DataTypes.INTEGER,
+        kpi_value: DataTypes.INTEGER,
+        descriptionkpivalue: DataTypes.STRING,
+        manday: DataTypes.INTEGER,
+        tasktype: DataTypes.STRING,
+        parent_id: DataTypes.INTEGER,
+        department_id: DataTypes.INTEGER,
+        position_id: DataTypes.INTEGER,
+        unit_id: DataTypes.INTEGER,
 
-departmentModel.hasMany(kpiNorms, {
-    targetKey: 'id',
-    foreignKey: 'department_id',
-});
-kpiNorms.belongsTo(departmentModel, { foreignKey: 'department_id', targetKey: 'id' });
-
-unitModel.hasMany(kpiNorms, {
-    targetKey: 'id',
-    foreignKey: 'unit_id',
-});
-kpiNorms.belongsTo(unitModel, { foreignKey: 'unit_id', targetKey: 'id' });
-
-module.exports = kpiNorms;
+    }, {
+        sequelize,
+        modelName: 'kpiNorms',
+    });
+    return kpiNorms;
+};

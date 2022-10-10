@@ -4,7 +4,7 @@ const {
 } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class tokens extends Model {
+    class workTrackUsers extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -12,23 +12,23 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            tokens.belongsTo(models.users, { foreignKey: 'user_id', targetKey: 'id' });
+            models.users.belongsToMany(models.workTracks, { through: workTrackUsers });
+            models.workTracks.belongsToMany(models.users, { through: workTrackUsers });
         }
     }
-    tokens.init({
-        name: DataTypes.STRING,
-        data_token: DataTypes.STRING,
-        type: {
-            type: DataTypes.ENUM(['refreshToken', 'expired']),
-            defaultValue: 'refreshToken',
-        },
+    workTrackUsers.init({
         user_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        workTrack_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
+        isResponsible: DataTypes.BOOLEAN,
     }, {
         sequelize,
-        modelName: 'tokens',
+        modelName: 'workTrackUsers',
     });
-    return tokens;
+    return workTrackUsers;
 };

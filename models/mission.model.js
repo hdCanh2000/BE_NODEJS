@@ -1,46 +1,36 @@
-const { DataTypes } = require('sequelize');
-const db = require('../config/database');
-const { unitModel } = require('./index');
+'use strict';
+const {
+    Model,
+} = require('sequelize');
 
-const missions = db.define('missions', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false,
-        autoIncrement: true,
-    },
-    name: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-        unique: true,
-    },
-    unit_id: {
-        type: DataTypes.INTEGER,
-    },
-    description: {
-        type: DataTypes.TEXT,
-    },
-    quantity: {
-        type: DataTypes.INTEGER,
-    },
-    kpiValue: {
-        type: DataTypes.INTEGER,
-    },
-    startTime: {
-        type: DataTypes.TEXT,
-    },
-    endTime: {
-        type: DataTypes.TEXT,
-    },
-    manday: {
-        type: DataTypes.INTEGER,
-    },
-});
-
-unitModel.hasMany(missions, {
-    targetKey: 'id',
-    foreignKey: 'unit_id',
-});
-missions.belongsTo(unitModel, { foreignKey: 'unit_id', targetKey: 'id' });
-
-module.exports = missions;
+module.exports = (sequelize, DataTypes) => {
+    class missions extends Model {
+        /**
+         * Helper method for defining associations.
+         * This method is not a part of Sequelize lifecycle.
+         * The `models/index` file will call this method automatically.
+         */
+        static associate(models) {
+            // define association here
+            missions.belongsTo(models.units, { foreignKey: 'unit_id', targetKey: 'id' });
+            missions.hasMany(models.workTracks, {
+                targetKey: 'id',
+                foreignKey: 'mission_id',
+            });
+        }
+    }
+    missions.init({
+        name: DataTypes.STRING,
+        description: DataTypes.STRING,
+        unit_id: DataTypes.INTEGER,
+        quantity: DataTypes.INTEGER,
+        kpiValue: DataTypes.INTEGER,
+        startTime: DataTypes.STRING,
+        endTime: DataTypes.STRING,
+        manday: DataTypes.INTEGER,
+    }, {
+        sequelize,
+        modelName: 'missions',
+    });
+    return missions;
+};

@@ -1,20 +1,34 @@
-const { DataTypes } = require('sequelize');
-const db = require('../config/database');
-const { missionModel, departmentModel } = require('./index');
+'use strict';
+const {
+  Model,
+} = require('sequelize');
 
-const missionDepartment = db.define('missionDepartment', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false,
-        autoIncrement: true,
+module.exports = (sequelize, DataTypes) => {
+  class missionDepartments extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+      models.missions.belongsToMany(models.departments, { through: missionDepartments });
+      models.departments.belongsToMany(models.missions, { through: missionDepartments });
+    }
+  }
+  missionDepartments.init({
+    mission_id: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
     },
-    isResponsible: {
-        type: DataTypes.BOOLEAN,
+    department_id: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
     },
-});
-
-missionModel.belongsToMany(departmentModel, { through: missionDepartment });
-departmentModel.belongsToMany(missionModel, { through: missionDepartment });
-
-module.exports = missionDepartment;
+    isResponsible: DataTypes.BOOLEAN,
+  }, {
+    sequelize,
+    modelName: 'missionDepartments',
+  });
+  return missionDepartments;
+};
