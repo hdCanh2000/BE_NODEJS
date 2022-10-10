@@ -32,11 +32,14 @@ exports.login = async (req, res) => {
       },
     });
     if (!user) {
-      return res.status(400).json({ message: 'The email does not exist or has been locked !!!' });
+      return res.status(400).json({ message: 'Tài khoản của bạn không tồn tại hoặc vô hiệu hóa !!!' });
+    }
+    if (user.isDelete === true) {
+      return res.status(400).json({ message: 'Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ phông IT để giải quyết!!!' });
     }
     const match = await bcrypt.compare(req.body.password, user.password);
     if (!match) {
-      return res.status(400).json({ message: 'Wrong Password', data: {} });
+      return res.status(400).json({ message: 'Sai mật khẩu. Vui lòng thử lại', data: {} });
     }
     const { accessToken, refreshToken } = await authService.signToken(user);
     await model.tokenModel.create({ data_token: refreshToken, user_id: user.id });

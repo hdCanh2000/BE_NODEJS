@@ -6,7 +6,7 @@ const getAll = async (req, res) => {
         const requirements = await requirementService.getAllResource();
         return res.status(200).json({ message: 'Success!', data: requirements });
     } catch (error) {
-        return res.status(400).json({ message: error });
+        return res.status(400).json({ message: 'Error!', error });
     }
 };
 
@@ -19,7 +19,7 @@ const getById = async (req, res) => {
         }
         return res.status(200).json({ message: 'Success!', data: requirement });
     } catch (error) {
-        return res.status(400).json({ message: error });
+        return res.status(400).json({ message: 'Error!', error });
     }
 };
 
@@ -28,7 +28,7 @@ const create = async (req, res) => {
         const requirement = await requirementService.createResource(req.body);
         return res.status(200).json({ message: 'Success!', data: requirement });
     } catch (error) {
-        return res.status(400).json({ message: error });
+        return res.status(400).json({ message: 'Error!', error });
     }
 };
 
@@ -36,20 +36,22 @@ const updateById = async (req, res) => {
     const { id } = req.params;
     try {
         const requirement = await requirementService.updateResourceById(id, req.body);
-        return res.status(200).json({ message: 'Success!', data: requirement });
+        if (requirement) {
+            const result = await requirementService.getResourceById(id);
+            return res.status(200).json({ message: 'Success!', data: result });
+        }
     } catch (error) {
-        console.log({ error });
-        return res.status(400).json({ message: error });
+        return res.status(400).json({ message: 'Error!', error });
     }
 };
 
 const deleteById = async (req, res) => {
-    const { id } = req.params;
+    const { id } = req.body;
     try {
         const requirement = await requirementService.deleteResourceById(id);
         return res.status(200).json({ message: 'Success!', data: requirement });
     } catch (error) {
-        return res.status(400).json({ message: error });
+        return res.status(400).json({ message: 'Error!', error });
     }
 };
 

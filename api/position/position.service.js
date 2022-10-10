@@ -1,15 +1,8 @@
 const model = require('../../models/index');
 
-exports.createPosition = async (name, description, address, manager, position_levels_id, department_id) => {
+exports.createPosition = async (data) => {
     try {
-        const create = await model.positionModel.create({
-            name,
-            description,
-            address,
-            manager,
-            position_levels_id,
-            department_id,
-        });
+        const create = await model.positionModel.create(data);
         return create;
     } catch (error) {
         return error;
@@ -39,9 +32,6 @@ exports.allPosition = async () => {
                 },
                 {
                     model: model.requirementModel,
-                },
-                {
-                    model: model.kpiNormModel,
                 },
             ],
         });

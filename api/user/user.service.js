@@ -2,18 +2,10 @@ const bcrypt = require('bcrypt');
 const model = require('../../models/index');
 const ApiError = require('../../utils/ApiError');
 
-exports.findUser = async (id, idDelete) => {
+exports.findUser = async (id) => {
     try {
         const findUser = await model.userModel.findOne({
-            where: { id, idDelete },
-            include: [
-                {
-                    model: model.departmentModel,
-                },
-                {
-                    model: model.positionModel,
-                },
-            ],
+            where: { id },
         });
         return findUser;
     } catch (error) {
@@ -72,16 +64,12 @@ exports.createUser = async (data) => {
 };
 
 exports.deleteById = async (id) => {
-    try {
-        const resource = await model.userModel.update({
-            isDelete: true,
-        }, { where: { id } });
-        if (!resource) {
-            throw new ApiError(404, 'Not Found!');
-        }
-        // await resource.update();
-        return resource;
-    } catch (error) {
-        return error;
+    const resource = await model.userModel.findOne({
+        where: { id },
+    });
+    if (!resource) {
+        throw new ApiError(404, 'Not Found!');
     }
+    await resource.destroy();
+    return resource;
 };

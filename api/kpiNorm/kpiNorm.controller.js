@@ -13,7 +13,10 @@ exports.updateKpiNorm = async (req, res) => {
     const { id } = req.params;
     try {
         const updateItem = await kpiNormService.updateKpiNormById(id, req.body);
-        return res.status(200).json({ message: 'Update KpiNorm Success!!', data: updateItem });
+        if (updateItem) {
+            const result = await kpiNormService.detailKpiNorm(id);
+            return res.status(200).json({ message: 'Update KpiNorm Success!', data: result });
+        }
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
     }
@@ -39,7 +42,7 @@ exports.getKpiNormDetail = async (req, res) => {
 };
 
 exports.deleteKpiNorm = async (req, res) => {
-    const { id } = req.params;
+    const { id } = req.body;
     try {
         const deletekpi = await kpiNormService.deleteById(id);
         return res.status(200).json({ message: 'Success!', data: deletekpi });

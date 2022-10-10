@@ -14,14 +14,17 @@ exports.updateUnit = async (req, res) => {
     const { id } = req.params;
     try {
         const updateUnit = await unitService.updateUnitById(id, req.body);
-        return res.status(200).json({ msg: 'Update Unit Success!', data: updateUnit });
+        if (updateUnit) {
+            const result = await unitService.getUnitById(id);
+            return res.status(200).json({ message: 'Success!', data: result });
+        }
     } catch (error) {
         return res.status(400).json({ message: 'Error!', error });
     }
 };
 
 exports.deleteUnit = async (req, res) => {
-    const { id } = req.params;
+    const { id } = req.body;
     try {
         const deleteUnit = await unitService.deleteUnitById(id);
         return res.status(200).json({ msg: 'Delete Unit Success!', data: deleteUnit });

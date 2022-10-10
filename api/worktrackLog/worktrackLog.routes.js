@@ -8,6 +8,6 @@ router.get('/:id', worktrackLogController.getById);
 router.get('/worktrack/:workTrack_id', worktrackLogController.getAllByWorktrackId);
 router.post('/', worktrackLogController.create);
 router.put('/:id', worktrackLogController.updateById);
-router.delete('/:id', worktrackLogController.deleteById);
+router.delete('/', worktrackLogController.deleteById);
 
 module.exports = router;

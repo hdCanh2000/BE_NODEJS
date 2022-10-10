@@ -23,7 +23,10 @@ exports.updateProfile = async (req, res) => {
     const { id } = req.params;
     try {
         const updateInfo = await userService.updateUserById(id, req.body);
-        return res.status(200).json({ msg: 'Update Profile success!!', data: updateInfo });
+        if (updateInfo) {
+            const result = await userService.findUser(id);
+            return res.status(200).json({ msg: 'Update Profile success!!', data: result });
+          }
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
     }
@@ -42,7 +45,7 @@ exports.changePassword = async (req, res) => {
 exports.getUserDetail = async (req, res) => {
     const { id } = req.params;
     try {
-        const userDetail = await userService.findUser(id, false);
+        const userDetail = await userService.findUser(id);
         return res.status(200).json({ message: 'Get User Detail Success!!', data: userDetail });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
@@ -122,7 +125,7 @@ exports.getAllUserByDepartmentId = async (req, res) => {
 };
 
 exports.deleteUser = async (req, res) => {
-    const { id } = req.params;
+    const { id } = req.body;
     try {
         const destroyUser = await userService.deleteById(id);
         return res.status(200).json({ message: 'Delete User Success!', data: destroyUser });
