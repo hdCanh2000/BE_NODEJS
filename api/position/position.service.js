@@ -48,9 +48,6 @@ exports.allPosition = async () => {
                 {
                     model: model.requirementModel,
                 },
-                {
-                    model: model.kpiNormModel,
-                },
             ],
         });
         return data;
