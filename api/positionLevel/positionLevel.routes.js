@@ -8,6 +8,6 @@ router.get('/', auth('admin'), positionLevelController.getAll);
 router.get('/:id', auth('admin'), positionLevelController.getById);
 router.post('/', auth('admin'), positionLevelController.create);
 router.put('/:id', auth('admin'), positionLevelController.updateById);
-router.delete('/', auth('admin'), positionLevelController.deleteById);
+router.delete('/:id', auth('admin'), positionLevelController.deleteById);
 
 module.exports = router;
