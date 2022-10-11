@@ -23,13 +23,12 @@ module.exports = (sequelize, DataTypes) => {
     }
     kpiNorms.init({
         name: DataTypes.STRING,
-        description: DataTypes.STRING,
-        hr: DataTypes.STRING,
+        description: DataTypes.TEXT,
         quantity: DataTypes.INTEGER,
         kpi_value: DataTypes.INTEGER,
-        descriptionkpivalue: DataTypes.STRING,
+        descriptionKpiValue: DataTypes.STRING,
         manday: DataTypes.INTEGER,
-        tasktype: DataTypes.STRING,
+        taskType: DataTypes.STRING,
         parent_id: DataTypes.INTEGER,
         department_id: DataTypes.INTEGER,
         position_id: DataTypes.INTEGER,

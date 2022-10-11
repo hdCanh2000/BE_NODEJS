@@ -31,6 +31,9 @@ module.exports = {
         name: {
           type: Sequelize.STRING,
         },
+        sex: {
+          type: Sequelize.ENUM(['male', 'female']),
+        },
         dateOfBirth: {
           type: Sequelize.STRING,
         },
@@ -38,7 +41,7 @@ module.exports = {
           type: Sequelize.STRING,
         },
         phone: {
-          type: Sequelize.INTEGER,
+          type: Sequelize.STRING,
         },
         address: {
           type: Sequelize.STRING,

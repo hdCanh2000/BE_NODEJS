@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     positions.init({
         name: DataTypes.STRING,
         code: DataTypes.STRING,
-        description: DataTypes.STRING,
+        description: DataTypes.TEXT,
         address: DataTypes.STRING,
         manager: DataTypes.INTEGER,
         position_levels_id: DataTypes.INTEGER,

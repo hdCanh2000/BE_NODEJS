@@ -15,6 +15,9 @@ module.exports = {
         type: Sequelize.STRING,
       },
       description: {
+        type: Sequelize.TEXT,
+      },
+      code: {
         type: Sequelize.STRING,
       },
       address: {

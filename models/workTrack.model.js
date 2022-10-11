@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
         priority: DataTypes.INTEGER,
         review: DataTypes.STRING,
         node: DataTypes.STRING,
-        description: DataTypes.STRING,
+        description: DataTypes.TEXT,
         deadline: DataTypes.STRING,
         startDate: DataTypes.STRING,
     }, {

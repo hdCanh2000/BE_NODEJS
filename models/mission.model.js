@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     }
     missions.init({
         name: DataTypes.STRING,
-        description: DataTypes.STRING,
+        description: DataTypes.TEXT,
         unit_id: DataTypes.INTEGER,
         quantity: DataTypes.INTEGER,
         kpiValue: DataTypes.INTEGER,

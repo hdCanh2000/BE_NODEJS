@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   requirements.init({
     name: DataTypes.STRING,
-    description: DataTypes.STRING,
+    description: DataTypes.TEXT,
   }, {
     sequelize,
     modelName: 'requirements',

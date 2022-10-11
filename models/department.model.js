@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   departments.init({
     name: DataTypes.STRING,
-    description: DataTypes.STRING,
+    description: DataTypes.TEXT,
     address: DataTypes.STRING,
     code: DataTypes.STRING,
     organizationLevel: DataTypes.INTEGER,

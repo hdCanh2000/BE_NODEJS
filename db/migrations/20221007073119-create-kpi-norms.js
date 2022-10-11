@@ -15,13 +15,10 @@ module.exports = {
         type: Sequelize.STRING,
       },
       description: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
       },
       manday: {
         type: Sequelize.INTEGER,
-      },
-      hr: {
-        type: Sequelize.STRING,
       },
       unit_id: {
         type: Sequelize.INTEGER,
@@ -47,13 +44,13 @@ module.exports = {
           key: 'id',
         },
       },
-      tasktype: {
+      taskType: {
         type: Sequelize.STRING,
       },
       kpi_value: {
         type: Sequelize.INTEGER,
       },
-      descriptionkpivalue: {
+      descriptionKpiValue: {
         type: Sequelize.STRING,
       },
       quantity: {

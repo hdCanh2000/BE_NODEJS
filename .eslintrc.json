@@ -32,6 +32,7 @@
         "@typescript-eslint/no-var-requires": "off",
         "linebreak-style": "off",
         "import/no-dynamic-require": "off",
-        "global-require": "off"
+        "global-require": "off",
+        "no-octal": "off"
     }
 }
