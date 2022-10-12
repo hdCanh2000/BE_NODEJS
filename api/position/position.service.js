@@ -59,3 +59,23 @@ exports.getPositionById = async (id) => {
         return error;
     }
 };
+
+exports.getPositionRequirement = async (id) => {
+    try {
+        const detail = await model.positionRequirement.findAll({
+            where: { positionId: id },
+        });
+        return detail;
+    } catch (error) {
+        return error;
+    }
+};
+
+exports.deletePositionRequirement = async (id) => {
+    try {
+        const deletePR = await model.positionRequirement.destroy({ where: { positionId: id } });
+        return deletePR;
+    } catch (error) {
+        return error;
+    }
+};
