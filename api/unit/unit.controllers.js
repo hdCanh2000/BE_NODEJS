@@ -24,7 +24,7 @@ exports.updateUnit = async (req, res) => {
 };
 
 exports.deleteUnit = async (req, res) => {
-    const { id } = req.body;
+    const { id } = req.params;
     try {
         const deleteUnit = await unitService.deleteUnitById(id);
         return res.status(200).json({ msg: 'Delete Unit Success!', data: deleteUnit });
