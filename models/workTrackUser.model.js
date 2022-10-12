@@ -17,11 +17,11 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
     workTrackUsers.init({
-        user_id: {
+        userId: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        workTrack_id: {
+        workTrackId: {
             type: DataTypes.INTEGER,
             allowNull: false,
         },

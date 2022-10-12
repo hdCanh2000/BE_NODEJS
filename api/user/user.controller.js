@@ -51,7 +51,6 @@ exports.getUserDetail = async (req, res) => {
         return res.status(404).json({ message: 'Error!', error });
     }
 };
-
 exports.getAllUser = async (req, res) => {
     try {
         const getUserById = await model.users.findOne({ where: { id: req.user.id, isDelete: false } });
@@ -63,9 +62,6 @@ exports.getAllUser = async (req, res) => {
                     },
                     {
                         model: model.positions,
-                    },
-                    {
-                        model: model.workTracks,
                     },
                 ],
                 where: { isDelete: false },
@@ -80,9 +76,6 @@ exports.getAllUser = async (req, res) => {
                     },
                     {
                         model: model.positions,
-                    },
-                    {
-                        model: model.workTracks,
                     },
                 ],
                 where: { department_id: getUserById.department_id, isDelete: false },
@@ -107,9 +100,6 @@ exports.getAllUserByDepartmentId = async (req, res) => {
                     },
                     {
                         model: model.positions,
-                    },
-                    {
-                        model: model.workTracks,
                     },
                 ],
             });

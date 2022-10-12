@@ -5,13 +5,7 @@ module.exports = {
     await queryInterface.createTable(
 'missionDepartments',
 {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
-      mission_id: {
+      missionId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
@@ -19,7 +13,7 @@ module.exports = {
           key: 'id',
         },
       },
-      department_id: {
+      departmentId: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {

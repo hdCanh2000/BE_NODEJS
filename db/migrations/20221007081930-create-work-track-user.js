@@ -5,18 +5,12 @@ module.exports = {
     await queryInterface.createTable(
 'workTrackUsers',
 {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
-      user_id: {
+      userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: { model: 'users', key: 'id' },
       },
-      workTrack_id: {
+      workTrackId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: { model: 'workTracks', key: 'id' },

@@ -17,11 +17,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   missionDepartments.init({
-    mission_id: {
+    missionId: {
       allowNull: false,
       type: DataTypes.INTEGER,
     },
-    department_id: {
+    departmentId: {
       allowNull: false,
       type: DataTypes.INTEGER,
     },

@@ -5,13 +5,7 @@ module.exports = {
     await queryInterface.createTable(
 'positionRequirements',
 {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
-      requirement_id: {
+      requirementId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -19,7 +13,7 @@ module.exports = {
           key: 'id',
         },
       },
-      position_id: {
+      positionId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {

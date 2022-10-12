@@ -5,14 +5,14 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     return queryInterface.bulkInsert('positionRequirements', [
       {
-        position_id: 14,
-        requirement_id: 1,
+        positionId: 14,
+        requirementId: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        position_id: 14,
-        requirement_id: 2,
+        positionId: 14,
+        requirementId: 2,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

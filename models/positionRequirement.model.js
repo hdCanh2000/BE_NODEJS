@@ -17,11 +17,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   positionRequirements.init({
-    requirement_id: {
+    requirementId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      position_id: {
+      positionId: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
