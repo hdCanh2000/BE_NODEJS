@@ -3,7 +3,7 @@ const ApiError = require('../../utils/ApiError');
 
 exports.createKpiNorm = async (data) => {
     try {
-        const result = model.kpiNormModel.create(data);
+        const result = model.kpiNorms.create(data);
         return result;
     } catch (error) {
         return error;
@@ -12,7 +12,7 @@ exports.createKpiNorm = async (data) => {
 
 exports.updateKpiNormById = async (id, data) => {
     try {
-        const update = await model.kpiNormModel.update(data, {
+        const update = await model.kpiNorms.update(data, {
         }, {
             where: { id },
         });
@@ -24,7 +24,7 @@ exports.updateKpiNormById = async (id, data) => {
 
 exports.detailKpiNorm = async (id) => {
     try {
-        const detail = await model.kpiNormModel.findOne({
+        const detail = await model.kpiNorms.findOne({
             where: { id },
         });
         return detail;
@@ -34,35 +34,35 @@ exports.detailKpiNorm = async (id) => {
 };
 
 exports.allKpiNorm = async (id) => {
-    const getUserById = await model.userModel.findOne({ where: { id } });
+    const getUserById = await model.users.findOne({ where: { id } });
     try {
         if (getUserById.role === 'admin') {
-            const data = await model.kpiNormModel.findAll({
+            const data = await model.kpiNorms.findAll({
                 include: [
                     {
-                        model: model.unitModel,
+                        model: model.units,
                     },
                     {
-                        model: model.departmentModel,
+                        model: model.departments,
                     },
                     {
-                        model: model.positionModel,
+                        model: model.positions,
                     },
                 ],
             });
             return data;
         }
         if (getUserById.role === 'manager') {
-            const data = await model.kpiNormModel.findAll({
+            const data = await model.kpiNorms.findAll({
                 include: [
                     {
-                        model: model.unitModel,
+                        model: model.units,
                     },
                     {
-                        model: model.departmentModel,
+                        model: model.departments,
                     },
                     {
-                        model: model.positionModel,
+                        model: model.positions,
                     },
                 ],
                 where: { department_id: getUserById.department_id },
@@ -75,7 +75,7 @@ exports.allKpiNorm = async (id) => {
 };
 
 exports.deleteById = async (id) => {
-    const resource = await model.kpiNormModel.findOne({
+    const resource = await model.kpiNorms.findOne({
         where: { id },
     });
     if (!resource) {

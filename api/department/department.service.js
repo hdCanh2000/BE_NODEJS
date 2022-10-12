@@ -14,7 +14,7 @@ exports.createDepartment = async (data) => {
 
 exports.updateDepartmentById = async (id, data) => {
     try {
-        const update = await model.departmentModel.update(data, {
+        const update = await model.departments.update(data, {
             where: { id },
         });
         return update;
@@ -25,9 +25,9 @@ exports.updateDepartmentById = async (id, data) => {
 
 exports.allDepartment = async () => {
     try {
-        const data = await model.departmentModel.findAll({
+        const data = await model.departments.findAll({
             include: [{
-                model: model.userModel,
+                model: model.users,
                 // where: { isDelete: false },
             }],
         });
@@ -39,7 +39,7 @@ exports.allDepartment = async () => {
 
 exports.detailDepartment = async (id) => {
     try {
-        const detail = await model.departmentModel.findOne({
+        const detail = await model.departments.findOne({
             where: { id },
         });
         return detail;

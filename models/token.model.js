@@ -16,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
     tokens.init({
-        name: DataTypes.STRING,
         data_token: DataTypes.STRING,
         type: {
             type: DataTypes.ENUM(['refreshToken', 'expired']),
