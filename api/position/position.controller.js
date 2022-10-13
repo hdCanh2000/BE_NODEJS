@@ -23,11 +23,23 @@ exports.addPosition = async (req, res) => {
 };
 
 exports.updatePosition = async (req, res) => {
-    const { id } = req.params;
+    const { requirement_id } = req.body;
     try {
-        const updateItem = await positionService.updateById(id, req.body);
+        const getPosition = await positionService.getPositionById(req.params.id);
+        const updateItem = await positionService.updateById(getPosition.id, req.body);
+        const addRequirementForPosition = async (id) => {
+            const findRequirement = await requirementService.getResourceById(id);
+            await getPosition.addRequirement(findRequirement);
+        };
+        if (requirement_id) {
+            // const getPositionRequirement = await positionService.getPositionRequirement(getPosition.id);
+            await positionService.deletePositionRequirement(getPosition.id);
+            requirement_id.forEach((element) => {
+                addRequirementForPosition(element);
+            });
+        }
         if (updateItem) {
-            const result = await positionService.getPositionById(id);
+            const result = await positionService.getPositionById(getPosition.id);
             return res.status(200).json({ message: 'Update Position Success!', data: result });
         }
     } catch (error) {
