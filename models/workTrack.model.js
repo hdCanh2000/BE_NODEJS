@@ -12,7 +12,6 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            workTracks.belongsTo(models.users, { foreignKey: 'user_id', targetKey: 'id' });
             workTracks.belongsTo(models.kpiNorms, { foreignKey: 'kpiNorm_id', targetKey: 'id' });
             workTracks.belongsTo(models.missions, { foreignKey: 'mission_id', targetKey: 'id' });
             workTracks.hasMany(models.workTrackLogs, {
