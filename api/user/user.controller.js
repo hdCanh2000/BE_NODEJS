@@ -4,7 +4,7 @@ const userService = require('./user.service');
 exports.addUser = async (req, res) => {
     const data = req.body;
     try {
-        const user = await model.userModel.findOne({
+        const user = await model.users.findOne({
             where: {
                 email: data.email,
             },
@@ -51,21 +51,17 @@ exports.getUserDetail = async (req, res) => {
         return res.status(404).json({ message: 'Error!', error });
     }
 };
-
 exports.getAllUser = async (req, res) => {
     try {
-        const getUserById = await model.userModel.findOne({ where: { id: req.user.id, isDelete: false } });
+        const getUserById = await model.users.findOne({ where: { id: req.user.id, isDelete: false } });
         if (getUserById.role === 'admin') {
-            const allUser = await model.userModel.findAll({
+            const allUser = await model.users.findAll({
                 include: [
                     {
-                        model: model.departmentModel,
+                        model: model.departments,
                     },
                     {
-                        model: model.positionModel,
-                    },
-                    {
-                        model: model.workTrackModel,
+                        model: model.positions,
                     },
                 ],
                 where: { isDelete: false },
@@ -73,16 +69,13 @@ exports.getAllUser = async (req, res) => {
             return res.status(200).json({ message: 'Get All User Success!', data: allUser });
         }
         if (getUserById.role !== 'admin') {
-            const allUser = await model.userModel.findAll({
+            const allUser = await model.users.findAll({
                 include: [
                     {
-                        model: model.departmentModel,
+                        model: model.departments,
                     },
                     {
-                        model: model.positionModel,
-                    },
-                    {
-                        model: model.workTrackModel,
+                        model: model.positions,
                     },
                 ],
                 where: { department_id: getUserById.department_id, isDelete: false },
@@ -97,26 +90,23 @@ exports.getAllUser = async (req, res) => {
 exports.getAllUserByDepartmentId = async (req, res) => {
     const { department_id } = req.params;
     try {
-        const getUserById = await model.userModel.findOne({ where: { id: req.user.id, isDelete: false } });
+        const getUserById = await model.users.findOne({ where: { id: req.user.id, isDelete: false } });
         if (getUserById.role === 'admin') {
-            const allUser = await model.userModel.findAll({
+            const allUser = await model.users.findAll({
                 where: { department_id, isDelete: false },
                 include: [
                     {
-                        model: model.departmentModel,
+                        model: model.departments,
                     },
                     {
-                        model: model.positionModel,
-                    },
-                    {
-                        model: model.workTrackModel,
+                        model: model.positions,
                     },
                 ],
             });
             return res.status(200).json({ message: 'Get All User Success!', data: allUser });
         }
         if (getUserById.role !== 'admin') {
-            const allUser = await model.userModel.findAll({ where: { department_id: getUserById.department_id, isDelete: false } });
+            const allUser = await model.users.findAll({ where: { department_id: getUserById.department_id, isDelete: false } });
             return res.status(200).json({ message: 'Get All User Success!', data: allUser });
         }
     } catch (error) {

@@ -35,7 +35,7 @@ exports.deleteUnit = async (req, res) => {
 
 exports.getAllUnit = async (req, res) => {
     try {
-        const getUnit = await model.unitModel.findAll({});
+        const getUnit = await model.units.findAll({});
         return res.status(200).json({ msg: 'Success', data: getUnit });
     } catch (error) {
         return res.status(400).json({ message: 'Error!', error });

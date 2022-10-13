@@ -2,7 +2,7 @@ const model = require('../../models/index');
 
 exports.createUnit = async (data) => {
     try {
-        const createDepartment = await model.unitModel.create(data);
+        const createDepartment = await model.units.create(data);
         return createDepartment;
     } catch (error) {
         return error;
@@ -11,7 +11,7 @@ exports.createUnit = async (data) => {
 
 exports.updateUnitById = async (id, data) => {
     try {
-        const update = await model.unitModel.update(data, {
+        const update = await model.units.update(data, {
             where: {
                 id,
             },
@@ -24,7 +24,7 @@ exports.updateUnitById = async (id, data) => {
 
 exports.getUnitById = async (id) => {
     try {
-        const detail = await model.unitModel.findOne({
+        const detail = await model.units.findOne({
             where: { id },
         });
         return detail;
@@ -35,7 +35,7 @@ exports.getUnitById = async (id) => {
 
 exports.deleteUnitById = async (id) => {
     try {
-        const deleteUnitById = await model.unitModel.destroy({
+        const deleteUnitById = await model.units.destroy({
             where: { id },
         });
         return deleteUnitById;

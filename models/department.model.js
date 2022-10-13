@@ -1,44 +1,45 @@
-const { DataTypes } = require('sequelize');
-const db = require('../config/database');
-const { userModel } = require('./index');
+'use strict';
+const {
+  Model,
+} = require('sequelize');
 
-const departments = db.define('departments', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false,
-        autoIncrement: true,
-    },
-    name: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-        unique: true,
-    },
-    description: {
-        type: DataTypes.TEXT,
-    },
-    address: {
-        type: DataTypes.TEXT,
-    },
-    code: {
-        type: DataTypes.TEXT,
-    },
-    organizationLevel: {
-        type: DataTypes.INTEGER,
-    },
-    isActive: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: true,
-    },
-    parent_id: {
-        type: DataTypes.INTEGER,
-    },
-});
-
-departments.hasMany(userModel, {
-    targetKey: 'id',
-    foreignKey: 'department_id',
+module.exports = (sequelize, DataTypes) => {
+  class departments extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+      departments.hasMany(models.users, {
+        targetKey: 'id',
+        foreignKey: 'department_id',
+      });
+      departments.hasMany(models.kpiNorms, {
+        targetKey: 'id',
+        foreignKey: 'department_id',
+    });
+    departments.hasMany(models.positions, {
+      targetKey: 'id',
+      foreignKey: 'department_id',
   });
-userModel.belongsTo(departments, { foreignKey: 'department_id', targetKey: 'id' });
-
-module.exports = departments;
+    }
+  }
+  departments.init({
+    name: DataTypes.STRING,
+    description: DataTypes.TEXT,
+    address: DataTypes.STRING,
+    code: DataTypes.STRING,
+    organizationLevel: DataTypes.INTEGER,
+    parent_id: DataTypes.INTEGER,
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
+  }, {
+    sequelize,
+    modelName: 'departments',
+  });
+  return departments;
+};

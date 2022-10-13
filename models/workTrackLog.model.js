@@ -1,33 +1,31 @@
-const { DataTypes } = require('sequelize');
-const db = require('../config/database');
-const { workTrackModel } = require('./index');
+'use strict';
+const {
+    Model,
+} = require('sequelize');
 
-const workTrackLogs = db.define('workTrackLogs', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false,
-        autoIncrement: true,
-    },
-    status: {
-        type: DataTypes.ENUM(['inProgress', 'completed', 'expired']),
-        defaultValue: 'inProgress',
-    },
-    date: {
-        type: DataTypes.TEXT,
-    },
-    note: {
-        type: DataTypes.TEXT,
-    },
-    workTrack_id: {
-        type: DataTypes.INTEGER,
-    },
-});
-
-workTrackModel.hasMany(workTrackLogs, {
-    targetKey: 'id',
-    foreignKey: 'workTrack_id',
-  });
-workTrackLogs.belongsTo(workTrackModel, { foreignKey: 'workTrack_id', targetKey: 'id' });
-
-module.exports = workTrackLogs;
+module.exports = (sequelize, DataTypes) => {
+    class workTrackLogs extends Model {
+        /**
+         * Helper method for defining associations.
+         * This method is not a part of Sequelize lifecycle.
+         * The `models/index` file will call this method automatically.
+         */
+        static associate(models) {
+            // define association here
+            workTrackLogs.belongsTo(models.workTracks, { foreignKey: 'workTrack_id', targetKey: 'id' });
+        }
+    }
+    workTrackLogs.init({
+        status: {
+            type: DataTypes.ENUM(['inProgress', 'completed', 'expired']),
+            defaultValue: 'inProgress',
+        },
+        date: DataTypes.STRING,
+        note: DataTypes.STRING,
+        workTrack_id: DataTypes.INTEGER,
+    }, {
+        sequelize,
+        modelName: 'workTrackLogs',
+    });
+    return workTrackLogs;
+};

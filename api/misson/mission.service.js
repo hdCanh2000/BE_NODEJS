@@ -2,7 +2,7 @@ const model = require('../../models/index');
 
 exports.addMission = async (name, unit_id, description, quantity, kpiValue, startTime, endTime, manday) => {
     try {
-        const addMission = await model.missionModel.create({ name, unit_id, description, quantity, kpiValue, startTime, endTime, manday });
+        const addMission = await model.missions.create({ name, unit_id, description, quantity, kpiValue, startTime, endTime, manday });
         return addMission;
     } catch (error) {
         return error;
@@ -11,7 +11,7 @@ exports.addMission = async (name, unit_id, description, quantity, kpiValue, star
 
 exports.getAllMission = async () => {
     try {
-        const getAllMission = await model.missionModel.findAll({ include: model.departmentModel });
+        const getAllMission = await model.missions.findAll({ include: model.departments });
         return getAllMission;
     } catch (error) {
         return error;
@@ -20,7 +20,7 @@ exports.getAllMission = async () => {
 
 exports.updateMission = async (id, name, unit_id, description, quantity, kpiValue, startTime, endTime, manday) => {
     try {
-        const updateMission = await model.missionModel.update(
+        const updateMission = await model.missions.update(
             { name, unit_id, description, quantity, kpiValue, startTime, endTime, manday },
             {
                 where: {
@@ -36,10 +36,10 @@ exports.updateMission = async (id, name, unit_id, description, quantity, kpiValu
 
 exports.getMissionById = async (id) => {
     try {
-        const getMissionById = await model.missionModel.findOne(
-        {
-            where: { id },
-        },
+        const getMissionById = await model.missions.findOne(
+            {
+                where: { id },
+            },
         );
         return getMissionById;
     } catch (error) {
@@ -49,21 +49,21 @@ exports.getMissionById = async (id) => {
 
 exports.getMissionDetail = async (id) => {
     try {
-        const getMissionDetail = await model.missionModel.findOne(
-        { include: model.departmentModel },
-        {
+        const getMissionDetail = await model.missions.findOne({
             where: { id },
-        },
-        );
+            include: [{
+                model: model.departments,
+            }],
+        });
         return getMissionDetail;
     } catch (error) {
-        return error;
+    return error;
     }
 };
 
 exports.getDepartmentById = async (id) => {
     try {
-        const detail = await model.departmentModel.findOne({
+        const detail = await model.departments.findOne({
             where: { id },
         });
         return detail;
@@ -74,7 +74,7 @@ exports.getDepartmentById = async (id) => {
 
 exports.getDepartmentMissionById = async (id, isResponsible) => {
     try {
-        const getMissionById = await model.departmentMission.findOne({
+        const getMissionById = await model.missionDepartments.findOne({
             where: { missionId: id, isResponsible },
         });
         return getMissionById;
@@ -83,20 +83,30 @@ exports.getDepartmentMissionById = async (id, isResponsible) => {
     }
 };
 
-exports.getDepartmentMission = async (id) => {
+// exports.getDepartmentMission = async (id) => {
+//     try {
+//         const getMissionById = await model.missionDepartments.findOne({
+//             where: { missionId: id },
+//         });
+//         console.log(getMissionById);
+//         return getMissionById;
+//     } catch (error) {
+//         return error;
+//     }
+// };
+
+exports.deleteDepartmentMission = async (id) => {
     try {
-        const getMissionById = await model.departmentMission.findOne({
-            where: { missionId: id },
-        });
-        return getMissionById;
+        const deleteMission = await model.missionDepartments.destroy({ where: { missionId: id } });
+        return deleteMission;
     } catch (error) {
         return error;
     }
 };
 
-exports.deleteDepartmentMission = async (id) => {
+exports.deleteDepartmentMissionWithResponsible = async (id, isResponsible) => {
     try {
-        const deleteMission = await model.departmentMission.destroy({ where: { id } });
+        const deleteMission = await model.missionDepartments.destroy({ where: { missionId: id, isResponsible } });
         return deleteMission;
     } catch (error) {
         return error;
@@ -105,23 +115,23 @@ exports.deleteDepartmentMission = async (id) => {
 
 exports.deleteMission = async (id) => {
     try {
-        const getMissionById = await model.missionModel.findOne(
-        {
-            where: { id },
-        },
+        const getMissionById = await model.missions.findOne(
+            {
+                where: { id },
+            },
         );
-        const deleteMissionById = await model.missionModel.destroy({ where: { id: getMissionById.id } });
+        const deleteMissionById = await model.missions.destroy({ where: { id: getMissionById.id } });
         return deleteMissionById;
     } catch (error) {
         return error;
     }
 };
 
-exports.deleteMultiDepartmentMission = async (id) => {
-    try {
-        const deleteMultiDepartmentMission = await model.departmentMission.destroy({ where: { id } });
-        return deleteMultiDepartmentMission;
-    } catch (error) {
-        return error;
-    }
-};
+// exports.deleteMultiDepartmentMission = async (id) => {
+//     try {
+//         const deleteMultiDepartmentMission = await model.missionDepartments.destroy({ where: { id } });
+//         return deleteMultiDepartmentMission;
+//     } catch (error) {
+//         return error;
+//     }
+// };

@@ -4,7 +4,7 @@ const ApiError = require('../../utils/ApiError');
 
 exports.findUser = async (id) => {
     try {
-        const findUser = await model.userModel.findOne({
+        const findUser = await model.users.findOne({
             where: { id },
         });
         return findUser;
@@ -15,7 +15,7 @@ exports.findUser = async (id) => {
 
 exports.updateUserById = async (id, data) => {
     try {
-        const updateUser = await model.userModel.update(data, { where: { id } });
+        const updateUser = await model.users.update(data, { where: { id } });
         return updateUser;
     } catch (error) {
         return error;
@@ -26,7 +26,7 @@ exports.changePassword = async (oldPassword, newPassword, newPassword2, id) => {
     const salt = await bcrypt.genSalt();
     const hashNewPassword = await bcrypt.hash(newPassword, salt);
     try {
-        const findUser = await model.userModel.findOne({ where: { id } });
+        const findUser = await model.users.findOne({ where: { id } });
         if (findUser) {
             const changePassword = await bcrypt.compare(oldPassword, findUser.password);
             if (changePassword === true) {
@@ -37,7 +37,7 @@ exports.changePassword = async (oldPassword, newPassword, newPassword2, id) => {
                 } if (newPassword !== newPassword2) {
                     return ('Confirm password wrong !');
                 }
-                await model.userModel.update({ password: hashNewPassword }, { where: { id } });
+                await model.users.update({ password: hashNewPassword }, { where: { id } });
                 return ('Change Password Success !', changePassword);
             }
             if (changePassword === false) {
@@ -53,7 +53,7 @@ exports.createUser = async (data) => {
     const salt = await bcrypt.genSalt();
     const hashPassword = await bcrypt.hash(data.password, salt);
     try {
-        const newUser = await model.userModel.create({
+        const newUser = await model.users.create({
             ...data,
             password: hashPassword,
         });
@@ -64,7 +64,7 @@ exports.createUser = async (data) => {
 };
 
 exports.deleteById = async (id) => {
-    const resource = await model.userModel.findOne({
+    const resource = await model.users.findOne({
         where: { id },
     });
     if (!resource) {

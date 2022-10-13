@@ -1,13 +1,13 @@
-const requirementModel = require('../../models/requirement.model');
+const model = require('../../models/index');
 const ApiError = require('../../utils/ApiError');
 
 const getAllResource = async () => {
-    const data = await requirementModel.findAll({});
+    const data = await model.requirements.findAll({});
     return data;
 };
 
 const getResourceById = async (id) => {
-    const data = await requirementModel.findOne({
+    const data = await model.requirements.findOne({
         where: {
             id,
         },
@@ -16,12 +16,12 @@ const getResourceById = async (id) => {
 };
 
 const createResource = async (data) => {
-    const result = requirementModel.create(data);
+    const result = model.requirements.create(data);
     return result;
 };
 
 const updateResourceById = async (id, data) => {
-    const result = await requirementModel.update(data, {
+    const result = await model.requirements.update(data, {
         where: {
             id,
         },
@@ -30,7 +30,7 @@ const updateResourceById = async (id, data) => {
 };
 
 const deleteResourceById = async (id) => {
-    const resource = await requirementModel.findOne({
+    const resource = await model.requirements.findOne({
         where:
         {
             id,
