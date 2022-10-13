@@ -147,4 +147,13 @@ const findUser = async (id) => {
     }
 };
 
-module.exports = { getAllResource, getResourceById, getAllResourceByUserId, createResource, updateResourceById, deleteResourceById, createWorkTrackUser, findUser };
+const deleteWorkTrackUserWithWorkTrack = async (workTrack_id) => {
+    try {
+        const deleteWorkTrack = await model.workTrackUsers.destroy({ where: { workTrackId: workTrack_id } });
+        return deleteWorkTrack;
+    } catch (error) {
+        return error;
+    }
+};
+
+module.exports = { getAllResource, getResourceById, getAllResourceByUserId, createResource, updateResourceById, deleteResourceById, createWorkTrackUser, findUser, deleteWorkTrackUserWithWorkTrack };
