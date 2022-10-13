@@ -1,9 +1,29 @@
+const { Op } = require('sequelize');
+const sequelize = require('sequelize');
 const model = require('../../models/index');
 const ApiError = require('../../utils/ApiError');
 
-const getAllResource = async () => {
-    const data = await model.positionLevels.findAll({});
-    return data;
+const getAllResource = async (page, limit, text) => {
+    let searchValue = '';
+    if (text) searchValue = text.toLowerCase();
+    else searchValue = '';
+
+    const total = await model.positionLevels.count();
+
+    const data = await model.positionLevels.findAndCountAll({
+        offset: (page - 1) * limit || 0,
+        limit,
+        order: [
+            ['id', 'DESC'],
+        ],
+        where: {
+            [Op.or]: [
+                sequelize.where(sequelize.fn('LOWER', sequelize.col('name')), 'LIKE', `%${searchValue}%`),
+                sequelize.where(sequelize.fn('LOWER', sequelize.col('code')), 'LIKE', `%${searchValue}%`),
+            ],
+        },
+    });
+    return { data: data.rows, pagination: { page: parseInt(page), limit: parseInt(limit), totalRows: data.rows.length, total } };
 };
 
 const getResourceById = async (id) => {
