@@ -5,7 +5,6 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     return queryInterface.bulkInsert('missions', [
       {
-        id: 1,
         name: 'Pre-Product Development',
         unit_id: null,
         description: '',
@@ -18,7 +17,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 2,
         name: 'Sale Enablement',
         unit_id: null,
         description: '',
@@ -31,7 +29,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 3,
         name: 'Chào bán năng lực nhà máy',
         unit_id: null,
         description: '',

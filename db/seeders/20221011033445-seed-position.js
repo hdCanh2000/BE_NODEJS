@@ -5,7 +5,6 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     return queryInterface.bulkInsert('positions', [
       {
-        id: 1,
         name: 'Nhân viên IT',
         description: 'Nhân viên IT',
         code: 'IT',
@@ -17,7 +16,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 2,
         name: 'CNCK',
         description: 'CNCK',
         code: 'CNCK',
@@ -29,7 +27,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 3,
         name: 'Thợ sơn vỏ',
         description: 'Thợ sơn vỏ',
         code: 'TSV',
@@ -41,7 +38,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 4,
         name: 'Giám Đốc',
         description: 'Giám Đốc',
         code: 'LĐKT',
@@ -53,7 +49,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 5,
         name: 'Nhân viên BD',
         description: 'Nhân viên BD',
         code: 'LĐKT',
@@ -65,7 +60,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 6,
         name: 'LĐPT',
         description: 'LĐPT',
         code: 'LDPT',
@@ -77,7 +71,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 7,
         name: 'Nhân viên Marketing',
         description: 'Nhân viên Marketing',
         code: 'LĐKT',
@@ -89,7 +82,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 8,
         name: 'KSCK',
         description: 'KSCK',
         code: 'KSCK',
@@ -101,7 +93,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 9,
         name: 'Thợ điện máy',
         description: 'Thợ điện máy',
         code: 'TDM',
@@ -113,7 +104,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 10,
         name: 'Team Leader BD',
         description: 'Leader Phát triển kinh doanh',
         code: 'LĐKT',
@@ -125,7 +115,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 11,
         name: 'Team Leader Marketing',
         description: 'Leader Marketing',
         code: 'LĐKT',
@@ -137,7 +126,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 12,
         name: 'Nhân viên cung ứng',
         description: 'Nhân viên cung ứng',
         code: 'LĐKT',
@@ -149,7 +137,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 13,
         name: 'Kế toán trưởng',
         description: 'Kế toán trưởng',
         code: 'LĐKT',
@@ -161,7 +148,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 14,
         name: 'Nhân viên kế toán',
         description: 'Nhân viên kế toán',
         code: 'LĐKT',
@@ -173,7 +159,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 15,
         name: 'Kỹ sư sản xuất',
         description: 'Kỹ sư sản xuất',
         code: 'LĐKT',
@@ -185,7 +170,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 16,
         name: 'Giám đốc bán hàng',
         description: 'Giám đốc bán hàng',
         code: 'LĐKT',
@@ -197,7 +181,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 17,
         name: 'Nhân viên bán hàng',
         description: 'Nhân viên bán hàng',
         code: 'LĐKT',
@@ -209,7 +192,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 18,
         name: 'Trưởng phòng HCNS',
         description: 'Trưởng phòng HCNS',
         code: 'LĐKT',
@@ -221,7 +203,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 19,
         name: 'Nhân viên HCNS',
         description: 'Nhân viên HCNS',
         code: 'LĐKT',
@@ -233,7 +214,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 20,
         name: 'Kỹ sư xây dựng',
         description: 'Kỹ sư xây dựng',
         code: 'LĐKT',
