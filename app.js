@@ -4,7 +4,7 @@ const methodOverride = require('method-override');
 const passport = require('passport');
 const morgan = require('morgan');
 const config = require('./config/passport');
-const db = require('./config/database');
+const db = require('./models/index');
 const routes = require('./routes');
 
 const app = express();
@@ -59,7 +59,7 @@ app.use(cors({
 // connect database
 const testDatabase = async () => {
   try {
-    await db.authenticate();
+    await db.sequelize.authenticate();
     // eslint-disable-next-line no-console
     console.log('Connection has been established successfully.');
   } catch (error) {

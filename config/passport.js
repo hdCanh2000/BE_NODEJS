@@ -11,7 +11,7 @@ const jwtOptions = {
 
   const jwtVerify = async (payload, done) => {
     try {
-      const user = await models.userModel.findOne({ where: { id: payload.id } });
+      const user = await models.users.findOne({ where: { id: payload.id } });
       if (!user) {
         return done(null, false);
       }

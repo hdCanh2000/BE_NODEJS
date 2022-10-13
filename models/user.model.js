@@ -1,64 +1,60 @@
-const { DataTypes } = require('sequelize');
-const db = require('../config/database');
-const token = require('./token.model');
+'use strict';
+const {
+    Model,
+} = require('sequelize');
 
-const users = db.define('users', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false,
-        autoIncrement: true,
-    },
-    email: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-        unique: {
-            args: true,
-            msg: 'Username already in use!',
+module.exports = (sequelize, DataTypes) => {
+    class users extends Model {
+        /**
+         * Helper method for defining associations.
+         * This method is not a part of Sequelize lifecycle.
+         * The `models/index` file will call this method automatically.
+         */
+        static associate(models) {
+            // define association here
+            users.belongsTo(models.departments, { foreignKey: 'department_id', targetKey: 'id' });
+            users.belongsTo(models.positions, { foreignKey: 'position_id', targetKey: 'id' });
+            users.hasMany(models.tokens, {
+                targetKey: 'id',
+                foreignKey: 'user_id',
+            });
+            users.hasMany(models.workTracks, {
+                targetKey: 'id',
+                foreignKey: 'user_id',
+            });
+        }
+    }
+    users.init({
+        email: {
+            type: DataTypes.STRING,
+            unique: {
+                args: true,
+                msg: 'Username already in use!',
             },
-    },
-    password: {
-        type: DataTypes.TEXT,
-    },
-    role: {
-        type: DataTypes.ENUM(['user', 'admin', 'manager']),
-        defaultValue: 'user',
-    },
-    code: {
-      type: DataTypes.TEXT,
-      unique: true,
-    },
-    name: {
-        type: DataTypes.TEXT,
-      },
-    dateOfBirth: {
-        type: DataTypes.TEXT,
-    },
-    dateOfJoin: {
-        type: DataTypes.TEXT,
-    },
-    phone: {
-      type: DataTypes.INTEGER,
-    },
-    address: {
-        type: DataTypes.TEXT,
-    },
-    department_id: {
-        type: DataTypes.INTEGER,
-    },
-    position_id: {
-        type: DataTypes.INTEGER,
-    },
-    isDelete: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-    },
-});
-
-users.hasMany(token, {
-    targetKey: 'id',
-    foreignKey: 'user_id',
-  });
-token.belongsTo(users, { foreignKey: 'user_id', targetKey: 'id' });
-
-module.exports = users;
+        },
+        password: DataTypes.STRING,
+        role: {
+            type: DataTypes.ENUM(['user', 'admin', 'manager']),
+            defaultValue: 'user',
+        },
+        code: DataTypes.STRING,
+        name: DataTypes.STRING,
+        sex: {
+            type: DataTypes.ENUM(['male', 'female']),
+        },
+        dateOfBirth: DataTypes.STRING,
+        dateOfJoin: DataTypes.STRING,
+        phone: DataTypes.STRING,
+        address: DataTypes.STRING,
+        department_id: DataTypes.INTEGER,
+        position_id: DataTypes.INTEGER,
+        isDelete: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
+    }, {
+        sequelize,
+        modelName: 'users',
+    });
+    return users;
+};

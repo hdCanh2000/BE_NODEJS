@@ -2,7 +2,7 @@ const model = require('../../models/index');
 
 exports.createPosition = async (data) => {
     try {
-        const create = await model.positionModel.create(data);
+        const create = await model.positions.create(data);
         return create;
     } catch (error) {
         return error;
@@ -11,7 +11,7 @@ exports.createPosition = async (data) => {
 
 exports.updateById = async (id, data) => {
     try {
-        const update = await model.positionModel.update(data, {
+        const update = await model.positions.update(data, {
             where: { id },
         });
         return update;
@@ -22,16 +22,16 @@ exports.updateById = async (id, data) => {
 
 exports.allPosition = async () => {
     try {
-        const data = await model.positionModel.findAll({
+        const data = await model.positions.findAll({
             include: [
                 {
-                    model: model.positionLevelModel,
+                    model: model.positionLevels,
                 },
                 {
-                    model: model.departmentModel,
+                    model: model.departments,
                 },
                 {
-                    model: model.requirementModel,
+                    model: model.requirements,
                 },
             ],
         });
@@ -43,14 +43,14 @@ exports.allPosition = async () => {
 
 exports.getPositionById = async (id) => {
     try {
-        const detail = await model.positionModel.findOne({
+        const detail = await model.positions.findOne({
             where: { id },
             include: [
                 {
-                    model: model.requirementModel,
+                    model: model.requirements,
                 },
                 {
-                    model: model.kpiNormModel,
+                    model: model.kpiNorms,
                 },
             ],
         });

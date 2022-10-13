@@ -1,17 +1,33 @@
-const { DataTypes } = require('sequelize');
-const db = require('../config/database');
-const { requirementModel, positionModel } = require('./index');
+'use strict';
+const {
+  Model,
+} = require('sequelize');
 
-const positionRequirement = db.define('positionRequirement', {
-    id: {
+module.exports = (sequelize, DataTypes) => {
+  class positionRequirements extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+      models.requirements.belongsToMany(models.positions, { through: positionRequirements });
+      models.positions.belongsToMany(models.requirements, { through: positionRequirements });
+    }
+  }
+  positionRequirements.init({
+    requirementId: {
         type: DataTypes.INTEGER,
-        primaryKey: true,
         allowNull: false,
-        autoIncrement: true,
-    },
-});
-
-requirementModel.belongsToMany(positionModel, { through: positionRequirement });
-positionModel.belongsToMany(requirementModel, { through: positionRequirement });
-
-module.exports = positionRequirement;
+      },
+      positionId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+  }, {
+    sequelize,
+    modelName: 'positionRequirements',
+  });
+  return positionRequirements;
+};

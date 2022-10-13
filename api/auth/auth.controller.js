@@ -9,24 +9,18 @@ dotenv.config();
 exports.signup = async (req, res) => {
   const salt = await bcrypt.genSalt();
   const hashPassword = await bcrypt.hash('123456', salt);
-  const user = await model.userModel.create({
+  const user = await model.users.create({
     email: 'Steven.tran@tbht.vn',
     password: hashPassword,
     role: 'admin',
     name: 'Admin',
   });
-  // const department = await model.departmentModel.create({
-  //   organizationLevel: 4,
-  //   name: 'Công ty Thái Hưng',
-  //   description: 'Công ty Thái Hưng',
-  //   address: 'Công ty Thái Hưng',
-  // });
   return res.send(user);
 };
 
 exports.login = async (req, res) => {
   try {
-    const user = await model.userModel.findOne({
+    const user = await model.users.findOne({
       where: {
         email: req.body.email,
       },
@@ -42,7 +36,7 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: 'Sai mật khẩu. Vui lòng thử lại', data: {} });
     }
     const { accessToken, refreshToken } = await authService.signToken(user);
-    await model.tokenModel.create({ data_token: refreshToken, user_id: user.id });
+    await model.tokens.create({ data_token: refreshToken, user_id: user.id });
     return res.status(200).json({ message: 'Success!', data: { accessToken, refreshToken, email: user.email, name: user.name, userId: user.id, role: [user.role] } });
   } catch (error) {
     return res.status(404).json({ message: 'Error!', error });
@@ -63,7 +57,7 @@ exports.refreshToken = async (req, res) => {
   const { refreshToken } = req.body;
   try {
     if (!refreshToken) return res.sendStatus(401).json({ message: 'Error!' });
-    const token = await model.tokenModel.findOne({
+    const token = await model.tokens.findOne({
       where: {
         data_token: refreshToken,
       },
@@ -79,7 +73,7 @@ exports.refreshToken = async (req, res) => {
       const reFreshToken = jwt.sign({ id: decoded.id, email: decoded.email, role: decoded.role }, process.env.REFRESH_TOKEN_SECRET, {
         expiresIn: '1d',
       });
-      await model.tokenModel.update({ data_token: reFreshToken }, { where: { id: token.id } });
+      await model.tokens.update({ data_token: reFreshToken }, { where: { id: token.id } });
       return res.status(200).json({ message: 'Success!!', data: { accessToken, reFreshToken } });
     });
   } catch (error) {

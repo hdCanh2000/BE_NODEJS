@@ -22,7 +22,7 @@ exports.signToken = async (user) => {
 
 exports.destroyToken = async (value) => {
   try {
-    const token = await model.tokenModel.findOne({
+    const token = await model.tokens.findOne({
       where: {
         data_token: value,
       },
