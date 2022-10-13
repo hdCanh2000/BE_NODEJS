@@ -123,4 +123,28 @@ const deleteResourceById = async (id) => {
     return resource;
 };
 
-module.exports = { getAllResource, getResourceById, getAllResourceByUserId, createResource, updateResourceById, deleteResourceById };
+const createWorkTrackUser = async (data) => {
+    try {
+        const createWorkTrackUsers = await model.workTrackUsers.create(data);
+        if (!createWorkTrackUsers) {
+            throw new ApiError(404, 'Not Found!');
+        }
+        return createWorkTrackUsers;
+    } catch (error) {
+        return error;
+    }
+};
+
+const findUser = async (id) => {
+    try {
+        const findOneUser = await model.users.findOne({ where: { id } });
+        if (!findOneUser) {
+            throw new ApiError(404, 'Not Found!');
+        }
+        return findOneUser;
+    } catch (error) {
+        return error;
+    }
+};
+
+module.exports = { getAllResource, getResourceById, getAllResourceByUserId, createResource, updateResourceById, deleteResourceById, createWorkTrackUser, findUser };

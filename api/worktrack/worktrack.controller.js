@@ -36,10 +36,14 @@ const getAllByUserId = async (req, res) => {
     }
 };
 
-const create = async (req, res) => {
+const addKpiNormForUser = async (req, res) => {
     try {
-        const worktrack = await worktrackService.createResource(req.body);
-        return res.status(200).json({ message: 'Success!', data: worktrack });
+        const workTrack = await worktrackService.createResource(req.body);
+        const findUser = await worktrackService.findUser(req.body.user_id);
+        if (findUser) {
+            await workTrack.addUser(findUser, { through: { isResponsible: true } });
+        }
+        return res.status(200).json({ message: 'Success!', data: workTrack });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
     }
@@ -65,4 +69,4 @@ const deleteById = async (req, res) => {
     }
 };
 
-module.exports = { getAll, getById, getAllByUserId, create, updateById, deleteById };
+module.exports = { getAll, getById, getAllByUserId, addKpiNormForUser, updateById, deleteById };
