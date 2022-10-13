@@ -5,7 +5,6 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     return queryInterface.bulkInsert('departments', [
       {
-        id: 1,
         name: 'THAI HUNG CORP',
         code: 'THC',
         description: 'Công ty cổ phần Thái Bình Hưng Thịnh (tên viết tắt Thai Hung Corp) được thành lập từ năm 2006, là một công ty gia công xuất khẩu. Đến năm 2018, công ty được tái cấu trúc để trở thành tổ hợp công nghiệp với ý tưởng khởi nghiệp về lĩnh vực xe điện. Mục tiêu này đại diện mạnh mẽ cho khát vọng xây dựng một Việt Nam cường thịnh, và được thể hiện qua khẩu hiệu mang đầy quyết tâm: “Thái Bình – Hưng Thịnh – Kiến Quốc”, truyền cảm hứng mạnh mẽ tới toàn hệ thống.\nCông ty đã khởi công xây dựng Nhà máy Cơ điện tại tỉnh Thái Bình với quy mô đầu tư 9.4 triệu Euro, có năng lực sản xuất chính là xe điện. Hiện nay chúng tôi đã thành lập công ty thành viên Giong GmbH tại Hannover CHLB Đức, hợp tác với một số đối tác uy tín trên thế giới về công nghệ xe điện và dự định chính thức đưa sản phẩm ra thị trường vào năm 2022. Ngoài ra công ty cũng sản xuất đồ gia dụng thông minh cung cấp cho thị trường Đức. Các sản phẩm mà chúng tôi phát triển đều đại diện cho công nghệ ứng dụng mới: Tối giản về hình thức nhưng tối ưu về các tính năng thông minh, điều này hoàn toàn phù hợp với xu hướng tiêu dùng hiện đại trên toàn cầu hiện nay, và hứa hẹn đem lại trải nghiệm thú vị cho người dùng',
@@ -16,7 +15,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 2,
         name: 'CÔNG TY CỔ PHẦN THÁI BÌNH HƯNG THỊNH',
         code: 'TH',
         description: '',
@@ -27,7 +25,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 3,
         name: 'CÔNG TY TNHH LOTON',
         code: 'LOTON',
         description: '',
@@ -38,7 +35,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 4,
         name: 'CÔNG TY TNHH WORLD BOX',
         code: 'WB',
         description: '',
@@ -49,7 +45,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 5,
         name: 'Phòng Hành chính nhân sự',
         code: 'HCNS',
         description: 'Phòng Hành chính nhân sự (HCNS) trực thuộc công ty, chịu trách nhiệm quản lý công tác HCNS toàn công ty, bao gồm HCNS của văn phòng (Hà Nội) và HCNS tại nhà máy',
@@ -60,7 +55,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 6,
         name: 'Phòng Kế toán',
         code: 'KT',
         description: '',
@@ -71,7 +65,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 7,
         name: 'Phòng R&D',
         code: 'RD',
         description: '',
@@ -82,7 +75,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 8,
         name: 'Phòng Marketing',
         code: 'MKT',
         description: '',
@@ -93,7 +85,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 9,
         name: 'Phòng phát triển KD',
         code: 'BD',
         description: '',
@@ -104,7 +95,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 10,
         name: 'Phòng Bán hàng',
         code: 'BH',
         description: '',
@@ -115,7 +105,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 11,
         name: 'Phòng cung ứng',
         code: 'CU',
         description: 'Tìm kiếm - đánh giá - đề xuất các đơn vị cung ứng trong và ngoài nước\nTìm kiếm - đàm phán - xây dựng - đề xuất phương án cung ứng các loại hàng hóa vật tư.\nThực hiện mua sắm theo kế hoạch sản xuất kinh doanh',
@@ -126,7 +115,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 12,
         name: 'Phòng IT',
         code: 'IT',
         description: '',
@@ -137,7 +125,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 13,
         name: 'Nhà máy cơ điện Thái Hưng',
         code: 'FAC',
         description: '',
@@ -148,7 +135,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 14,
         name: 'Phòng Quản trị vận hành',
         code: 'QT',
         description: '',
@@ -159,7 +145,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 15,
         name: 'Phòng Kỹ thuật công nghệ',
         code: 'KT',
         description: '',
@@ -170,7 +155,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 16,
         name: 'Xưởng Cơ khí',
         code: 'CK',
         description: '',
@@ -181,7 +165,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 17,
         name: 'Xưởng Sửa chữa bảo hành',
         code: 'SC',
         description: '',
@@ -192,7 +175,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 18,
         name: 'Xưởng Lắp ráp',
         code: 'NM-BPSX',
         description: '',
@@ -203,7 +185,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 19,
         name: 'Xưởng phụ kiện',
         code: 'DDN',
         description: '',
@@ -214,7 +195,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 20,
         name: 'Xưởng BB',
         code: 'BB',
         description: '',
@@ -225,7 +205,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 21,
         name: 'GIONG GMBH',
         code: 'GIONG',
         description: '',
@@ -236,7 +215,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 22,
         name: 'Phòng kế toán - Thai Hung Logistic',
         code: 'PKT-THL',
         description: '',
@@ -247,7 +225,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 23,
         name: 'Phòng Sales - Bán hàng ',
         code: 'PKD',
         description: '',

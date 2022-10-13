@@ -33,6 +33,7 @@
         "linebreak-style": "off",
         "import/no-dynamic-require": "off",
         "global-require": "off",
-        "no-octal": "off"
+        "no-octal": "off",
+        "radix": "off"
     }
 }

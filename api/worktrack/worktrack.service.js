@@ -65,7 +65,14 @@ const getResourceById = async (id) => {
             },
             {
                 model: model.workTrackLogs,
-            }],
+            },
+            {
+                model: model.users,
+                include: {
+                    model: model.departments,
+                },
+            },
+        ],
     });
     return data;
 };
@@ -90,7 +97,14 @@ const getAllResourceByUserId = async (user_id) => {
             },
             {
                 model: model.workTrackLogs,
-            }],
+            },
+            {
+                model: model.users,
+                include: {
+                    model: model.departments,
+                },
+            },
+        ],
     });
     return data;
 };
@@ -147,6 +161,15 @@ const findUser = async (id) => {
     }
 };
 
+const deleteWorkTrackUser = async (user_id, workTrack_id) => {
+    try {
+        const deleteWorkTrack = await model.workTrackUsers.destroy({ where: { userId: user_id, workTrackId: workTrack_id } });
+        return deleteWorkTrack;
+    } catch (error) {
+        return error;
+    }
+};
+
 const deleteWorkTrackUserWithWorkTrack = async (workTrack_id) => {
     try {
         const deleteWorkTrack = await model.workTrackUsers.destroy({ where: { workTrackId: workTrack_id } });
@@ -156,4 +179,4 @@ const deleteWorkTrackUserWithWorkTrack = async (workTrack_id) => {
     }
 };
 
-module.exports = { getAllResource, getResourceById, getAllResourceByUserId, createResource, updateResourceById, deleteResourceById, createWorkTrackUser, findUser, deleteWorkTrackUserWithWorkTrack };
+module.exports = { getAllResource, getResourceById, getAllResourceByUserId, createResource, updateResourceById, deleteResourceById, createWorkTrackUser, findUser, deleteWorkTrackUser, deleteWorkTrackUserWithWorkTrack };

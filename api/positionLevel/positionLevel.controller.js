@@ -2,9 +2,10 @@ const ApiError = require('../../utils/ApiError');
 const positionLevelService = require('./positionLevel.service');
 
 const getAll = async (req, res) => {
+    const { page, limit, text } = req.query;
     try {
-        const positionLevels = await positionLevelService.getAllResource();
-        return res.status(200).json({ message: 'Success!', data: positionLevels });
+        const positionLevels = await positionLevelService.getAllResource(page, limit, text);
+        return res.status(200).json(positionLevels);
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
     }

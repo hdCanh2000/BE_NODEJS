@@ -43,17 +43,24 @@ const addKpiNormForUser = async (req, res) => {
         if (findUser) {
             await workTrack.addUser(findUser, { through: { isResponsible: true } });
         }
-        return res.status(200).json({ message: 'Success!', data: workTrack });
+        return res.status(200).json({ message: 'Create Success!', data: workTrack });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
     }
 };
 
-const updateById = async (req, res) => {
+const updateWorkTrackById = async (req, res) => {
     const { id } = req.params;
     try {
-        const worktrack = await worktrackService.updateResourceById(id, req.body);
-        return res.status(200).json({ message: 'Success!', data: worktrack });
+        const getWorkTrackById = await worktrackService.getResourceById(id);
+        const workTrack = await worktrackService.updateResourceById(id, req.body);
+        const findUser = await worktrackService.findUser(req.body.user_id);
+        if (findUser) {
+            await worktrackService.deleteWorkTrackUser(getWorkTrackById.users[0]?.id, id);
+            await getWorkTrackById.addUser(findUser, { through: { isResponsible: true } });
+        }
+        const newWorkTrack = await worktrackService.getResourceById(id);
+        return res.status(200).json({ message: 'Update Success!', data: newWorkTrack });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
     }
@@ -71,4 +78,4 @@ const deleteById = async (req, res) => {
     }
 };
 
-module.exports = { getAll, getById, getAllByUserId, addKpiNormForUser, updateById, deleteById };
+module.exports = { getAll, getById, getAllByUserId, addKpiNormForUser, updateWorkTrackById, deleteById };

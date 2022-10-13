@@ -12,7 +12,7 @@ module.exports = {
         department_id: 9,
         parent_id: null,
         position_id: 10,
-        taskType: 'công việc hàng ngày',
+        taskType: 'Thường xuyên',
         kpi_value: null,
         descriptionKpiValue: null,
         quantity: 35,
