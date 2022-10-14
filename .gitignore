@@ -43,3 +43,7 @@ package-lock.json
 .env.production
 
 .env.local
+
+.env
+
+/config/database.json
