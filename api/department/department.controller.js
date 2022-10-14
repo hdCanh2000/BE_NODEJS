@@ -25,8 +25,8 @@ exports.updateDepartment = async (req, res) => {
 
 exports.getAllDepartment = async (req, res) => {
   try {
-    const result = await departmentService.allDepartment();
-    return res.status(200).json({ message: 'Get All Department Success!', data: result });
+    const result = await departmentService.allDepartment(req.query);
+    return res.status(200).json(result);
   } catch (error) {
     return res.status(404).json({ message: 'Error!', error });
   }
