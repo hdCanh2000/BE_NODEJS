@@ -53,7 +53,7 @@ const updateWorkTrackById = async (req, res) => {
     const { id } = req.params;
     try {
         const getWorkTrackById = await worktrackService.getResourceById(id);
-        const workTrack = await worktrackService.updateResourceById(id, req.body);
+        await worktrackService.updateResourceById(id, req.body);
         const findUser = await worktrackService.findUser(req.body.user_id);
         if (findUser) {
             await worktrackService.deleteWorkTrackUser(getWorkTrackById.users[0]?.id, id);

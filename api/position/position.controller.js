@@ -1,18 +1,15 @@
 const positionService = require('./position.service');
 const requirementService = require('../requirement/requirement.service');
-// const kpiNormService = require('../kpiNorm/kpiNorm.service');
 
 exports.addPosition = async (req, res) => {
-    const { requirement_id } = req.body;
     try {
         const addPosition = await positionService.createPosition(req.body);
-
         const addRequirementForPosition = async (id) => {
             const findRequirement = await requirementService.getResourceById(id);
             await addPosition.addRequirement(findRequirement);
         };
-        if (requirement_id) {
-            requirement_id.forEach((element) => {
+        if (req.body.requirement_id) {
+            req.body.requirement_id.forEach((element) => {
                 addRequirementForPosition(element);
             });
         }
