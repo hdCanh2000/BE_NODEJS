@@ -1,4 +1,5 @@
 const kpiNormService = require('./kpiNorm.service');
+const ApiError = require('../../utils/ApiError');
 
 exports.addKpiNorm = async (req, res) => {
     try {
@@ -42,8 +43,18 @@ exports.getKpiNormDetail = async (req, res) => {
 };
 
 exports.deleteKpiNorm = async (req, res) => {
-    const { id } = req.body;
+    const { id } = req.params;
     try {
+        const updateWorkTrackByKpiNorm = async (kpiNorm_id) => {
+            await kpiNormService.updateWorkTrack(kpiNorm_id);
+        };
+        const getWorkTrackByKpiNorm = await kpiNormService.getWorkTrackByKpiNorm(id);
+        if (!getWorkTrackByKpiNorm) {
+            throw new ApiError(404, 'Not Found');
+        }
+        getWorkTrackByKpiNorm.forEach((element) => {
+            updateWorkTrackByKpiNorm(element.id);
+        });
         const deletekpi = await kpiNormService.deleteById(id);
         return res.status(200).json({ message: 'Success!', data: deletekpi });
     } catch (error) {
