@@ -9,7 +9,7 @@ exports.signToken = async (user) => {
   try {
     // sign token
     const accessToken = jwt.sign({ id: user.id, email: user.email, role: user.role }, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: '1h',
+      expiresIn: '1d',
     });
     const refreshToken = jwt.sign({ id: user.id, email: user.email, role: user.role }, process.env.REFRESH_TOKEN_SECRET, {
       expiresIn: '1d',
