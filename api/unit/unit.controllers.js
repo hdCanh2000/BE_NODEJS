@@ -1,3 +1,5 @@
+const { Op } = require('sequelize');
+const sequelize = require('sequelize');
 const unitService = require('./unit.service');
 const model = require('../../models/index');
 const ApiError = require('../../utils/ApiError');
@@ -52,9 +54,26 @@ exports.deleteUnit = async (req, res) => {
 };
 
 exports.getAllUnit = async (req, res) => {
+    const { page, limit, text } = req.query;
+    let searchValue = '';
+    if (text) searchValue = text.toString();
+    else searchValue = '';
+    const total = await model.units.count();
     try {
-        const getUnit = await model.units.findAll({});
-        return res.status(200).json({ msg: 'Success', data: getUnit });
+        const units = await model.units.findAndCountAll({
+            offset: (page - 1) * limit || 0,
+            limit,
+            order: [
+                ['id', 'DESC'],
+            ],
+            where: {
+                [Op.or]: [
+                    sequelize.where(sequelize.fn('LOWER', sequelize.col('name')), 'LIKE', `%${searchValue}%`),
+                    sequelize.where(sequelize.fn('LOWER', sequelize.col('code')), 'LIKE', `%${searchValue}%`),
+                ],
+            },
+        });
+        return res.status(200).json({ data: units.rows, pagination: { page: parseInt(page), limit: parseInt(limit), totalRows: units.rows.length, total } });
     } catch (error) {
         return res.status(400).json({ message: 'Error!', error });
     }

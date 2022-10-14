@@ -84,3 +84,24 @@ exports.deleteById = async (id) => {
     await resource.destroy();
     return resource;
 };
+
+exports.getWorkTrackByKpiNorm = async (id) => {
+    try {
+        const getWorkTrackByKpiNorm = await model.workTracks.findAll({ where: { kpiNorm_id: id } });
+        return getWorkTrackByKpiNorm;
+    } catch (error) {
+        return error;
+    }
+};
+
+exports.updateWorkTrack = async (id) => {
+    try {
+        const updateWorkTrack = await model.workTracks.update(
+            { kpiNorm_id: null },
+            { where: { id } },
+        );
+    return updateWorkTrack;
+    } catch (error) {
+        return error;
+    }
+};

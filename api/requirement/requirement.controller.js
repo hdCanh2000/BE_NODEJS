@@ -3,8 +3,8 @@ const requirementService = require('./requirement.service');
 
 const getAll = async (req, res) => {
     try {
-        const requirements = await requirementService.getAllResource();
-        return res.status(200).json({ message: 'Success!', data: requirements });
+        const requirements = await requirementService.getAllResource(req.query);
+        return res.status(200).json(requirements);
     } catch (error) {
         return res.status(400).json({ message: 'Error!', error });
     }
