@@ -11,7 +11,16 @@ exports.addMission = async (name, unit_id, description, quantity, kpiValue, star
 
 exports.getAllMission = async () => {
     try {
-        const getAllMission = await model.missions.findAll({ include: model.departments });
+        const getAllMission = await model.missions.findAll({
+            include: [
+                {
+                    model: model.departments,
+                },
+                {
+                    model: model.units,
+                },
+            ],
+         });
         return getAllMission;
     } catch (error) {
         return error;
@@ -39,6 +48,14 @@ exports.getMissionById = async (id) => {
         const getMissionById = await model.missions.findOne(
             {
                 where: { id },
+                include: [
+                    {
+                        model: model.departments,
+                    },
+                    {
+                        model: model.units,
+                    },
+                ],
             },
         );
         return getMissionById;
@@ -57,7 +74,7 @@ exports.getMissionDetail = async (id) => {
         });
         return getMissionDetail;
     } catch (error) {
-    return error;
+        return error;
     }
 };
 

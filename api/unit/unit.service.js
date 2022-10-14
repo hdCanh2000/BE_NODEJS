@@ -43,3 +43,53 @@ exports.deleteUnitById = async (id) => {
         return error;
     }
 };
+
+exports.findMissionByUnitId = async (id) => {
+    try {
+        const findMissionByUnitId = await model.missions.findAll({ where: { unit_id: id } });
+        return findMissionByUnitId;
+    } catch (error) {
+        return error;
+    }
+};
+
+exports.updateMission = async (id) => {
+    try {
+        const updateMission = await model.missions.update(
+            { unit_id: null },
+            {
+                where: {
+                    id,
+                },
+            },
+        );
+        return updateMission;
+    } catch (error) {
+        return error;
+    }
+};
+
+exports.findKpiNormByUnitId = async (id) => {
+    try {
+        const findKpiNormByUnitId = await model.kpiNorms.findAll({ where: { unit_id: id } });
+        return findKpiNormByUnitId;
+    } catch (error) {
+        return error;
+    }
+};
+
+exports.updateKpiNorm = async (id) => {
+    try {
+        const updateKpiNorm = await model.kpiNorms.update(
+            { unit_id: null },
+            {
+                where: {
+                    id,
+                },
+            },
+        );
+        return updateKpiNorm;
+    } catch (error) {
+        return error;
+    }
+};

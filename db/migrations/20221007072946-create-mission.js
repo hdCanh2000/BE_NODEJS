@@ -13,6 +13,7 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING,
+        unique: true,
       },
       unit_id: {
         type: Sequelize.INTEGER,
