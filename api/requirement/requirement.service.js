@@ -31,7 +31,7 @@ const updateResourceById = async (id, data) => {
 
 const deleteRequirementWithPosition = async (id) => {
     try {
-        const remove = await model.positionRequirement.destroy(
+        const remove = await model.positionRequirements.destroy(
             { where: { requirementId: id } },
         );
         return remove;
