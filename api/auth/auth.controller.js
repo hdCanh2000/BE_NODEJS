@@ -35,7 +35,7 @@ exports.login = async (req, res) => {
     if (!match) {
       return res.status(400).json({ message: 'Sai mật khẩu. Vui lòng thử lại', data: {} });
     }
-    console.log({ user });
+    // console.log({ user });
     const { accessToken, refreshToken } = await authService.signToken(user);
     await model.tokens.create({ data_token: refreshToken, user_id: user.id });
 
