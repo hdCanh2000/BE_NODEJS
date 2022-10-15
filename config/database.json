@@ -5,5 +5,12 @@
     "database": "dwt",
     "host": "127.0.0.1",
     "dialect": "postgres"
+  },
+  "production": {
+    "username": "appuser",
+    "password": "mtDH.2018TH",
+    "database": "dwtapp",
+    "host": "159.223.93.249",
+    "dialect": "postgres"
   }
 }
