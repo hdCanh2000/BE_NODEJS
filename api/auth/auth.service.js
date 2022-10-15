@@ -17,6 +17,7 @@ exports.signToken = async (user) => {
     console.log({ accessToken, refreshToken, user });
     return { accessToken, refreshToken };
   } catch (error) {
+    console.log(error)
     return error;
   }
 };
