@@ -14,6 +14,7 @@ exports.signToken = async (user) => {
     const refreshToken = jwt.sign({ id: user.id, email: user.email, role: user.role }, process.env.REFRESH_TOKEN_SECRET, {
       expiresIn: '1d',
     });
+    console.log({ accessToken, refreshToken, user });
     return { accessToken, refreshToken };
   } catch (error) {
     return error;
