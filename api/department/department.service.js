@@ -46,9 +46,9 @@ exports.allDepartment = async (query) => {
             order: [
                 ['id', 'ASC'],
             ],
-            // where: {
-            //     [Op.and]: conditions,
-            // },
+            where: {
+                [Op.and]: conditions,
+            },
         });
         return { data: data.rows, pagination: { page: parseInt(page), limit: parseInt(limit), totalRows: data.rows.length, total } };
     } catch (error) {
