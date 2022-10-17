@@ -20,7 +20,7 @@ exports.getAllMission = async () => {
                     model: model.units,
                 },
             ],
-         });
+        });
         return getAllMission;
     } catch (error) {
         return error;
@@ -28,19 +28,15 @@ exports.getAllMission = async () => {
 };
 
 exports.updateMission = async (id, name, unit_id, description, quantity, kpiValue, startTime, endTime, manday) => {
-    try {
-        const updateMission = await model.missions.update(
-            { name, unit_id, description, quantity, kpiValue, startTime, endTime, manday },
-            {
-                where: {
-                    id,
-                },
+    const updateMission = await model.missions.update(
+        { name, unit_id, description, quantity, kpiValue, startTime, endTime, manday },
+        {
+            where: {
+                id,
             },
-        );
-        return updateMission;
-    } catch (error) {
-        return error;
-    }
+        },
+    );
+    return updateMission;
 };
 
 exports.getMissionById = async (id) => {

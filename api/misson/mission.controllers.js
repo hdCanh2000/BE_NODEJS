@@ -14,7 +14,7 @@ exports.addMission = async (req, res) => {
         }
         return res.status(200).json({ msg: 'Success!', data: addMission });
     } catch (error) {
-        return res.status(400).json({ message: error });
+        return res.status(400).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -23,7 +23,7 @@ exports.getMission = async (req, res) => {
         const getAllMission = await missionService.getAllMission();
         return res.status(200).json({ msg: 'Success!', data: getAllMission });
     } catch (error) {
-        return res.status(400).json({ message: error });
+        return res.status(400).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -32,7 +32,7 @@ exports.getDetailMission = async (req, res) => {
         const getDetailMission = await missionService.getMissionDetail(req.params.id);
         return res.status(200).json({ msg: 'Success!', data: getDetailMission });
     } catch (error) {
-        return res.status(400).json({ message: error });
+        return res.status(400).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -54,12 +54,12 @@ exports.updateMission = async (req, res) => {
         const getNewMission = await missionService.getMissionDetail(req.params.id);
         return res.status(200).json({ msg: 'Success!', data: getNewMission });
     } catch (error) {
-        return res.status(400).json({ message: error });
+        return res.status(400).json({ message: 'Error!', error: error.message });
     }
 };
 
 exports.deleteMission = async (req, res) => {
-    const { id } = req.body;
+    const { id } = req.params;
     try {
         const getMissionById = await missionService.getMissionById(id);
         await missionService.deleteDepartmentMission(getMissionById.id);
@@ -68,6 +68,6 @@ exports.deleteMission = async (req, res) => {
             return res.status(200).json({ msg: 'Success!', data: deleteMissionById });
         }
     } catch (error) {
-        return res.status(400).json({ message: error });
+        return res.status(400).json({ message: 'Error!', error: error.message });
     }
 };
