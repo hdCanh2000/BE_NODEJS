@@ -20,7 +20,7 @@ router.use('/users', userRoutes);
 router.use('/auth', authRoutes);
 router.use('/positionLevels', positionLevelRouter);
 router.use('/units', unitRoutes);
-router.use('/mission', missionRouters);
+router.use('/missions', missionRouters);
 router.use('/worktracks', worktrackRoutes);
 router.use('/worktrackLogs', worktrackLogRoutes);
 router.use('/kpiNorms', kpiNormRoutes);

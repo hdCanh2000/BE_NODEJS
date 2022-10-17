@@ -10,14 +10,10 @@ exports.createPosition = async (data) => {
 };
 
 exports.updateById = async (id, data) => {
-    try {
-        const update = await model.positions.update(data, {
-            where: { id },
-        });
-        return update;
-    } catch (error) {
-        return error;
-    }
+    const update = await model.positions.update(data, {
+        where: { id },
+    });
+    return update;
 };
 
 exports.allPosition = async () => {

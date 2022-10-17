@@ -11,15 +11,10 @@ exports.createKpiNorm = async (data) => {
 };
 
 exports.updateKpiNormById = async (id, data) => {
-    try {
-        const update = await model.kpiNorms.update(data, {
-        }, {
-            where: { id },
-        });
-        return update;
-    } catch (error) {
-        return error;
-    }
+    const update = await model.kpiNorms.update(data, {
+        where: { id },
+    });
+    return update;
 };
 
 exports.detailKpiNorm = async (id) => {
