@@ -12,12 +12,15 @@ exports.addMission = async (name, unit_id, description, quantity, kpiValue, star
 };
 
 exports.getAllMission = async (query) => {
-    const { page = 1, limit, text = '' } = query;
+    const { page = 1, limit, text } = query;
     let searchValue = '';
     if (text) searchValue = text.toLowerCase();
+    else searchValue = '';
+
     const conditions = [{
         [Op.or]: [
-            sequelize.where(sequelize.fn('LOWER', sequelize.col('name')), 'LIKE', `%${searchValue}%`),
+            sequelize.where(sequelize.fn('LOWER', sequelize.col('missions.name')), 'LIKE', `%${searchValue}%`),
+            sequelize.where(sequelize.fn('LOWER', sequelize.col('missions.description')), 'LIKE', `%${searchValue}%`),
         ],
     }];
 
@@ -41,8 +44,8 @@ exports.getAllMission = async (query) => {
                     attributes: ['id', 'name', 'code'],
                 },
             ],
-         });
-         return { data, pagination: { page: parseInt(page), limit: parseInt(limit), totalRows: data.length, total } };
+        });
+        return { data, pagination: { page: parseInt(page), limit: parseInt(limit), totalRows: data.length, total } };
     } catch (error) {
         return error;
     }
