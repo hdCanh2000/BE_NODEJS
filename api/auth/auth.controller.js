@@ -35,8 +35,10 @@ exports.login = async (req, res) => {
     if (!match) {
       return res.status(400).json({ message: 'Sai mật khẩu. Vui lòng thử lại', data: {} });
     }
+    // console.log({ user });
     const { accessToken, refreshToken } = await authService.signToken(user);
     await model.tokens.create({ data_token: refreshToken, user_id: user.id });
+
     return res.status(200).json({ message: 'Success!', data: { accessToken, refreshToken, email: user.email, name: user.name, userId: user.id, role: [user.role] } });
   } catch (error) {
     return res.status(404).json({ message: 'Error!', error });
