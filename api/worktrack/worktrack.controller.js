@@ -56,7 +56,7 @@ const getAllByUserId = async (req, res) => {
 
 const addKpiNormForUser = async (req, res) => {
     try {
-        const workTrack = await worktrackService.createResource(req.body);
+        const workTrack = await worktrackService.createResource(req.body, req.user.id);
         const findUser = await worktrackService.findUser(req.body.user_id);
         if (findUser) {
             await workTrack.addUser(findUser, { through: { isResponsible: true } });

@@ -154,8 +154,8 @@ const getAllResourceByUserId = async (user_id) => {
     return user;
 };
 
-const createResource = async (data) => {
-    const result = model.workTracks.create(data);
+const createResource = async (data, id) => {
+    const result = model.workTracks.create({ data, createdBy: id });
     return result;
 };
 
