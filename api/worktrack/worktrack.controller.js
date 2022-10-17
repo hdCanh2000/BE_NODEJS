@@ -32,7 +32,7 @@ const getAllByUserId = async (req, res) => {
         }
         return res.status(200).json({ message: 'Success!', data: worktracks });
     } catch (error) {
-        return res.status(404).json({ message: 'Not Found!', error });
+        return res.status(404).json({ message: 'Not Found!', error: error.message });
     }
 };
 
@@ -45,7 +45,7 @@ const addKpiNormForUser = async (req, res) => {
         }
         return res.status(200).json({ message: 'Create Success!', data: workTrack });
     } catch (error) {
-        return res.status(404).json({ message: 'Error!', error });
+        return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -62,7 +62,7 @@ const updateWorkTrackById = async (req, res) => {
         const newWorkTrack = await worktrackService.getResourceById(id);
         return res.status(200).json({ message: 'Update Success!', data: newWorkTrack });
     } catch (error) {
-        return res.status(404).json({ message: 'Error!', error });
+        return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -74,7 +74,7 @@ const deleteById = async (req, res) => {
         const worktrack = await worktrackService.deleteResourceById(findWorkTrack.id);
         return res.status(200).json({ message: 'Delete Success!', data: worktrack });
     } catch (error) {
-        return res.status(404).json({ message: 'Error!', error });
+        return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
 

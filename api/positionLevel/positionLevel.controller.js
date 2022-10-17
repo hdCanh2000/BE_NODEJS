@@ -7,7 +7,7 @@ const getAll = async (req, res) => {
         const positionLevels = await positionLevelService.getAllResource(page, limit, text);
         return res.status(200).json(positionLevels);
     } catch (error) {
-        return res.status(404).json({ message: 'Error!', error });
+        return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -20,7 +20,7 @@ const getById = async (req, res) => {
         }
         return res.status(200).json({ message: 'Success!', data: positionLevel });
     } catch (error) {
-        return res.status(404).json({ message: 'Position Level not found!', error });
+        return res.status(404).json({ message: 'Position Level not found!', error: error.message });
     }
 };
 
@@ -29,7 +29,7 @@ const create = async (req, res) => {
         const positionLevel = await positionLevelService.createResource(req.body);
         return res.status(200).json({ message: 'Success!', data: positionLevel });
     } catch (error) {
-        return res.status(404).json({ message: 'Error!', error });
+        return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -42,7 +42,7 @@ const updateById = async (req, res) => {
             return res.status(200).json({ message: 'Success!', data: result });
         }
     } catch (error) {
-        return res.status(404).json({ message: 'Error!', error });
+        return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -57,7 +57,7 @@ const deleteById = async (req, res) => {
         const deletePositionLevel = await positionLevelService.deleteResourceById(positionLevel.id);
         return res.status(200).json({ message: 'Success!', data: deletePositionLevel });
     } catch (error) {
-        return res.status(404).json({ message: 'Error!', error });
+        return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
 

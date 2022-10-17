@@ -15,7 +15,7 @@ exports.addUser = async (req, res) => {
         const newUser = await userService.createUser({ ...data });
         return res.status(200).json({ message: 'Register success!', data: newUser });
     } catch (error) {
-        return res.status(404).json({ message: 'Error!', error });
+        return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -28,7 +28,7 @@ exports.updateProfile = async (req, res) => {
             return res.status(200).json({ msg: 'Update Profile success!!', data: result });
           }
     } catch (error) {
-        return res.status(404).json({ message: 'Error!', error });
+        return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -38,7 +38,7 @@ exports.changePassword = async (req, res) => {
         const changePassword = await userService.changePassword(oldPassword, newPassword, newPassword2, req.user.id);
         return res.status(200).json({ msg: 'Success', data: changePassword });
     } catch (error) {
-        return res.status(400).json({ error });
+        return res.status(400).json({ error: error.message });
     }
 };
 
@@ -48,7 +48,7 @@ exports.getUserDetail = async (req, res) => {
         const userDetail = await userService.findUser(id);
         return res.status(200).json({ message: 'Get User Detail Success!!', data: userDetail });
     } catch (error) {
-        return res.status(404).json({ message: 'Error!', error });
+        return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
 exports.getAllUser = async (req, res) => {
@@ -83,7 +83,7 @@ exports.getAllUser = async (req, res) => {
             return res.status(200).json({ message: 'Get All User Success!', data: allUser });
         }
     } catch (error) {
-        return res.status(404).json({ message: 'Error!', error });
+        return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -110,7 +110,7 @@ exports.getAllUserByDepartmentId = async (req, res) => {
             return res.status(200).json({ message: 'Get All User Success!', data: allUser });
         }
     } catch (error) {
-        return res.status(404).json({ message: 'Error!', error });
+        return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -120,6 +120,6 @@ exports.deleteUser = async (req, res) => {
         const destroyUser = await userService.deleteById(id);
         return res.status(200).json({ message: 'Delete User Success!', data: destroyUser });
     } catch (error) {
-        return res.status(404).json({ message: 'Error!', error });
+        return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
