@@ -6,7 +6,7 @@ const getAll = async (req, res) => {
         const worktracks = await worktrackService.getAllResource();
         return res.status(200).json({ message: 'Success!', data: worktracks });
     } catch (error) {
-        return res.status(404).json({ message: 'Error!', error });
+        return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -19,7 +19,7 @@ const getById = async (req, res) => {
         }
         return res.status(200).json({ message: 'Success!', data: worktrack });
     } catch (error) {
-        return res.status(404).json({ message: 'Not Found!', error });
+        return res.status(404).json({ message: 'Not Found!', error: error.message });
     }
 };
 
@@ -32,7 +32,7 @@ const getAllByWorktrackId = async (req, res) => {
         }
         return res.status(200).json({ message: 'Success!', data: worktracks });
     } catch (error) {
-        return res.status(404).json({ message: 'Not Found!', error });
+        return res.status(404).json({ message: 'Not Found!', error: error.message });
     }
 };
 
@@ -41,7 +41,7 @@ const create = async (req, res) => {
         const worktrack = await worktrackService.createResource(req.body);
         return res.status(200).json({ message: 'Success!', data: worktrack });
     } catch (error) {
-        return res.status(404).json({ message: 'Error!', error });
+        return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -49,9 +49,12 @@ const updateById = async (req, res) => {
     const { id } = req.params;
     try {
         const worktrack = await worktrackService.updateResourceById(id, req.body);
-        return res.status(200).json({ message: 'Success!', data: worktrack });
+        if (worktrack) {
+            const result = await worktrackService.getResourceById(id);
+            return res.status(200).json({ message: 'Success!', data: result });
+        }
     } catch (error) {
-        return res.status(404).json({ message: 'Error!', error });
+        return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -61,7 +64,7 @@ const deleteById = async (req, res) => {
         const worktrack = await worktrackService.deleteResourceById(id);
         return res.status(200).json({ message: 'Success!', data: worktrack });
     } catch (error) {
-        return res.status(404).json({ message: 'Error!', error });
+        return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
 

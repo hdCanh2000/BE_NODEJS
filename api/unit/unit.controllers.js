@@ -9,7 +9,7 @@ exports.addUnit = async (req, res) => {
         const addUnit = await unitService.createUnit(req.body);
         return res.status(200).json({ msg: 'Create Unit Success!', data: addUnit });
     } catch (error) {
-        return res.status(400).json({ message: 'Error!', error });
+        return res.status(400).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -22,7 +22,7 @@ exports.updateUnit = async (req, res) => {
             return res.status(200).json({ message: 'Success!', data: result });
         }
     } catch (error) {
-        return res.status(400).json({ message: 'Error!', error });
+        return res.status(400).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -49,7 +49,7 @@ exports.deleteUnit = async (req, res) => {
             const deleteUnit = await unitService.deleteUnitById(id);
             return res.status(200).json({ msg: 'Delete Unit Success!', data: deleteUnit });
     } catch (error) {
-        return res.status(400).json({ message: 'Error!', error });
+        return res.status(400).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -75,6 +75,6 @@ exports.getAllUnit = async (req, res) => {
         });
         return res.status(200).json({ data: units.rows, pagination: { page: parseInt(page), limit: parseInt(limit), totalRows: units.rows.length, total } });
     } catch (error) {
-        return res.status(400).json({ message: 'Error!', error });
+        return res.status(400).json({ message: 'Error!', error: error.message });
     }
 };
