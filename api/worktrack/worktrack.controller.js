@@ -3,8 +3,14 @@ const ApiError = require('../../utils/ApiError');
 
 const getAll = async (req, res) => {
     try {
-        const worktracks = await worktrackService.getAllResource(req.user.id);
-        return res.status(200).json({ message: 'Success!', data: worktracks });
+        if (req.user.role === 'admin') {
+            const workTracks = await worktrackService.getWorkTrackByAdmin(req.user.id);
+            return res.status(200).json({ message: 'Success!', data: workTracks });
+        }
+        if (req.user.role === 'manager') {
+            const workTracks = await worktrackService.getWorkTrackByManager(req.user.id);
+            return res.status(200).json({ message: 'Success!', data: workTracks });
+        }
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
     }
@@ -20,6 +26,18 @@ const getById = async (req, res) => {
         return res.status(200).json({ message: 'Success!', data: worktrack });
     } catch (error) {
         return res.status(404).json({ message: 'Not Found!', error });
+    }
+};
+
+const getWorkTrackOfMe = async (req, res) => {
+    try {
+        const getWorkTrackMe = await worktrackService.getAllResourceByUserId(req.user.id);
+        if (!getWorkTrackMe) {
+            throw new ApiError(404, 'Not Found');
+        }
+        return res.status(200).json({ message: 'Success!', data: getWorkTrackMe });
+    } catch (error) {
+        return error;
     }
 };
 
@@ -78,4 +96,4 @@ const deleteById = async (req, res) => {
     }
 };
 
-module.exports = { getAll, getById, getAllByUserId, addKpiNormForUser, updateWorkTrackById, deleteById };
+module.exports = { getAll, getById, getAllByUserId, addKpiNormForUser, updateWorkTrackById, deleteById, getWorkTrackOfMe };

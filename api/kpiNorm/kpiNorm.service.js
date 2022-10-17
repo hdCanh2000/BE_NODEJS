@@ -28,42 +28,34 @@ exports.detailKpiNorm = async (id) => {
     }
 };
 
-exports.allKpiNorm = async (id) => {
-    const getUserById = await model.users.findOne({ where: { id } });
+exports.allKpiNorm = async () => {
     try {
-        if (getUserById.role === 'admin') {
-            const data = await model.kpiNorms.findAll({
-                include: [
-                    {
-                        model: model.units,
-                    },
-                    {
-                        model: model.departments,
-                    },
-                    {
-                        model: model.positions,
-                    },
-                ],
-            });
-            return data;
-        }
-        if (getUserById.role === 'manager') {
-            const data = await model.kpiNorms.findAll({
-                include: [
-                    {
-                        model: model.units,
-                    },
-                    {
-                        model: model.departments,
-                    },
-                    {
-                        model: model.positions,
-                    },
-                ],
-                where: { department_id: getUserById.department_id },
-            });
-            return data;
-        }
+        const data = await model.kpiNorms.findAll({
+            include: [
+                {
+                    model: model.units,
+                },
+                {
+                    model: model.departments,
+                },
+                {
+                    model: model.positions,
+                },
+            ],
+        });
+        return data;
+    } catch (error) {
+        return error;
+    }
+};
+
+exports.getKpiNormByDepartment = async (id) => {
+    try {
+        const data = await model.kpiNorms.findAll({
+            where: { department_id: id },
+            include: [model.units, model.departments, model.positions],
+        });
+        return data;
     } catch (error) {
         return error;
     }
