@@ -155,7 +155,9 @@ const getAllResourceByUserId = async (user_id) => {
 };
 
 const createResource = async (data, id) => {
-    const result = model.workTracks.create(data, { createdBy: id });
+    // eslint-disable-next-line no-param-reassign
+    data.createdBy = id;
+    const result = model.workTracks.create(data);
     return result;
 };
 
