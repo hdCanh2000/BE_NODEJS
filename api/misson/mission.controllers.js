@@ -20,8 +20,8 @@ exports.addMission = async (req, res) => {
 
 exports.getMission = async (req, res) => {
     try {
-        const getAllMission = await missionService.getAllMission();
-        return res.status(200).json({ msg: 'Success!', data: getAllMission });
+        const getAllMission = await missionService.getAllMission(req.query);
+        return res.status(200).json(getAllMission);
     } catch (error) {
         return res.status(400).json({ message: 'Error!', error: error.message });
     }
