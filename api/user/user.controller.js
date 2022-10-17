@@ -51,37 +51,11 @@ exports.getUserDetail = async (req, res) => {
         return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
+
 exports.getAllUser = async (req, res) => {
     try {
-        const getUserById = await model.users.findOne({ where: { id: req.user.id, isDelete: false } });
-        if (getUserById.role === 'admin') {
-            const allUser = await model.users.findAll({
-                include: [
-                    {
-                        model: model.departments,
-                    },
-                    {
-                        model: model.positions,
-                    },
-                ],
-                where: { isDelete: false },
-            });
-            return res.status(200).json({ message: 'Get All User Success!', data: allUser });
-        }
-        if (getUserById.role !== 'admin') {
-            const allUser = await model.users.findAll({
-                include: [
-                    {
-                        model: model.departments,
-                    },
-                    {
-                        model: model.positions,
-                    },
-                ],
-                where: { department_id: getUserById.department_id, isDelete: false },
-            });
-            return res.status(200).json({ message: 'Get All User Success!', data: allUser });
-        }
+        const data = await userService.findAll({ userId: req.user.id, query: req.query });
+        return res.status(200).json(data);
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error: error.message });
     }
