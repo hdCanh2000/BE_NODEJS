@@ -1,3 +1,5 @@
+const { Op } = require('sequelize');
+const sequelize = require('sequelize');
 const model = require('../../models/index');
 
 exports.createPosition = async (data) => {
@@ -16,22 +18,46 @@ exports.updateById = async (id, data) => {
     return update;
 };
 
-exports.allPosition = async () => {
+exports.allPosition = async (query) => {
+    const { page = 1, limit, text = '' } = query;
+    let searchValue = '';
+    if (text) searchValue = text.toLowerCase();
+    else searchValue = '';
+
+    const conditions = [{
+        [Op.or]: [
+            sequelize.where(sequelize.fn('LOWER', sequelize.col('positions.name')), 'LIKE', `%${searchValue}%`),
+            sequelize.where(sequelize.fn('LOWER', sequelize.col('positions.code')), 'LIKE', `%${searchValue}%`),
+        ],
+    }];
+
     try {
+        const total = await model.positions.count();
         const data = await model.positions.findAll({
+            offset: (page - 1) * limit || 0,
+            limit,
+            order: [
+                ['id', 'ASC'],
+            ],
+            where: {
+                [Op.and]: conditions,
+            },
             include: [
                 {
                     model: model.positionLevels,
+                    attributes: ['id', 'name', 'code'],
                 },
                 {
                     model: model.departments,
+                    attributes: ['id', 'name', 'code', 'parent_id', 'organizationLevel'],
                 },
                 {
                     model: model.requirements,
+                    attributes: ['id', 'name'],
                 },
             ],
         });
-        return data;
+        return { message: 'Get All Position Success!', data, pagination: { page: parseInt(page), limit: parseInt(limit), totalRows: data.length, total } };
     } catch (error) {
         return error;
     }
