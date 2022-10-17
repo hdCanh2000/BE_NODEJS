@@ -29,6 +29,9 @@ exports.allDepartment = async (query) => {
     const { page = 1, limit, text = '', isActive, organizationLevel } = query;
     let searchValue = '';
     if (text) searchValue = text.toLowerCase();
+    // sequelize.where(sequelize.fn('unaccent', sequelize.fn('LOWER', sequelize.col('name'))), 'LIKE', `%${searchValue}%`),
+    // sequelize.where(sequelize.fn('unaccent', sequelize.fn('LOWER', sequelize.col('code'))), 'LIKE', `%${searchValue}%`),
+    // sequelize.where(sequelize.fn('unaccent', sequelize.fn('LOWER', sequelize.col('description'))), 'LIKE', `%${searchValue}%`),
     const conditions = [{
         [Op.or]: [
             sequelize.where(sequelize.fn('LOWER', sequelize.col('name')), 'LIKE', `%${searchValue}%`),
