@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
                 targetKey: 'id',
                 foreignKey: 'user_id',
             });
+            users.hasMany(models.workTracks, {
+                targetKey: 'id',
+                foreignKey: 'createdBy',
+            });
         }
     }
     users.init({

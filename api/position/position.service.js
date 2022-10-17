@@ -10,14 +10,10 @@ exports.createPosition = async (data) => {
 };
 
 exports.updateById = async (id, data) => {
-    try {
-        const update = await model.positions.update(data, {
-            where: { id },
-        });
-        return update;
-    } catch (error) {
-        return error;
-    }
+    const update = await model.positions.update(data, {
+        where: { id },
+    });
+    return update;
 };
 
 exports.allPosition = async () => {
@@ -62,7 +58,7 @@ exports.getPositionById = async (id) => {
 
 exports.getPositionRequirement = async (id) => {
     try {
-        const detail = await model.positionRequirement.findAll({
+        const detail = await model.positionRequirements.findAll({
             where: { positionId: id },
         });
         return detail;
@@ -73,7 +69,7 @@ exports.getPositionRequirement = async (id) => {
 
 exports.deletePositionRequirement = async (id) => {
     try {
-        const deletePR = await model.positionRequirement.destroy({ where: { positionId: id } });
+        const deletePR = await model.positionRequirements.destroy({ where: { positionId: id } });
         return deletePR;
     } catch (error) {
         return error;

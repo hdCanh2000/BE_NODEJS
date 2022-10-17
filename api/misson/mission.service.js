@@ -1,3 +1,5 @@
+const { Op } = require('sequelize');
+const sequelize = require('sequelize');
 const model = require('../../models/index');
 
 exports.addMission = async (name, unit_id, description, quantity, kpiValue, startTime, endTime, manday) => {
@@ -9,38 +11,56 @@ exports.addMission = async (name, unit_id, description, quantity, kpiValue, star
     }
 };
 
-exports.getAllMission = async () => {
+exports.getAllMission = async (query) => {
+    const { page = 1, limit, text } = query;
+    let searchValue = '';
+    if (text) searchValue = text.toLowerCase();
+    else searchValue = '';
+
+    const conditions = [{
+        [Op.or]: [
+            sequelize.where(sequelize.fn('LOWER', sequelize.col('missions.name')), 'LIKE', `%${searchValue}%`),
+            sequelize.where(sequelize.fn('LOWER', sequelize.col('missions.description')), 'LIKE', `%${searchValue}%`),
+        ],
+    }];
+
     try {
-        const getAllMission = await model.missions.findAll({
+        const total = await model.missions.count();
+        const data = await model.missions.findAll({
+            offset: (page - 1) * limit || 0,
+            limit,
+            order: [
+                ['id', 'ASC'],
+            ],
+            where: {
+                [Op.and]: conditions,
+            },
             include: [
                 {
                     model: model.departments,
                 },
                 {
                     model: model.units,
+                    attributes: ['id', 'name', 'code'],
                 },
             ],
-         });
-        return getAllMission;
+        });
+        return { data, pagination: { page: parseInt(page), limit: parseInt(limit), totalRows: data.length, total } };
     } catch (error) {
         return error;
     }
 };
 
 exports.updateMission = async (id, name, unit_id, description, quantity, kpiValue, startTime, endTime, manday) => {
-    try {
-        const updateMission = await model.missions.update(
-            { name, unit_id, description, quantity, kpiValue, startTime, endTime, manday },
-            {
-                where: {
-                    id,
-                },
+    const updateMission = await model.missions.update(
+        { name, unit_id, description, quantity, kpiValue, startTime, endTime, manday },
+        {
+            where: {
+                id,
             },
-        );
-        return updateMission;
-    } catch (error) {
-        return error;
-    }
+        },
+    );
+    return updateMission;
 };
 
 exports.getMissionById = async (id) => {
@@ -54,6 +74,7 @@ exports.getMissionById = async (id) => {
                     },
                     {
                         model: model.units,
+                        attributes: ['id', 'name', 'code'],
                     },
                 ],
             },
@@ -68,9 +89,15 @@ exports.getMissionDetail = async (id) => {
     try {
         const getMissionDetail = await model.missions.findOne({
             where: { id },
-            include: [{
-                model: model.departments,
-            }],
+            include: [
+                {
+                    model: model.departments,
+                },
+                {
+                    model: model.units,
+                    attributes: ['id', 'name', 'code'],
+                },
+            ],
         });
         return getMissionDetail;
     } catch (error) {

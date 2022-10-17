@@ -51,6 +51,60 @@ const getAllResource = async (id) => {
     }
 };
 
+const getWorkTrackByAdmin = async () => {
+    try {
+        const data = await model.workTracks.findAll({
+            include: [
+                {
+                    model: model.kpiNorms,
+                },
+                {
+                    model: model.users,
+                    include: {
+                        model: model.departments,
+                    },
+                },
+                {
+                    model: model.missions,
+                },
+                {
+                    model: model.workTrackLogs,
+                }],
+        });
+        return data;
+    } catch (error) {
+        return error;
+    }
+};
+const getWorkTrackByManager = async (id) => {
+    try {
+        const data = await model.workTracks.findAll({
+            where: {
+                createdBy: id,
+            },
+            include: [
+                {
+                    model: model.kpiNorms,
+                },
+                {
+                    model: model.users,
+                    include: {
+                        model: model.departments,
+                    },
+                },
+                {
+                    model: model.missions,
+                },
+                {
+                    model: model.workTrackLogs,
+                }],
+        });
+        return data;
+    } catch (error) {
+        return error;
+    }
+};
+
 const getResourceById = async (id) => {
     const data = await model.workTracks.findOne({
         where: {
@@ -80,36 +134,29 @@ const getResourceById = async (id) => {
 const getAllResourceByUserId = async (user_id) => {
     const user = await model.users.findOne({
         where: { id: user_id },
+        include: [
+            {
+                model: model.workTracks,
+                include: [
+                    model.kpiNorms,
+                    model.missions,
+                    model.workTrackLogs,
+                ],
+            },
+            {
+                model: model.departments,
+            },
+        ],
     });
     if (!user) {
         throw new ApiError(404, 'User not found!');
     }
-    const data = await model.workTracks.findAll({
-        where: {
-            user_id: user.id,
-        },
-        include: [
-            {
-                model: model.kpiNorms,
-            },
-            {
-                model: model.missions,
-            },
-            {
-                model: model.workTrackLogs,
-            },
-            {
-                model: model.users,
-                include: {
-                    model: model.departments,
-                },
-            },
-        ],
-    });
-    return data;
+    return user;
 };
 
-const createResource = async (data) => {
+const createResource = async (data, id) => {
+    // eslint-disable-next-line no-param-reassign
+    data.createdBy = id;
     const result = model.workTracks.create(data);
     return result;
 };
@@ -179,4 +226,4 @@ const deleteWorkTrackUserWithWorkTrack = async (workTrack_id) => {
     }
 };
 
-module.exports = { getAllResource, getResourceById, getAllResourceByUserId, createResource, updateResourceById, deleteResourceById, createWorkTrackUser, findUser, deleteWorkTrackUser, deleteWorkTrackUserWithWorkTrack };
+module.exports = { getAllResource, getResourceById, getAllResourceByUserId, createResource, updateResourceById, deleteResourceById, createWorkTrackUser, findUser, deleteWorkTrackUser, deleteWorkTrackUserWithWorkTrack, getWorkTrackByAdmin, getWorkTrackByManager };

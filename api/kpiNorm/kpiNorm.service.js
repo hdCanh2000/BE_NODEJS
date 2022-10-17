@@ -11,15 +11,10 @@ exports.createKpiNorm = async (data) => {
 };
 
 exports.updateKpiNormById = async (id, data) => {
-    try {
-        const update = await model.kpiNorms.update(data, {
-        }, {
-            where: { id },
-        });
-        return update;
-    } catch (error) {
-        return error;
-    }
+    const update = await model.kpiNorms.update(data, {
+        where: { id },
+    });
+    return update;
 };
 
 exports.detailKpiNorm = async (id) => {
@@ -33,42 +28,34 @@ exports.detailKpiNorm = async (id) => {
     }
 };
 
-exports.allKpiNorm = async (id) => {
-    const getUserById = await model.users.findOne({ where: { id } });
+exports.allKpiNorm = async () => {
     try {
-        if (getUserById.role === 'admin') {
-            const data = await model.kpiNorms.findAll({
-                include: [
-                    {
-                        model: model.units,
-                    },
-                    {
-                        model: model.departments,
-                    },
-                    {
-                        model: model.positions,
-                    },
-                ],
-            });
-            return data;
-        }
-        if (getUserById.role === 'manager') {
-            const data = await model.kpiNorms.findAll({
-                include: [
-                    {
-                        model: model.units,
-                    },
-                    {
-                        model: model.departments,
-                    },
-                    {
-                        model: model.positions,
-                    },
-                ],
-                where: { department_id: getUserById.department_id },
-            });
-            return data;
-        }
+        const data = await model.kpiNorms.findAll({
+            include: [
+                {
+                    model: model.units,
+                },
+                {
+                    model: model.departments,
+                },
+                {
+                    model: model.positions,
+                },
+            ],
+        });
+        return data;
+    } catch (error) {
+        return error;
+    }
+};
+
+exports.getKpiNormByDepartment = async (id) => {
+    try {
+        const data = await model.kpiNorms.findAll({
+            where: { department_id: id },
+            include: [model.units, model.departments, model.positions],
+        });
+        return data;
     } catch (error) {
         return error;
     }
@@ -100,7 +87,7 @@ exports.updateWorkTrack = async (id) => {
             { kpiNorm_id: null },
             { where: { id } },
         );
-    return updateWorkTrack;
+        return updateWorkTrack;
     } catch (error) {
         return error;
     }

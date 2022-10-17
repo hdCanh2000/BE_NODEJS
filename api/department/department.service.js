@@ -1,4 +1,6 @@
 const dotenv = require('dotenv');
+const { Op } = require('sequelize');
+const sequelize = require('sequelize');
 const model = require('../../models/index');
 
 dotenv.config();
@@ -23,15 +25,34 @@ exports.updateDepartmentById = async (id, data) => {
     }
 };
 
-exports.allDepartment = async () => {
+exports.allDepartment = async (query) => {
+    const { page = 1, limit, text = '', isActive, organizationLevel } = query;
+    let searchValue = '';
+    if (text) searchValue = text.toLowerCase();
+    // sequelize.where(sequelize.fn('unaccent', sequelize.fn('LOWER', sequelize.col('name'))), 'LIKE', `%${searchValue}%`),
+    // sequelize.where(sequelize.fn('unaccent', sequelize.fn('LOWER', sequelize.col('code'))), 'LIKE', `%${searchValue}%`),
+    // sequelize.where(sequelize.fn('unaccent', sequelize.fn('LOWER', sequelize.col('description'))), 'LIKE', `%${searchValue}%`),
+    const conditions = [{
+        [Op.or]: [
+            sequelize.where(sequelize.fn('LOWER', sequelize.col('name')), 'LIKE', `%${searchValue}%`),
+            sequelize.where(sequelize.fn('LOWER', sequelize.col('code')), 'LIKE', `%${searchValue}%`),
+        ],
+    }];
+    if (isActive) conditions.push({ isActive });
+    if (organizationLevel) conditions.push({ organizationLevel });
     try {
-        const data = await model.departments.findAll({
-            include: [{
-                model: model.users,
-                // where: { isDelete: false },
-            }],
+        const total = await model.departments.count();
+        const data = await model.departments.findAndCountAll({
+            offset: (page - 1) * limit || 0,
+            limit,
+            order: [
+                ['id', 'ASC'],
+            ],
+            where: {
+                [Op.and]: conditions,
+            },
         });
-        return data;
+        return { data: data.rows, pagination: { page: parseInt(page), limit: parseInt(limit), totalRows: data.rows.length, total } };
     } catch (error) {
         return error;
     }
@@ -87,9 +108,9 @@ exports.getPositionByDepartmentId = async (id) => {
 exports.updateUser = async (id) => {
     try {
         const updateUser = await model.users.update(
-                { department_id: null },
-                { where: { id } },
-            );
+            { department_id: null },
+            { where: { id } },
+        );
         return updateUser;
     } catch (error) {
         return error;
@@ -99,9 +120,9 @@ exports.updateUser = async (id) => {
 exports.updatePosition = async (id) => {
     try {
         const updatePosition = await model.positions.update(
-                { department_id: null },
-                { where: { id } },
-            );
+            { department_id: null },
+            { where: { id } },
+        );
         return updatePosition;
     } catch (error) {
         return error;
@@ -111,9 +132,9 @@ exports.updatePosition = async (id) => {
 exports.updateKpiNorm = async (id) => {
     try {
         const updateKpiNorm = await model.kpiNorms.update(
-                { department_id: null },
-                { where: { id } },
-            );
+            { department_id: null },
+            { where: { id } },
+        );
         return updateKpiNorm;
     } catch (error) {
         return error;
