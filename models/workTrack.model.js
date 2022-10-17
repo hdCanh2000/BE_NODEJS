@@ -17,17 +17,19 @@ module.exports = (sequelize, DataTypes) => {
             workTracks.hasMany(models.workTrackLogs, {
                 targetKey: 'id',
                 foreignKey: 'workTrack_id',
-              });
+            });
+            workTracks.belongsTo(models.users, { foreignKey: 'createdBy', targetKey: 'id' });
         }
     }
     workTracks.init({
         kpiNorm_id: DataTypes.INTEGER,
         parent_id: DataTypes.INTEGER,
         mission_id: DataTypes.INTEGER,
+        createdBy: DataTypes.INTEGER,
         quantity: DataTypes.INTEGER,
         priority: DataTypes.INTEGER,
         review: DataTypes.STRING,
-        node: DataTypes.STRING,
+        note: DataTypes.TEXT,
         description: DataTypes.TEXT,
         deadline: DataTypes.STRING,
         startDate: DataTypes.STRING,
