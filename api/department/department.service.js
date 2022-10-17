@@ -28,12 +28,11 @@ exports.updateDepartmentById = async (id, data) => {
 exports.allDepartment = async (query) => {
     const { page = 1, limit, text = '', isActive, organizationLevel } = query;
     let searchValue = '';
-    if (text) searchValue = text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    if (text) searchValue = text.toLowerCase();
     const conditions = [{
         [Op.or]: [
-            sequelize.where(sequelize.fn('unaccent', sequelize.fn('LOWER', sequelize.col('name'))), 'LIKE', `%${searchValue}%`),
-            sequelize.where(sequelize.fn('unaccent', sequelize.fn('LOWER', sequelize.col('code'))), 'LIKE', `%${searchValue}%`),
-            sequelize.where(sequelize.fn('unaccent', sequelize.fn('LOWER', sequelize.col('description'))), 'LIKE', `%${searchValue}%`),
+            sequelize.where(sequelize.fn('LOWER', sequelize.col('name')), 'LIKE', `%${searchValue}%`),
+            sequelize.where(sequelize.fn('LOWER', sequelize.col('code')), 'LIKE', `%${searchValue}%`),
         ],
     }];
     if (isActive) conditions.push({ isActive });
@@ -46,9 +45,9 @@ exports.allDepartment = async (query) => {
             order: [
                 ['id', 'ASC'],
             ],
-            // where: {
-            //     [Op.and]: conditions,
-            // },
+            where: {
+                [Op.and]: conditions,
+            },
         });
         return { data: data.rows, pagination: { page: parseInt(page), limit: parseInt(limit), totalRows: data.rows.length, total } };
     } catch (error) {
