@@ -26,13 +26,14 @@ exports.updateKpiNorm = async (req, res) => {
 exports.getAllKpiNorm = async (req, res) => {
     try {
         if (req.user.role === 'admin') {
-            const result = await kpiNormService.allKpiNorm(req.user.id);
+            const result = await kpiNormService.allKpiNorm({ userId: req.user.id, query: req.query });
             return res.status(200).json({ message: 'Get All KpiNorm Success!', data: result });
         }
         if (req.user.role === 'manager') {
             const result = await kpiNormService.getKpiNormByDepartment(req.user.department_id);
             return res.status(200).json({ message: 'Get All KpiNorm Success!', data: result });
         }
+        return res.status(401).json({ message: 'Không có quyền truy cập!' });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error: error.message });
     }
