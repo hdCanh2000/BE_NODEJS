@@ -6,23 +6,15 @@ const model = require('../../models/index');
 dotenv.config();
 
 exports.createDepartment = async (data) => {
-    try {
-        const result = model.departmentModel.create(data);
-        return result;
-    } catch (error) {
-        return error;
-    }
+    const result = model.departments.create(data);
+    return result;
 };
 
 exports.updateDepartmentById = async (id, data) => {
-    try {
-        const update = await model.departments.update(data, {
-            where: { id },
-        });
-        return update;
-    } catch (error) {
-        return error;
-    }
+    const update = await model.departments.update(data, {
+        where: { id },
+    });
+    return update;
 };
 
 exports.allDepartment = async (query) => {
@@ -59,95 +51,59 @@ exports.allDepartment = async (query) => {
 };
 
 exports.detailDepartment = async (id) => {
-    try {
-        const detail = await model.departments.findOne({
-            where: { id },
-        });
-        return detail;
-    } catch (error) {
-        return error;
-    }
+    const detail = await model.departments.findOne({
+        where: { id },
+    });
+    return detail;
 };
 
 exports.deleteDepartment = async (id) => {
-    try {
-        const deleteDepartment = await model.departments.destroy({ where: { id } });
-        return deleteDepartment;
-    } catch (error) {
-        return error;
-    }
+    const deleteDepartment = await model.departments.destroy({ where: { id } });
+    return deleteDepartment;
 };
 
 exports.getUserByDepartmentId = async (id) => {
-    try {
-        const getUser = await model.users.findAll({ where: { department_id: id } });
-        return getUser;
-    } catch (error) {
-        return error;
-    }
+    const getUser = await model.users.findAll({ where: { department_id: id } });
+    return getUser;
 };
 
 exports.getKpiNormByDepartmentId = async (id) => {
-    try {
-        const getKpiNorm = await model.kpiNorms.findAll({ where: { department_id: id } });
-        return getKpiNorm;
-    } catch (error) {
-        return error;
-    }
+    const getKpiNorm = await model.kpiNorms.findAll({ where: { department_id: id } });
+    return getKpiNorm;
 };
 
 exports.getPositionByDepartmentId = async (id) => {
-    try {
-        const getPosition = await model.positions.findAll({ where: { department_id: id } });
-        return getPosition;
-    } catch (error) {
-        return error;
-    }
+    const getPosition = await model.positions.findAll({ where: { department_id: id } });
+    return getPosition;
 };
 
 exports.updateUser = async (id) => {
-    try {
-        const updateUser = await model.users.update(
-            { department_id: null },
-            { where: { id } },
-        );
-        return updateUser;
-    } catch (error) {
-        return error;
-    }
+    const updateUser = await model.users.update(
+        { department_id: null },
+        { where: { id } },
+    );
+    return updateUser;
 };
 
 exports.updatePosition = async (id) => {
-    try {
-        const updatePosition = await model.positions.update(
-            { department_id: null },
-            { where: { id } },
-        );
-        return updatePosition;
-    } catch (error) {
-        return error;
-    }
+    const updatePosition = await model.positions.update(
+        { department_id: null },
+        { where: { id } },
+    );
+    return updatePosition;
 };
 
 exports.updateKpiNorm = async (id) => {
-    try {
-        const updateKpiNorm = await model.kpiNorms.update(
-            { department_id: null },
-            { where: { id } },
-        );
-        return updateKpiNorm;
-    } catch (error) {
-        return error;
-    }
+    const updateKpiNorm = await model.kpiNorms.update(
+        { department_id: null },
+        { where: { id } },
+    );
+    return updateKpiNorm;
 };
 
 exports.deleteMissionDepartment = async (id) => {
-    try {
-        const deleteMissionDepartment = await model.missionDepartments.destroy({ where: { departmentId: id } });
-        return deleteMissionDepartment;
-    } catch (error) {
-        return error;
-    }
+    const deleteMissionDepartment = await model.missionDepartments.destroy({ where: { departmentId: id } });
+    return deleteMissionDepartment;
 };
 
 // exports.getAllDepartment = async (id) => {
