@@ -97,6 +97,9 @@ exports.findAll = async ({ userId, query }) => {
                     {
                         model: model.positions,
                     },
+                    {
+                        model: model.workTracks,
+                    },
                 ],
                 where: {
                     isDelete: false,
@@ -115,6 +118,9 @@ exports.findAll = async ({ userId, query }) => {
                     },
                     {
                         model: model.positions,
+                    },
+                    {
+                        model: model.workTracks,
                     },
                 ],
                 where: {
