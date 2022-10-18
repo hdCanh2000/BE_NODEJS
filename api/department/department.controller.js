@@ -54,6 +54,9 @@ exports.deleteDepartment = async (req, res) => {
     const updatePositionByDepartmentId = async (department_id) => {
       await departmentService.updatePosition(department_id);
     };
+    // const updateDepartment = async (department_id, data) => {
+    //   await departmentService.updateDepartmentById(department_id, data);
+    // };
     const getUser = await departmentService.getUserByDepartmentId(id);
     const getKpiNorm = await departmentService.getKpiNormByDepartmentId(id);
     const getPosition = await departmentService.getPositionByDepartmentId(id);
@@ -67,9 +70,15 @@ exports.deleteDepartment = async (req, res) => {
       updateKpiNormByDepartmentId(e.id);
     });
     getPosition.forEach((e) => {
-    updatePositionByDepartmentId(e.id);
+      updatePositionByDepartmentId(e.id);
     });
     await departmentService.deleteMissionDepartment(id);
+    // const departments = await departmentService.getAllDepartment(id);
+    // if (departments) {
+    //   departments.forEach((e) => {
+    //     updateDepartment(e.id, { parent_id: null });
+    //   });
+    // }
     const deleteDepartment = await departmentService.deleteDepartment(id);
     return res.status(200).json({ msg: 'Delete Unit Success!', data: deleteDepartment });
   } catch (error) {

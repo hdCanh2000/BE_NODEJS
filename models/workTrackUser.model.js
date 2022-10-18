@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        isCreated: DataTypes.BOOLEAN,
         isResponsible: DataTypes.BOOLEAN,
     }, {
         sequelize,
