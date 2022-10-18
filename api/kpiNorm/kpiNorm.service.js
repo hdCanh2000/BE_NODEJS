@@ -1,3 +1,5 @@
+const { Op } = require('sequelize');
+const sequelize = require('sequelize');
 const model = require('../../models/index');
 const ApiError = require('../../utils/ApiError');
 
@@ -28,18 +30,39 @@ exports.detailKpiNorm = async (id) => {
     }
 };
 
-exports.allKpiNorm = async () => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+exports.allKpiNorm = async ({ userId, query }) => {
+    const { page = 1, limit, text = '' } = query;
+    let searchValue = '';
+    if (text) searchValue = text.toLowerCase();
+    const conditions = [{
+        [Op.or]: [
+            sequelize.where(sequelize.fn('LOWER', sequelize.col('kpiNorms.name')), 'LIKE', `%${searchValue}%`),
+        ],
+    }];
+
     try {
         const data = await model.kpiNorms.findAll({
+            offset: (page - 1) * limit || 0,
+            limit,
+            order: [
+                ['id', 'ASC'],
+            ],
+            where: {
+                [Op.and]: conditions,
+            },
             include: [
                 {
                     model: model.units,
+                    attributes: ['id', 'name', 'code'],
                 },
                 {
                     model: model.departments,
+                    attributes: ['id', 'name', 'code', 'organizationLevel', 'parent_id'],
                 },
                 {
                     model: model.positions,
+                    attributes: ['id', 'name', 'code'],
                 },
             ],
         });
