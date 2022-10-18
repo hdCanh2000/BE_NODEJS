@@ -105,3 +105,12 @@ exports.deleteMissionDepartment = async (id) => {
     const deleteMissionDepartment = await model.missionDepartments.destroy({ where: { departmentId: id } });
     return deleteMissionDepartment;
 };
+
+// exports.getAllDepartment = async (id) => {
+//     try {
+//         const allDepartment = await model.departments.findAll({ where: { parent_id: id } });
+//         return allDepartment;
+//     } catch (error) {
+//         return error;
+//     }
+// };
