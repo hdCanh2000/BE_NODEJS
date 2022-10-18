@@ -4,14 +4,11 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.addColumn(
-      'workTracks', // table name
-      'createdBy', // new field name
+      'workTrackUsers', // table name
+      'isCreated', // new field name
       {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'users',
-          key: 'id',
-        },
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
     );
     await queryInterface.changeColumn('workTracks', 'node', {
@@ -21,6 +18,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn('workTracks', 'createdBy');
+    await queryInterface.removeColumn('workTrackUsers', 'isCreated');
   },
 };

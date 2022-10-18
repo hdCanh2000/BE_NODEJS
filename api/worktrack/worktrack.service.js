@@ -79,15 +79,16 @@ const getWorkTrackByAdmin = async () => {
 const getWorkTrackByManager = async (id) => {
     try {
         const data = await model.workTracks.findAll({
-            where: {
-                createdBy: id,
-            },
             include: [
                 {
                     model: model.kpiNorms,
                 },
                 {
                     model: model.users,
+                    where: {
+                        userId: id,
+                        isCreated: true,
+                    },
                     include: {
                         model: model.departments,
                     },
@@ -154,9 +155,7 @@ const getAllResourceByUserId = async (user_id) => {
     return user;
 };
 
-const createResource = async (data, id) => {
-    // eslint-disable-next-line no-param-reassign
-    data.createdBy = id;
+const createResource = async (data) => {
     const result = model.workTracks.create(data);
     return result;
 };

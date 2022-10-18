@@ -56,10 +56,15 @@ const getAllByUserId = async (req, res) => {
 
 const addKpiNormForUser = async (req, res) => {
     try {
-        const workTrack = await worktrackService.createResource(req.body, req.user.id);
+        const workTrack = await worktrackService.createResource(req.body);
         const findUser = await worktrackService.findUser(req.body.user_id);
+        const userCreate = await worktrackService.findUser(req.user.id);
         if (findUser) {
-            await workTrack.addUser(findUser, { through: { isResponsible: true } });
+            const addUser = await workTrack.addUser(findUser, { through: { isResponsible: true } });
+            const addUserCreate = await workTrack.addUser(userCreate, { through: { isCreated: true } });
+            if (!addUser || !addUserCreate) {
+                throw new ApiError(400, 'Bad Request');
+            }
         }
         return res.status(200).json({ message: 'Create Success!', data: workTrack });
     } catch (error) {
