@@ -46,8 +46,8 @@ exports.updatePosition = async (req, res) => {
 
 exports.getAllPosition = async (req, res) => {
     try {
-        const result = await positionService.allPosition();
-        return res.status(200).json({ message: 'Get All Position Success!', data: result });
+        const result = await positionService.allPosition(req.query);
+        return res.status(200).json(result);
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error: error.message });
     }

@@ -18,14 +18,14 @@ module.exports = (sequelize, DataTypes) => {
                 targetKey: 'id',
                 foreignKey: 'workTrack_id',
             });
-            workTracks.belongsTo(models.users, { foreignKey: 'createdBy', targetKey: 'id' });
+            // workTracks.belongsTo(models.users, { foreignKey: 'createdBy', targetKey: 'id' });
         }
     }
     workTracks.init({
         kpiNorm_id: DataTypes.INTEGER,
         parent_id: DataTypes.INTEGER,
         mission_id: DataTypes.INTEGER,
-        createdBy: DataTypes.INTEGER,
+        // createdBy: DataTypes.INTEGER,
         quantity: DataTypes.INTEGER,
         priority: DataTypes.INTEGER,
         review: DataTypes.STRING,
