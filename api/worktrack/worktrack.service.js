@@ -78,27 +78,22 @@ const getWorkTrackByAdmin = async () => {
 };
 const getWorkTrackByManager = async (id) => {
     try {
-        const data = await model.workTracks.findAll({
+        const data = await model.users.findOne({
+            where: {
+                id,
+            },
             include: [
+                model.departments,
                 {
-                    model: model.kpiNorms,
+                    model: model.workTracks,
+                    include: [
+                        model.users,
+                        model.kpiNorms,
+                        model.missions,
+                        model.workTrackLogs,
+                    ],
                 },
-                {
-                    model: model.users,
-                    where: {
-                        userId: id,
-                        isCreated: true,
-                    },
-                    include: {
-                        model: model.departments,
-                    },
-                },
-                {
-                    model: model.missions,
-                },
-                {
-                    model: model.workTrackLogs,
-                }],
+            ],
         });
         return data;
     } catch (error) {
