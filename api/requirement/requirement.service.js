@@ -48,17 +48,6 @@ const updateResourceById = async (id, data) => {
     return result;
 };
 
-// const deleteRequirementWithPosition = async (id) => {
-//     try {
-//         const remove = await model.positionRequirements.destroy(
-//             { where: { requirementId: id } },
-//         );
-//         return remove;
-//     } catch (error) {
-//         return error;
-//     }
-// };
-
 const deleteResourceById = async (id) => {
     const resource = await model.requirements.findOne({
         where:

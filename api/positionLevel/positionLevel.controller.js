@@ -49,11 +49,6 @@ const updateById = async (req, res) => {
 const deleteById = async (req, res) => {
     const { id } = req.params;
     try {
-        // const positionLevel = await positionLevelService.getResourceById(id);
-        // if (!positionLevel) {
-        //     throw new ApiError(404, 'Position Level not found');
-        // }
-        // await positionLevelService.deletePositionLevelWithPosition(positionLevel.id);
         const deletePositionLevel = await positionLevelService.deleteResourceById(id);
         return res.status(200).json({ message: 'Success!', data: deletePositionLevel });
     } catch (error) {

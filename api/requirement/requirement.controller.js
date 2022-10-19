@@ -48,11 +48,6 @@ const updateById = async (req, res) => {
 const deleteById = async (req, res) => {
     const { id } = req.params;
     try {
-        // const findRequirement = await requirementService.getResourceById(id);
-        // if (!findRequirement) {
-        //     throw new ApiError(404, 'Requirement not found');
-        // }
-        // await requirementService.deleteRequirementWithPosition(findRequirement.id);
         const requirement = await requirementService.deleteResourceById(id);
         return res.status(200).json({ message: 'Success!', data: requirement });
     } catch (error) {

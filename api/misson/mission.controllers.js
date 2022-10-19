@@ -61,8 +61,6 @@ exports.updateMission = async (req, res) => {
 exports.deleteMission = async (req, res) => {
     const { id } = req.params;
     try {
-        // const getMissionById = await missionService.getMissionById(id);
-        // await missionService.deleteDepartmentMission(getMissionById.id);
         const deleteMissionById = await missionService.deleteMission(id);
             return res.status(200).json({ msg: 'Success!', data: deleteMissionById });
     } catch (error) {

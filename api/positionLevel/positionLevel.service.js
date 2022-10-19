@@ -61,18 +61,6 @@ const updateResourceById = async (id, data) => {
     return result;
 };
 
-// const deletePositionLevelWithPosition = async (id) => {
-//     try {
-//         const remove = await model.positions.update(
-//             { position_levels_id: null },
-//             { where: { position_levels_id: id } },
-//         );
-//         return remove;
-//     } catch (error) {
-//         return error;
-//     }
-// };
-
 const deleteResourceById = async (id) => {
     const resource = await model.positionLevels.findOne({
         where:

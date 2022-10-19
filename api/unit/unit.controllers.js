@@ -29,23 +29,6 @@ exports.updateUnit = async (req, res) => {
 exports.deleteUnit = async (req, res) => {
     const { id } = req.params;
     try {
-        // const updateMissionById = async (mission_id) => {
-        //     await unitService.updateMission(mission_id);
-        // };
-        // const findMission = await unitService.findMissionByUnitId(id);
-        // findMission.forEach((e) => {
-        //     updateMissionById(e.id);
-        // });
-        // const updateKpiNormById = async (mission_id) => {
-        //     await unitService.updateKpiNorm(mission_id);
-        // };
-        // const findKpiNorm = await unitService.findKpiNormByUnitId(id);
-        // findKpiNorm.forEach((e) => {
-        //     updateKpiNormById(e.id);
-        // });
-        // if (!findMission || !findKpiNorm) {
-        //     throw new ApiError(404, 'Not Found');
-        // }
             const deleteUnit = await unitService.deleteUnitById(id);
             return res.status(200).json({ msg: 'Delete Unit Success!', data: deleteUnit });
     } catch (error) {

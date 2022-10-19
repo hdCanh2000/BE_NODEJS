@@ -211,22 +211,4 @@ const deleteWorkTrackUser = async (user_id, workTrack_id) => {
     }
 };
 
-// const deleteWorkTrackUserWithWorkTrack = async (workTrack_id) => {
-//     try {
-//         const deleteWorkTrack = await model.workTrackUsers.destroy({ where: { workTrackId: workTrack_id } });
-//         return deleteWorkTrack;
-//     } catch (error) {
-//         return error;
-//     }
-// };
-
-// const deleteWorkTrackLog = async (workTrack_id) => {
-//     try {
-//         const deleteWTL = await model.workTrackLogs.destroy({ where: { workTrack_id } });
-//         return deleteWTL;
-//     } catch (error) {
-//         return error;
-//     }
-// };
-
 module.exports = { getAllResource, getResourceById, getAllResourceByUserId, createResource, updateResourceById, deleteResourceById, createWorkTrackUser, findUser, deleteWorkTrackUser, getWorkTrackByAdmin, getWorkTrackByManager };
