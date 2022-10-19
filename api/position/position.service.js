@@ -101,3 +101,12 @@ exports.deletePositionRequirement = async (id) => {
         return error;
     }
 };
+
+exports.deletePosition = async (id) => {
+    try {
+        const deleteP = await model.positions.destroy({ where: { id } });
+        return deleteP;
+    } catch (error) {
+        return error;
+    }
+};

@@ -1,5 +1,6 @@
 const positionService = require('./position.service');
 const requirementService = require('../requirement/requirement.service');
+const ApiError = require('../../utils/ApiError');
 
 exports.addPosition = async (req, res) => {
     try {
@@ -60,5 +61,14 @@ exports.getPositionDetail = async (req, res) => {
         return res.status(200).json({ message: 'Get Detail Position Success!!', data: detail });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error: error.message });
+    }
+};
+
+exports.deletePosition = async (req, res) => {
+    try {
+        const deleteP = await positionService.deletePosition(req.params.id);
+        return res.status(200).json({ message: 'Delete Position Success!!', data: deleteP });
+    } catch (error) {
+        return res.status(400).json({ message: 'Error!', error: error.message });
     }
 };

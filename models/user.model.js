@@ -17,11 +17,8 @@ module.exports = (sequelize, DataTypes) => {
             users.hasMany(models.tokens, {
                 targetKey: 'id',
                 foreignKey: 'user_id',
+                onDelete: 'SET NULL',
             });
-            // users.hasMany(models.workTracks, {
-            //     targetKey: 'id',
-            //     foreignKey: 'createdBy',
-            // });
         }
     }
     users.init({

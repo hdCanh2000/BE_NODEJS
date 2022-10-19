@@ -13,6 +13,7 @@ module.exports = {
       },
       kpiNorm_id: {
         type: Sequelize.INTEGER,
+        onDelete: 'SET NULL',
         references: {
           model: 'kpiNorms',
           key: 'id',
@@ -23,6 +24,7 @@ module.exports = {
       },
       mission_id: {
         type: Sequelize.INTEGER,
+        onDelete: 'SET NULL',
         references: {
           model: 'missions',
           key: 'id',
@@ -37,8 +39,8 @@ module.exports = {
       review: {
         type: Sequelize.STRING,
       },
-      node: {
-        type: Sequelize.STRING,
+      note: {
+        type: Sequelize.TEXT,
       },
       description: {
         type: Sequelize.TEXT,

@@ -52,18 +52,18 @@ exports.getKpiNormDetail = async (req, res) => {
 exports.deleteKpiNorm = async (req, res) => {
     const { id } = req.params;
     try {
-        const updateWorkTrackByKpiNorm = async (kpiNorm_id) => {
-            await kpiNormService.updateWorkTrack(kpiNorm_id);
-        };
-        const getWorkTrackByKpiNorm = await kpiNormService.getWorkTrackByKpiNorm(id);
-        if (!getWorkTrackByKpiNorm) {
-            throw new ApiError(404, 'Not Found');
-        }
-        getWorkTrackByKpiNorm.forEach((element) => {
-            updateWorkTrackByKpiNorm(element.id);
-        });
-        const deletekpi = await kpiNormService.deleteById(id);
-        return res.status(200).json({ message: 'Success!', data: deletekpi });
+        // const updateWorkTrackByKpiNorm = async (kpiNorm_id) => {
+        //     await kpiNormService.updateWorkTrack(kpiNorm_id);
+        // };
+        // const getWorkTrackByKpiNorm = await kpiNormService.getWorkTrackByKpiNorm(id);
+        // if (!getWorkTrackByKpiNorm) {
+        //     throw new ApiError(404, 'Not Found');
+        // }
+        // getWorkTrackByKpiNorm.forEach((element) => {
+        //     updateWorkTrackByKpiNorm(element.id);
+        // });
+        const deleteKpi = await kpiNormService.deleteById(id);
+        return res.status(200).json({ message: 'Success!', data: deleteKpi });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error: error.message });
     }

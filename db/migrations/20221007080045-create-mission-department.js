@@ -8,6 +8,7 @@ module.exports = {
       missionId: {
         allowNull: false,
         type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
         references: {
           model: 'missions',
           key: 'id',
@@ -16,6 +17,7 @@ module.exports = {
       departmentId: {
         allowNull: false,
         type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
         references: {
           model: 'departments',
           key: 'id',

@@ -139,14 +139,14 @@ exports.getDepartmentMissionById = async (id, isResponsible) => {
 //     }
 // };
 
-exports.deleteDepartmentMission = async (id) => {
-    try {
-        const deleteMission = await model.missionDepartments.destroy({ where: { missionId: id } });
-        return deleteMission;
-    } catch (error) {
-        return error;
-    }
-};
+// exports.deleteDepartmentMission = async (id) => {
+//     try {
+//         const deleteMission = await model.missionDepartments.destroy({ where: { missionId: id } });
+//         return deleteMission;
+//     } catch (error) {
+//         return error;
+//     }
+// };
 
 exports.deleteDepartmentMissionWithResponsible = async (id, isResponsible) => {
     try {

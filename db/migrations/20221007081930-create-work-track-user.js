@@ -8,15 +8,21 @@ module.exports = {
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        onDelete: 'CASCADE',
         references: { model: 'users', key: 'id' },
       },
       workTrackId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        onDelete: 'CASCADE',
         references: { model: 'workTracks', key: 'id' },
       },
       isResponsible: {
         type: Sequelize.BOOLEAN,
+      },
+      isCreated: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,
