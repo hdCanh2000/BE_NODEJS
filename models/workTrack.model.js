@@ -33,6 +33,10 @@ module.exports = (sequelize, DataTypes) => {
         description: DataTypes.TEXT,
         deadline: DataTypes.STRING,
         startDate: DataTypes.STRING,
+        status: {
+            type: DataTypes.ENUM(['pending', 'accepted', 'completed', 'closed']),
+            defaultValue: 'accepted',
+        },
     }, {
         sequelize,
         modelName: 'workTracks',
