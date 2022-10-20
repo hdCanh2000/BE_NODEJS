@@ -127,27 +127,6 @@ exports.getDepartmentMissionById = async (id, isResponsible) => {
     }
 };
 
-// exports.getDepartmentMission = async (id) => {
-//     try {
-//         const getMissionById = await model.missionDepartments.findOne({
-//             where: { missionId: id },
-//         });
-//         console.log(getMissionById);
-//         return getMissionById;
-//     } catch (error) {
-//         return error;
-//     }
-// };
-
-exports.deleteDepartmentMission = async (id) => {
-    try {
-        const deleteMission = await model.missionDepartments.destroy({ where: { missionId: id } });
-        return deleteMission;
-    } catch (error) {
-        return error;
-    }
-};
-
 exports.deleteDepartmentMissionWithResponsible = async (id, isResponsible) => {
     try {
         const deleteMission = await model.missionDepartments.destroy({ where: { missionId: id, isResponsible } });
@@ -170,12 +149,3 @@ exports.deleteMission = async (id) => {
         return error;
     }
 };
-
-// exports.deleteMultiDepartmentMission = async (id) => {
-//     try {
-//         const deleteMultiDepartmentMission = await model.missionDepartments.destroy({ where: { id } });
-//         return deleteMultiDepartmentMission;
-//     } catch (error) {
-//         return error;
-//     }
-// };

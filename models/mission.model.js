@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
             missions.hasMany(models.workTracks, {
                 targetKey: 'id',
                 foreignKey: 'mission_id',
+                onDelete: 'SET NULL',
             });
         }
     }

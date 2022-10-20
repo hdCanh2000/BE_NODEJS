@@ -15,10 +15,12 @@ module.exports = (sequelize, DataTypes) => {
       units.hasMany(models.kpiNorms, {
         targetKey: 'id',
         foreignKey: 'unit_id',
+        onDelete: 'SET NULL',
       });
       units.hasMany(models.missions, {
         targetKey: 'id',
         foreignKey: 'unit_id',
+        onDelete: 'SET NULL',
       });
     }
   }

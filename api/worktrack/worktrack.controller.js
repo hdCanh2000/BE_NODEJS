@@ -35,6 +35,13 @@ const getWorkTrackOfMe = async (req, res) => {
         if (!getWorkTrackMe) {
             throw new ApiError(404, 'Not Found');
         }
+        const check = getWorkTrackMe.dataValues?.workTracks;
+        for (let i = 0; i < check.length; i++) {
+            const checkResponsible = check[i].dataValues?.workTrackUsers?.dataValues?.isResponsible;
+            if (!(checkResponsible === true)) {
+                check.splice(i, 1);
+            }
+        }
         return res.status(200).json({ message: 'Success!', data: getWorkTrackMe });
     } catch (error) {
         return error;
@@ -92,13 +99,27 @@ const updateWorkTrackById = async (req, res) => {
 const deleteById = async (req, res) => {
     const { id } = req.params;
     try {
-        const findWorkTrack = await worktrackService.getResourceById(id);
-        await worktrackService.deleteWorkTrackUserWithWorkTrack(findWorkTrack.id);
-        const worktrack = await worktrackService.deleteResourceById(findWorkTrack.id);
+        const worktrack = await worktrackService.deleteResourceById(id);
         return res.status(200).json({ message: 'Delete Success!', data: worktrack });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
 
-module.exports = { getAll, getById, getAllByUserId, addKpiNormForUser, updateWorkTrackById, deleteById, getWorkTrackOfMe };
+const getWorkTrackWithPending = async (req, res) => {
+    try {
+        if (req.user.role === 'admin') {
+            const workTrack = await worktrackService.getWorkTrackPending();
+            return res.status(200).json({ message: 'Delete Success!', data: workTrack });
+        }
+
+        if (req.user.role === 'manager') {
+            const workTrack = await worktrackService.getWorkTrackPending(req.user.id);
+            return res.status(200).json({ message: 'Delete Success!', data: workTrack });
+        }
+    } catch (error) {
+        return res.status(400).json({ message: 'Error!', error: error.message });
+    }
+};
+
+module.exports = { getWorkTrackWithPending, getAll, getById, getAllByUserId, addKpiNormForUser, updateWorkTrackById, deleteById, getWorkTrackOfMe };

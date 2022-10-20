@@ -17,8 +17,8 @@ module.exports = (sequelize, DataTypes) => {
             workTracks.hasMany(models.workTrackLogs, {
                 targetKey: 'id',
                 foreignKey: 'workTrack_id',
+                onDelete: 'SET NULL',
             });
-            // workTracks.belongsTo(models.users, { foreignKey: 'createdBy', targetKey: 'id' });
         }
     }
     workTracks.init({

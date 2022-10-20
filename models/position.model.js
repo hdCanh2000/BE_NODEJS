@@ -17,10 +17,12 @@ module.exports = (sequelize, DataTypes) => {
             positions.hasMany(models.users, {
                 targetKey: 'id',
                 foreignKey: 'position_id',
+                onDelete: 'SET NULL',
               });
             positions.hasMany(models.kpiNorms, {
                 targetKey: 'id',
                 foreignKey: 'position_id',
+                onDelete: 'SET NULL',
             });
         }
     }

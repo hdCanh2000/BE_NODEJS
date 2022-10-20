@@ -12,8 +12,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      models.requirements.belongsToMany(models.positions, { through: positionRequirements });
-      models.positions.belongsToMany(models.requirements, { through: positionRequirements });
+      models.requirements.belongsToMany(models.positions, { through: positionRequirements, onDelete: 'CASCADE' });
+      models.positions.belongsToMany(models.requirements, { through: positionRequirements, onDelete: 'CASCADE' });
     }
   }
   positionRequirements.init({

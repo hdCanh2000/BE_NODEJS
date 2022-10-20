@@ -12,8 +12,8 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            models.users.belongsToMany(models.workTracks, { through: workTrackUsers });
-            models.workTracks.belongsToMany(models.users, { through: workTrackUsers });
+            models.users.belongsToMany(models.workTracks, { through: workTrackUsers, onDelete: 'CASCADE' });
+            models.workTracks.belongsToMany(models.users, { through: workTrackUsers, onDelete: 'CASCADE' });
         }
     }
     workTrackUsers.init({

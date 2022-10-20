@@ -17,6 +17,7 @@ module.exports = {
       },
       unit_id: {
         type: Sequelize.INTEGER,
+        onDelete: 'SET NULL',
         references: {
           model: 'units',
           key: 'id',

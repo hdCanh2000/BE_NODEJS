@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       positionLevels.hasMany(models.positions, {
         targetKey: 'id',
         foreignKey: 'position_levels_id',
+        onDelete: 'SET NULL',
     });
     }
   }

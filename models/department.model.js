@@ -15,14 +15,17 @@ module.exports = (sequelize, DataTypes) => {
       departments.hasMany(models.users, {
         targetKey: 'id',
         foreignKey: 'department_id',
+        onDelete: 'SET NULL',
       });
       departments.hasMany(models.kpiNorms, {
         targetKey: 'id',
         foreignKey: 'department_id',
+        onDelete: 'SET NULL',
     });
     departments.hasMany(models.positions, {
       targetKey: 'id',
       foreignKey: 'department_id',
+      onDelete: 'SET NULL',
   });
     }
   }

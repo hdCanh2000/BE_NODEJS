@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
             kpiNorms.hasMany(models.workTracks, {
                 targetKey: 'id',
                 foreignKey: 'kpiNorm_id',
+                onDelete: 'SET NULL',
             });
         }
     }

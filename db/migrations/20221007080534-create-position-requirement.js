@@ -8,6 +8,7 @@ module.exports = {
       requirementId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        onDelete: 'CASCADE',
         references: {
           model: 'requirements',
           key: 'id',
@@ -16,6 +17,7 @@ module.exports = {
       positionId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        onDelete: 'CASCADE',
         references: {
           model: 'positions',
           key: 'id',

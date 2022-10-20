@@ -23,6 +23,7 @@ module.exports = {
       },
       workTrack_id: {
         type: Sequelize.INTEGER,
+        onDelete: 'SET NULL',
         references: {
           model: 'workTracks',
           key: 'id',

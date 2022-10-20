@@ -29,6 +29,7 @@ module.exports = {
       },
       position_levels_id: {
         type: Sequelize.INTEGER,
+        onDelete: 'SET NULL',
         references: {
           model: 'positionLevels',
           key: 'id',
@@ -36,6 +37,7 @@ module.exports = {
       },
       department_id: {
         type: Sequelize.INTEGER,
+        onDelete: 'SET NULL',
         references: {
           model: 'departments',
           key: 'id',

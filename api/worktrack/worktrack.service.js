@@ -78,27 +78,22 @@ const getWorkTrackByAdmin = async () => {
 };
 const getWorkTrackByManager = async (id) => {
     try {
-        const data = await model.workTracks.findAll({
+        const data = await model.users.findOne({
+            where: {
+                id,
+            },
             include: [
+                model.departments,
                 {
-                    model: model.kpiNorms,
+                    model: model.workTracks,
+                    include: [
+                        model.users,
+                        model.kpiNorms,
+                        model.missions,
+                        model.workTrackLogs,
+                    ],
                 },
-                {
-                    model: model.users,
-                    where: {
-                        userId: id,
-                        isCreated: true,
-                    },
-                    include: {
-                        model: model.departments,
-                    },
-                },
-                {
-                    model: model.missions,
-                },
-                {
-                    model: model.workTrackLogs,
-                }],
+            ],
         });
         return data;
     } catch (error) {
@@ -216,13 +211,54 @@ const deleteWorkTrackUser = async (user_id, workTrack_id) => {
     }
 };
 
-const deleteWorkTrackUserWithWorkTrack = async (workTrack_id) => {
+const getWorkTrackPending = async (id) => {
     try {
-        const deleteWorkTrack = await model.workTrackUsers.destroy({ where: { workTrackId: workTrack_id } });
-        return deleteWorkTrack;
+        if (id) {
+            const data = await model.users.findOne({
+                where: {
+                    id,
+                },
+                include: [
+                    model.departments,
+                    {
+                        model: model.workTracks,
+                        where: { status: 'pending' },
+                        include: [
+                            model.users,
+                            model.kpiNorms,
+                            model.missions,
+                            model.workTrackLogs,
+                        ],
+                    },
+                ],
+            });
+            return data;
+        }
+        if (!id) {
+            const workTrackByStatus = await model.workTracks.findAll({
+                where: { status: 'pending' },
+                include: [
+                    {
+                        model: model.kpiNorms,
+                    },
+                    {
+                        model: model.users,
+                        include: {
+                            model: model.departments,
+                        },
+                    },
+                    {
+                        model: model.missions,
+                    },
+                    {
+                        model: model.workTrackLogs,
+                    }],
+            });
+            return workTrackByStatus;
+        }
     } catch (error) {
         return error;
     }
 };
 
-module.exports = { getAllResource, getResourceById, getAllResourceByUserId, createResource, updateResourceById, deleteResourceById, createWorkTrackUser, findUser, deleteWorkTrackUser, deleteWorkTrackUserWithWorkTrack, getWorkTrackByAdmin, getWorkTrackByManager };
+module.exports = { getWorkTrackPending, getAllResource, getResourceById, getAllResourceByUserId, createResource, updateResourceById, deleteResourceById, createWorkTrackUser, findUser, deleteWorkTrackUser, getWorkTrackByAdmin, getWorkTrackByManager };

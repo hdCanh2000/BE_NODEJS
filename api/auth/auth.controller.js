@@ -67,7 +67,6 @@ exports.refreshToken = async (req, res) => {
     if (!token) return res.sendStatus(403).json({ message: 'Token not found!' });
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, async (err, decoded) => {
       // eslint-disable-next-line no-console
-      console.log('--------------------------------------------', decoded);
       if (err) return res.sendStatus(403).json({ message: 'Expired' });
       const accessToken = jwt.sign({ id: decoded.id, email: decoded.email, role: decoded.role }, process.env.ACCESS_TOKEN_SECRET, {
         expiresIn: '1h',
