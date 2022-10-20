@@ -11,5 +11,6 @@ router.put('/:id', auth(['admin', 'user', 'manager']), userController.updateProf
 router.get('/department/:department_id', auth(['admin', 'user', 'manager']), userController.getAllUserByDepartmentId);
 router.put('/changePassword', auth(['admin', 'user', 'manager']), userController.changePassword);
 // router.delete('/', auth('admin'), userController.deleteUser);
+router.post('/exportExcel', auth(['admin', 'manager']), userController.exportExcel);
 
 module.exports = router;
