@@ -107,7 +107,7 @@ const deleteById = async (req, res) => {
 };
 
 const getWorkTrackByStatus = async (req, res) => {
-    const { status } = req.body;
+    const { status } = req.query;
     try {
         if (req.user.role === 'admin') {
             const workTrack = await worktrackService.getWorkTrackByStatus(status);
