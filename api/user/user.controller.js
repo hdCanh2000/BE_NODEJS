@@ -122,6 +122,7 @@ exports.exportExcel = async (req, res) => {
                 phone: item.dataValues.phone,
                 address: item.dataValues.address,
                 sex: item.dataValues.sex === 'male' ? 'Nam' : 'Nữ',
+                isDelete: item.dataValues.isDelete ? 'Không hoạt động' : 'Hoạt động',
                 dateOfBirth: item.dataValues.dateOfBirth ? moment(item.dataValues.dateOfBirth).format('DD/MM/YYYY') : '',
                 dateOfJoin: item.dataValues.dateOfJoin ? moment(item.dataValues.dateOfJoin).format('DD/MM/YYYY') : '',
                 departmentName: showDepartment(item.department_id),
@@ -132,15 +133,16 @@ exports.exportExcel = async (req, res) => {
         worksheet.columns = [
             { header: 'STT', key: 'stt', width: 7 },
             { header: 'Name', key: 'name', width: 22 },
-            { header: 'Mã nhân sự', key: 'code', width: 15 },
-            { header: 'Email liên hệ', key: 'email', width: 35 },
+            { header: 'Mã nhân sự', key: 'code', width: 12 },
+            { header: 'Email liên hệ', key: 'email', width: 30 },
             { header: 'Phòng ban công tác', key: 'departmentName', width: 30 },
             { header: 'Vị trí làm việc', key: 'positionName', width: 25 },
             { header: 'Số điện thoại', key: 'phone', width: 20 },
             { header: 'Địa chỉ', key: 'address', width: 50 },
             { header: 'Giới tính', key: 'sex', width: 10 },
-            { header: 'Ngày sinh', key: 'dateOfBirth', width: 15 },
+            { header: 'Ngày sinh', key: 'dateOfBirth', width: 12 },
             { header: 'Ngày tham gia', key: 'dateOfJoin', width: 15 },
+            { header: 'Trạng thái', key: 'isDelete', width: 17 },
         ];
         let count = 1;
         user.forEach((e) => {
