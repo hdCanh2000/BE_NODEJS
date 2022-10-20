@@ -1,6 +1,5 @@
 const ExcelJs = require('exceljs');
 const moment = require('moment');
-const home = require('os').homedir();
 const model = require('../../models/index');
 const userService = require('./user.service');
 
@@ -154,9 +153,8 @@ exports.exportExcel = async (req, res) => {
             // eslint-disable-next-line no-param-reassign
             cell.font = { bold: true, size: 12 };
         });
-
-        const result = await workbook.xlsx.writeFile(`${home}/Desktop/Users.xlsx`);
-        return res.status(200).json({ message: 'Export Excel Success!', data: result });
+        await workbook.xlsx.writeFile('Users.xlsx');
+        res.download('Users.xlsx');
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error: error.message });
     }
