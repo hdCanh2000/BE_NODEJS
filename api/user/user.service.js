@@ -8,6 +8,7 @@ exports.findUser = async (id) => {
     try {
         const findUser = await model.users.findOne({
             where: { id },
+            include: [model.departments, model.positions],
         });
         return findUser;
     } catch (error) {

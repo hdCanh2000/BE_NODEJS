@@ -211,4 +211,54 @@ const deleteWorkTrackUser = async (user_id, workTrack_id) => {
     }
 };
 
-module.exports = { getAllResource, getResourceById, getAllResourceByUserId, createResource, updateResourceById, deleteResourceById, createWorkTrackUser, findUser, deleteWorkTrackUser, getWorkTrackByAdmin, getWorkTrackByManager };
+const getWorkTrackByStatus = async (status, id) => {
+    try {
+        if (id) {
+            const data = await model.users.findOne({
+                where: {
+                    id,
+                },
+                include: [
+                    model.departments,
+                    {
+                        model: model.workTracks,
+                        where: { status },
+                        include: [
+                            model.users,
+                            model.kpiNorms,
+                            model.missions,
+                            model.workTrackLogs,
+                        ],
+                    },
+                ],
+            });
+            return data;
+        }
+        if (!id) {
+            const workTrackByStatus = await model.workTracks.findAll({
+                where: { status },
+                include: [
+                    {
+                        model: model.kpiNorms,
+                    },
+                    {
+                        model: model.users,
+                        include: {
+                            model: model.departments,
+                        },
+                    },
+                    {
+                        model: model.missions,
+                    },
+                    {
+                        model: model.workTrackLogs,
+                    }],
+            });
+            return workTrackByStatus;
+        }
+    } catch (error) {
+        return error;
+    }
+};
+
+module.exports = { getWorkTrackByStatus, getAllResource, getResourceById, getAllResourceByUserId, createResource, updateResourceById, deleteResourceById, createWorkTrackUser, findUser, deleteWorkTrackUser, getWorkTrackByAdmin, getWorkTrackByManager };

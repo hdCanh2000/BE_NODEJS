@@ -106,4 +106,21 @@ const deleteById = async (req, res) => {
     }
 };
 
-module.exports = { getAll, getById, getAllByUserId, addKpiNormForUser, updateWorkTrackById, deleteById, getWorkTrackOfMe };
+const getWorkTrackByStatus = async (req, res) => {
+    const { status } = req.body;
+    try {
+        if (req.user.role === 'admin') {
+            const workTrack = await worktrackService.getWorkTrackByStatus(status);
+            return res.status(200).json({ message: 'Delete Success!', data: workTrack });
+        }
+
+        if (req.user.role === 'manager') {
+            const workTrack = await worktrackService.getWorkTrackByStatus(status, req.user.id);
+            return res.status(200).json({ message: 'Delete Success!', data: workTrack });
+        }
+    } catch (error) {
+        return res.status(400).json({ message: 'Error!', error: error.message });
+    }
+};
+
+module.exports = { getWorkTrackByStatus, getAll, getById, getAllByUserId, addKpiNormForUser, updateWorkTrackById, deleteById, getWorkTrackOfMe };
