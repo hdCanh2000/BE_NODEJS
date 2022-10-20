@@ -37,8 +37,8 @@ const getWorkTrackOfMe = async (req, res) => {
         }
         const check = getWorkTrackMe.dataValues?.workTracks;
         for (let i = 0; i < check.length; i++) {
-            const checkCreated = check[i].dataValues?.workTrackUsers?.dataValues?.isCreated;
-            if (checkCreated === true) {
+            const checkResponsible = check[i].dataValues?.workTrackUsers?.dataValues?.isResponsible;
+            if (!(checkResponsible === true)) {
                 check.splice(i, 1);
             }
         }
