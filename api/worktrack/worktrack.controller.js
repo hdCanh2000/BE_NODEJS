@@ -35,6 +35,13 @@ const getWorkTrackOfMe = async (req, res) => {
         if (!getWorkTrackMe) {
             throw new ApiError(404, 'Not Found');
         }
+        const check = getWorkTrackMe.dataValues?.workTracks;
+        for (let i = 0; i < check.length; i++) {
+            const checkCreated = check[i].dataValues?.workTrackUsers?.dataValues?.isCreated;
+            if (checkCreated === true) {
+                check.splice(i, 1);
+            }
+        }
         return res.status(200).json({ message: 'Success!', data: getWorkTrackMe });
     } catch (error) {
         return error;
