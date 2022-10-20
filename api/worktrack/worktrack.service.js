@@ -222,6 +222,7 @@ const getWorkTrackByStatus = async (status, id) => {
                     model.departments,
                     {
                         model: model.workTracks,
+                        as: 'workTracks',
                         where: { status },
                         include: [
                             model.users,
