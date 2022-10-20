@@ -1,3 +1,6 @@
+const ExcelJs = require('exceljs');
+const moment = require('moment');
+const home = require('os').homedir();
 const model = require('../../models/index');
 const userService = require('./user.service');
 
@@ -93,6 +96,65 @@ exports.deleteUser = async (req, res) => {
     try {
         const destroyUser = await userService.deleteById(id);
         return res.status(200).json({ message: 'Delete User Success!', data: destroyUser });
+    } catch (error) {
+        return res.status(404).json({ message: 'Error!', error: error.message });
+    }
+};
+
+exports.exportExcel = async (req, res) => {
+    try {
+        const users = await model.users.findAll();
+        const department = await model.departments.findAll();
+        const showDepartment = (id) => {
+            const newData = department.filter((item) => item.id === id);
+            return newData[0]?.name;
+        };
+        const position = await model.positions.findAll();
+        const showPosition = (id) => {
+            const newData = position.filter((item) => item.id === id);
+            return newData[0]?.name;
+        };
+        const user = users.filter((items) => items.dataValues.role !== 'admin').map((item) => (
+            {
+                name: item.dataValues.name,
+                code: item.dataValues.code,
+                email: item.dataValues.email,
+                phone: item.dataValues.phone,
+                address: item.dataValues.address,
+                sex: item.dataValues.sex === 'male' ? 'Nam' : 'Nữ',
+                dateOfBirth: item.dataValues.dateOfBirth ? moment(item.dataValues.dateOfBirth).format('DD/MM/YYYY') : '',
+                dateOfJoin: item.dataValues.dateOfJoin ? moment(item.dataValues.dateOfJoin).format('DD/MM/YYYY') : '',
+                departmentName: showDepartment(item.department_id),
+                positionName: showPosition(item.position_id),
+            }));
+        const workbook = new ExcelJs.Workbook();
+        const worksheet = workbook.addWorksheet('Users');
+        worksheet.columns = [
+            { header: 'STT', key: 'stt', width: 7 },
+            { header: 'Name', key: 'name', width: 22 },
+            { header: 'Mã nhân sự', key: 'code', width: 15 },
+            { header: 'Email liên hệ', key: 'email', width: 35 },
+            { header: 'Phòng ban công tác', key: 'departmentName', width: 30 },
+            { header: 'Vị trí làm việc', key: 'positionName', width: 25 },
+            { header: 'Số điện thoại', key: 'phone', width: 20 },
+            { header: 'Địa chỉ', key: 'address', width: 50 },
+            { header: 'Giới tính', key: 'sex', width: 10 },
+            { header: 'Ngày sinh', key: 'dateOfBirth', width: 15 },
+            { header: 'Ngày tham gia', key: 'dateOfJoin', width: 15 },
+        ];
+        let count = 1;
+        user.forEach((e) => {
+            e.stt = count;
+            worksheet.addRow(e);
+            count += 1;
+        });
+        worksheet.getRow(1).eachCell((cell) => {
+            // eslint-disable-next-line no-param-reassign
+            cell.font = { bold: true, size: 12 };
+        });
+
+        const result = await workbook.xlsx.writeFile(`${home}/Desktop/Users.xlsx`);
+        return res.status(200).json({ message: 'Export Excel Success!', data: result });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error: error.message });
     }
