@@ -39,7 +39,7 @@ exports.deleteUnit = async (req, res) => {
 exports.getAllUnit = async (req, res) => {
     const { page, limit, text } = req.query;
     let searchValue = '';
-    if (text) searchValue = text.toString();
+    if (text) searchValue = text.toString().toLowerCase();
     else searchValue = '';
     const total = await model.units.count();
     try {
