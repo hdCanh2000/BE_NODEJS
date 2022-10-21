@@ -164,6 +164,15 @@ const updateResourceById = async (id, data) => {
     return result;
 };
 
+const updateStatusWorktrack = async (id, status) => {
+    const result = await model.workTracks.update({ status }, {
+        where: {
+            id,
+        },
+    });
+    return result;
+};
+
 const deleteResourceById = async (id) => {
     const resource = await model.workTracks.findOne({
         where:
@@ -262,4 +271,4 @@ const getWorkTrackByStatus = async (status, id) => {
     }
 };
 
-module.exports = { getWorkTrackByStatus, getAllResource, getResourceById, getAllResourceByUserId, createResource, updateResourceById, deleteResourceById, createWorkTrackUser, findUser, deleteWorkTrackUser, getWorkTrackByAdmin, getWorkTrackByManager };
+module.exports = { getWorkTrackByStatus, getAllResource, getResourceById, getAllResourceByUserId, createResource, updateResourceById, updateStatusWorktrack, deleteResourceById, createWorkTrackUser, findUser, deleteWorkTrackUser, getWorkTrackByAdmin, getWorkTrackByManager };
