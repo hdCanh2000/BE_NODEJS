@@ -56,9 +56,9 @@ exports.changePassword = async (req, res) => {
 };
 
 exports.getUserDetail = async (req, res) => {
-    // const { id } = req.params;
+    const { id } = req.params;
     try {
-        const userDetail = await userService.findUser(req.user.id);
+        const userDetail = await userService.findUser(id);
         return res.status(200).json({ message: 'Get User Detail Success!!', data: userDetail });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error: error.message });
