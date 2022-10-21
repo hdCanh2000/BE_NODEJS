@@ -32,22 +32,18 @@ exports.allDepartment = async (query) => {
     }];
     if (isActive) conditions.push({ isActive });
     if (organizationLevel) conditions.push({ organizationLevel });
-    try {
-        const total = await model.departments.count();
-        const data = await model.departments.findAndCountAll({
-            offset: (page - 1) * limit || 0,
-            limit,
-            order: [
-                ['id', 'ASC'],
-            ],
-            where: {
-                [Op.and]: conditions,
-            },
-        });
-        return { data: data.rows, pagination: { page: parseInt(page), limit: parseInt(limit), totalRows: data.rows.length, total } };
-    } catch (error) {
-        return error;
-    }
+    const total = await model.departments.count();
+    const data = await model.departments.findAndCountAll({
+        offset: (page - 1) * limit || 0,
+        limit,
+        order: [
+            ['id', 'ASC'],
+        ],
+        where: {
+            [Op.and]: conditions,
+        },
+    });
+    return { data: data.rows, pagination: { page: parseInt(page), limit: parseInt(limit), totalRows: data.rows.length, total } };
 };
 
 exports.detailDepartment = async (id) => {
