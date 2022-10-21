@@ -8,7 +8,7 @@ const getAllResource = async (query) => {
     let searchValue = '';
     if (text) searchValue = text.toString();
     else searchValue = '';
-    const total = await model.positionLevels.count();
+    const total = await model.requirements.count();
     const data = await model.requirements.findAndCountAll({
         offset: (page - 1) * limit || 0,
         limit,
