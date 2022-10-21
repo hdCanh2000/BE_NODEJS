@@ -4,7 +4,7 @@ const worktrackController = require('./worktrack.controller');
 
 const router = express.Router();
 
-router.get('/', auth(['admin', 'manager', 'user']), worktrackController.getAll);
+router.get('/', auth(['admin', 'manager']), worktrackController.getAll);
 router.get('/workTrackMe', auth(['admin', 'manager', 'user']), worktrackController.getWorkTrackOfMe);
 router.get('/user/:user_id', auth(['admin', 'manager', 'user']), worktrackController.getAllByUserId);
 router.get('/workTrackPending', auth(['admin', 'manager', 'user']), worktrackController.getWorkTrackByStatus);

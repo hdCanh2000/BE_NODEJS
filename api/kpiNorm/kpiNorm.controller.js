@@ -29,7 +29,7 @@ exports.getAllKpiNorm = async (req, res) => {
             const result = await kpiNormService.allKpiNorm({ userId: req.user.id, query: req.query });
             return res.status(200).json({ message: 'Get All KpiNorm Success!', data: result });
         }
-        if (req.user.role === 'manager') {
+        if (!(req.user.role === 'admin')) {
             const result = await kpiNormService.getKpiNormByDepartment(req.user.department_id);
             return res.status(200).json({ message: 'Get All KpiNorm Success!', data: result });
         }
