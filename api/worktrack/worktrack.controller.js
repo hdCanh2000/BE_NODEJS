@@ -11,6 +11,20 @@ const getAll = async (req, res) => {
             const workTracks = await worktrackService.getWorkTrackByManager(req.user.id);
             return res.status(200).json({ message: 'Success!', data: workTracks });
         }
+        if (req.user.role === 'user') {
+            const workTracks = await worktrackService.getAllResourceByUserId(req.user.id);
+            if (!workTracks) {
+                throw new ApiError(404, 'Not Found');
+            }
+            const check = workTracks.dataValues?.workTracks;
+            for (let i = 0; i < check.length; i++) {
+                const checkCreated = check[i].dataValues?.workTrackUsers?.dataValues?.isCreated;
+                if (!(checkCreated === true)) {
+                    check.splice(i, 1);
+                }
+            }
+            return res.status(200).json({ message: 'Success!', data: workTracks });
+        }
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
     }
@@ -96,6 +110,17 @@ const updateWorkTrackById = async (req, res) => {
     }
 };
 
+const updateStatusWorkTrackById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        await worktrackService.updateStatusWorktrack(id, req.body.status);
+        const newWorkTrack = await worktrackService.getResourceById(id);
+        return res.status(200).json({ message: 'Update Success!', data: newWorkTrack });
+    } catch (error) {
+        return res.status(404).json({ message: 'Error!', error: error.message });
+    }
+};
+
 const deleteById = async (req, res) => {
     const { id } = req.params;
     try {
@@ -123,4 +148,4 @@ const getWorkTrackByStatus = async (req, res) => {
     }
 };
 
-module.exports = { getWorkTrackByStatus, getAll, getById, getAllByUserId, addKpiNormForUser, updateWorkTrackById, deleteById, getWorkTrackOfMe };
+module.exports = { getWorkTrackByStatus, getAll, getById, getAllByUserId, addKpiNormForUser, updateWorkTrackById, updateStatusWorkTrackById, deleteById, getWorkTrackOfMe };

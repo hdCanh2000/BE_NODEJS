@@ -3,12 +3,8 @@ const sequelize = require('sequelize');
 const model = require('../../models/index');
 
 exports.addMission = async (name, unit_id, description, quantity, kpiValue, startTime, endTime, manday) => {
-    try {
-        const addMission = await model.missions.create({ name, unit_id, description, quantity, kpiValue, startTime, endTime, manday });
-        return addMission;
-    } catch (error) {
-        return error;
-    }
+    const addMission = await model.missions.create({ name, unit_id, description, quantity, kpiValue, startTime, endTime, manday });
+    return addMission;
 };
 
 exports.getAllMission = async (query) => {
@@ -24,31 +20,27 @@ exports.getAllMission = async (query) => {
         ],
     }];
 
-    try {
-        const total = await model.missions.count();
-        const data = await model.missions.findAll({
-            offset: (page - 1) * limit || 0,
-            limit,
-            order: [
-                ['id', 'ASC'],
-            ],
-            where: {
-                [Op.and]: conditions,
+    const total = await model.missions.count();
+    const data = await model.missions.findAll({
+        offset: (page - 1) * limit || 0,
+        limit,
+        order: [
+            ['id', 'ASC'],
+        ],
+        where: {
+            [Op.and]: conditions,
+        },
+        include: [
+            {
+                model: model.departments,
             },
-            include: [
-                {
-                    model: model.departments,
-                },
-                {
-                    model: model.units,
-                    attributes: ['id', 'name', 'code'],
-                },
-            ],
-        });
-        return { data, pagination: { page: parseInt(page), limit: parseInt(limit), totalRows: data.length, total } };
-    } catch (error) {
-        return error;
-    }
+            {
+                model: model.units,
+                attributes: ['id', 'name', 'code'],
+            },
+        ],
+    });
+    return { data, pagination: { page: parseInt(page), limit: parseInt(limit), totalRows: data.length, total } };
 };
 
 exports.updateMission = async (id, name, unit_id, description, quantity, kpiValue, startTime, endTime, manday) => {
@@ -64,30 +56,8 @@ exports.updateMission = async (id, name, unit_id, description, quantity, kpiValu
 };
 
 exports.getMissionById = async (id) => {
-    try {
-        const getMissionById = await model.missions.findOne(
-            {
-                where: { id },
-                include: [
-                    {
-                        model: model.departments,
-                    },
-                    {
-                        model: model.units,
-                        attributes: ['id', 'name', 'code'],
-                    },
-                ],
-            },
-        );
-        return getMissionById;
-    } catch (error) {
-        return error;
-    }
-};
-
-exports.getMissionDetail = async (id) => {
-    try {
-        const getMissionDetail = await model.missions.findOne({
+    const getMissionById = await model.missions.findOne(
+        {
             where: { id },
             include: [
                 {
@@ -98,54 +68,52 @@ exports.getMissionDetail = async (id) => {
                     attributes: ['id', 'name', 'code'],
                 },
             ],
-        });
-        return getMissionDetail;
-    } catch (error) {
-        return error;
-    }
+        },
+    );
+    return getMissionById;
+};
+
+exports.getMissionDetail = async (id) => {
+    const getMissionDetail = await model.missions.findOne({
+        where: { id },
+        include: [
+            {
+                model: model.departments,
+            },
+            {
+                model: model.units,
+                attributes: ['id', 'name', 'code'],
+            },
+        ],
+    });
+    return getMissionDetail;
 };
 
 exports.getDepartmentById = async (id) => {
-    try {
-        const detail = await model.departments.findOne({
-            where: { id },
-        });
-        return detail;
-    } catch (error) {
-        return error;
-    }
+    const detail = await model.departments.findOne({
+        where: { id },
+    });
+    return detail;
 };
 
 exports.getDepartmentMissionById = async (id, isResponsible) => {
-    try {
-        const getMissionById = await model.missionDepartments.findOne({
-            where: { missionId: id, isResponsible },
-        });
-        return getMissionById;
-    } catch (error) {
-        return error;
-    }
+    const getMissionById = await model.missionDepartments.findOne({
+        where: { missionId: id, isResponsible },
+    });
+    return getMissionById;
 };
 
 exports.deleteDepartmentMissionWithResponsible = async (id, isResponsible) => {
-    try {
-        const deleteMission = await model.missionDepartments.destroy({ where: { missionId: id, isResponsible } });
-        return deleteMission;
-    } catch (error) {
-        return error;
-    }
+    const deleteMission = await model.missionDepartments.destroy({ where: { missionId: id, isResponsible } });
+    return deleteMission;
 };
 
 exports.deleteMission = async (id) => {
-    try {
-        const getMissionById = await model.missions.findOne(
-            {
-                where: { id },
-            },
-        );
-        const deleteMissionById = await model.missions.destroy({ where: { id: getMissionById.id } });
-        return deleteMissionById;
-    } catch (error) {
-        return error;
-    }
+    const getMissionById = await model.missions.findOne(
+        {
+            where: { id },
+        },
+    );
+    const deleteMissionById = await model.missions.destroy({ where: { id: getMissionById.id } });
+    return deleteMissionById;
 };
