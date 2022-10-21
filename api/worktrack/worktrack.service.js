@@ -214,26 +214,31 @@ const deleteWorkTrackUser = async (user_id, workTrack_id) => {
 const getWorkTrackByStatus = async (status, id) => {
     try {
         if (id) {
-            const data = await model.users.findOne({
+            const workTrackByStatus = await model.workTracks.findAll({
                 where: {
-                    id,
+                    status,
                 },
                 include: [
-                    model.departments,
                     {
-                        model: model.workTracks,
-                        as: 'workTracks',
-                        where: { status },
-                        include: [
-                            model.users,
-                            model.kpiNorms,
-                            model.missions,
-                            model.workTrackLogs,
-                        ],
+                        model: model.kpiNorms,
                     },
-                ],
+                    {
+                        model: model.users,
+                        as: 'users',
+                        where: { id },
+                        required: false,
+                        include: {
+                            model: model.departments,
+                        },
+                    },
+                    {
+                        model: model.missions,
+                    },
+                    {
+                        model: model.workTrackLogs,
+                    }],
             });
-            return data;
+            return workTrackByStatus;
         }
         if (!id) {
             const workTrackByStatus = await model.workTracks.findAll({
