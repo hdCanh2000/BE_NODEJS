@@ -3,12 +3,8 @@ const sequelize = require('sequelize');
 const model = require('../../models/index');
 
 exports.createPosition = async (data) => {
-    try {
-        const create = await model.positions.create(data);
-        return create;
-    } catch (error) {
-        return error;
-    }
+    const create = await model.positions.create(data);
+    return create;
 };
 
 exports.updateById = async (id, data) => {
@@ -31,82 +27,62 @@ exports.allPosition = async (query) => {
         ],
     }];
 
-    try {
-        const total = await model.positions.count();
-        const data = await model.positions.findAll({
-            offset: (page - 1) * limit || 0,
-            limit,
-            order: [
-                ['id', 'ASC'],
-            ],
-            where: {
-                [Op.and]: conditions,
+    const total = await model.positions.count();
+    const data = await model.positions.findAll({
+        offset: (page - 1) * limit || 0,
+        limit,
+        order: [
+            ['id', 'ASC'],
+        ],
+        where: {
+            [Op.and]: conditions,
+        },
+        include: [
+            {
+                model: model.positionLevels,
+                attributes: ['id', 'name', 'code'],
             },
-            include: [
-                {
-                    model: model.positionLevels,
-                    attributes: ['id', 'name', 'code'],
-                },
-                {
-                    model: model.departments,
-                    attributes: ['id', 'name', 'code', 'parent_id', 'organizationLevel'],
-                },
-                {
-                    model: model.requirements,
-                    attributes: ['id', 'name'],
-                },
-            ],
-        });
-        return { message: 'Get All Position Success!', data, pagination: { page: parseInt(page), limit: parseInt(limit), totalRows: data.length, total } };
-    } catch (error) {
-        return error;
-    }
+            {
+                model: model.departments,
+                attributes: ['id', 'name', 'code', 'parent_id', 'organizationLevel'],
+            },
+            {
+                model: model.requirements,
+                attributes: ['id', 'name'],
+            },
+        ],
+    });
+    return { message: 'Get All Position Success!', data, pagination: { page: parseInt(page), limit: parseInt(limit), totalRows: data.length, total } };
 };
 
 exports.getPositionById = async (id) => {
-    try {
-        const detail = await model.positions.findOne({
-            where: { id },
-            include: [
-                {
-                    model: model.requirements,
-                },
-                {
-                    model: model.kpiNorms,
-                },
-            ],
-        });
-        return detail;
-    } catch (error) {
-        return error;
-    }
+    const detail = await model.positions.findOne({
+        where: { id },
+        include: [
+            {
+                model: model.requirements,
+            },
+            {
+                model: model.kpiNorms,
+            },
+        ],
+    });
+    return detail;
 };
 
 exports.getPositionRequirement = async (id) => {
-    try {
-        const detail = await model.positionRequirements.findAll({
-            where: { positionId: id },
-        });
-        return detail;
-    } catch (error) {
-        return error;
-    }
+    const detail = await model.positionRequirements.findAll({
+        where: { positionId: id },
+    });
+    return detail;
 };
 
 exports.deletePositionRequirement = async (id) => {
-    try {
-        const deletePR = await model.positionRequirements.destroy({ where: { positionId: id } });
-        return deletePR;
-    } catch (error) {
-        return error;
-    }
+    const deletePR = await model.positionRequirements.destroy({ where: { positionId: id } });
+    return deletePR;
 };
 
 exports.deletePosition = async (id) => {
-    try {
-        const deleteP = await model.positions.destroy({ where: { id } });
-        return deleteP;
-    } catch (error) {
-        return error;
-    }
+    const deleteP = await model.positions.destroy({ where: { id } });
+    return deleteP;
 };
