@@ -11,6 +11,20 @@ const getAll = async (req, res) => {
             const workTracks = await worktrackService.getWorkTrackByManager(req.user.id);
             return res.status(200).json({ message: 'Success!', data: workTracks });
         }
+        if (req.user.role === 'user') {
+            const workTracks = await worktrackService.getAllResourceByUserId(req.user.id);
+            if (!workTracks) {
+                throw new ApiError(404, 'Not Found');
+            }
+            const check = workTracks.dataValues?.workTracks;
+            for (let i = 0; i < check.length; i++) {
+                const checkCreated = check[i].dataValues?.workTrackUsers?.dataValues?.isCreated;
+                if (!(checkCreated === true)) {
+                    check.splice(i, 1);
+                }
+            }
+            return res.status(200).json({ message: 'Success!', data: workTracks });
+        }
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error });
     }
