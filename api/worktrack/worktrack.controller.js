@@ -106,15 +106,16 @@ const deleteById = async (req, res) => {
     }
 };
 
-const getWorkTrackWithPending = async (req, res) => {
+const getWorkTrackByStatus = async (req, res) => {
+    const { status } = req.query;
     try {
         if (req.user.role === 'admin') {
-            const workTrack = await worktrackService.getWorkTrackPending();
+            const workTrack = await worktrackService.getWorkTrackByStatus(status);
             return res.status(200).json({ message: 'Delete Success!', data: workTrack });
         }
 
         if (req.user.role === 'manager') {
-            const workTrack = await worktrackService.getWorkTrackPending(req.user.id);
+            const workTrack = await worktrackService.getWorkTrackByStatus(status, req.user.id);
             return res.status(200).json({ message: 'Delete Success!', data: workTrack });
         }
     } catch (error) {
@@ -122,4 +123,4 @@ const getWorkTrackWithPending = async (req, res) => {
     }
 };
 
-module.exports = { getWorkTrackWithPending, getAll, getById, getAllByUserId, addKpiNormForUser, updateWorkTrackById, deleteById, getWorkTrackOfMe };
+module.exports = { getWorkTrackByStatus, getAll, getById, getAllByUserId, addKpiNormForUser, updateWorkTrackById, deleteById, getWorkTrackOfMe };

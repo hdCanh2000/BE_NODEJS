@@ -211,7 +211,7 @@ const deleteWorkTrackUser = async (user_id, workTrack_id) => {
     }
 };
 
-const getWorkTrackPending = async (id) => {
+const getWorkTrackByStatus = async (status, id) => {
     try {
         if (id) {
             const data = await model.users.findOne({
@@ -222,7 +222,8 @@ const getWorkTrackPending = async (id) => {
                     model.departments,
                     {
                         model: model.workTracks,
-                        where: { status: 'pending' },
+                        as: 'workTracks',
+                        where: { status },
                         include: [
                             model.users,
                             model.kpiNorms,
@@ -236,7 +237,7 @@ const getWorkTrackPending = async (id) => {
         }
         if (!id) {
             const workTrackByStatus = await model.workTracks.findAll({
-                where: { status: 'pending' },
+                where: { status },
                 include: [
                     {
                         model: model.kpiNorms,
@@ -261,4 +262,4 @@ const getWorkTrackPending = async (id) => {
     }
 };
 
-module.exports = { getWorkTrackPending, getAllResource, getResourceById, getAllResourceByUserId, createResource, updateResourceById, deleteResourceById, createWorkTrackUser, findUser, deleteWorkTrackUser, getWorkTrackByAdmin, getWorkTrackByManager };
+module.exports = { getWorkTrackByStatus, getAllResource, getResourceById, getAllResourceByUserId, createResource, updateResourceById, deleteResourceById, createWorkTrackUser, findUser, deleteWorkTrackUser, getWorkTrackByAdmin, getWorkTrackByManager };

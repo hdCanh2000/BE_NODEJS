@@ -1,6 +1,5 @@
 const ExcelJs = require('exceljs');
 const moment = require('moment');
-const home = require('os').homedir();
 const model = require('../../models/index');
 const userService = require('./user.service');
 
@@ -28,6 +27,17 @@ exports.updateProfile = async (req, res) => {
         const updateInfo = await userService.updateUserById(id, req.body);
         if (updateInfo) {
             const result = await userService.findUser(id);
+            return res.status(200).json({ msg: 'Update Profile success!!', data: result });
+          }
+    } catch (error) {
+        return res.status(404).json({ message: 'Error!', error: error.message });
+    }
+};
+exports.updateInformation = async (req, res) => {
+    try {
+        const updateInfo = await userService.updateUserById(req.user.id, req.body);
+        if (updateInfo) {
+            const result = await userService.findUser(req.user.id);
             return res.status(200).json({ msg: 'Update Profile success!!', data: result });
           }
     } catch (error) {
@@ -122,6 +132,7 @@ exports.exportExcel = async (req, res) => {
                 phone: item.dataValues.phone,
                 address: item.dataValues.address,
                 sex: item.dataValues.sex === 'male' ? 'Nam' : 'Nữ',
+                isDelete: item.dataValues.isDelete ? 'Không hoạt động' : 'Hoạt động',
                 dateOfBirth: item.dataValues.dateOfBirth ? moment(item.dataValues.dateOfBirth).format('DD/MM/YYYY') : '',
                 dateOfJoin: item.dataValues.dateOfJoin ? moment(item.dataValues.dateOfJoin).format('DD/MM/YYYY') : '',
                 departmentName: showDepartment(item.department_id),
@@ -132,15 +143,16 @@ exports.exportExcel = async (req, res) => {
         worksheet.columns = [
             { header: 'STT', key: 'stt', width: 7 },
             { header: 'Name', key: 'name', width: 22 },
-            { header: 'Mã nhân sự', key: 'code', width: 15 },
-            { header: 'Email liên hệ', key: 'email', width: 35 },
+            { header: 'Mã nhân sự', key: 'code', width: 12 },
+            { header: 'Email liên hệ', key: 'email', width: 30 },
             { header: 'Phòng ban công tác', key: 'departmentName', width: 30 },
             { header: 'Vị trí làm việc', key: 'positionName', width: 25 },
             { header: 'Số điện thoại', key: 'phone', width: 20 },
             { header: 'Địa chỉ', key: 'address', width: 50 },
             { header: 'Giới tính', key: 'sex', width: 10 },
-            { header: 'Ngày sinh', key: 'dateOfBirth', width: 15 },
+            { header: 'Ngày sinh', key: 'dateOfBirth', width: 12 },
             { header: 'Ngày tham gia', key: 'dateOfJoin', width: 15 },
+            { header: 'Trạng thái', key: 'isDelete', width: 17 },
         ];
         let count = 1;
         user.forEach((e) => {
@@ -152,9 +164,8 @@ exports.exportExcel = async (req, res) => {
             // eslint-disable-next-line no-param-reassign
             cell.font = { bold: true, size: 12 };
         });
-
-        const result = await workbook.xlsx.writeFile(`${home}/Desktop/Users.xlsx`);
-        return res.status(200).json({ message: 'Export Excel Success!', data: result });
+        await workbook.xlsx.writeFile('Users.xlsx');
+        res.download('Users.xlsx');
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error: error.message });
     }
