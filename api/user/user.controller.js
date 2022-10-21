@@ -33,6 +33,17 @@ exports.updateProfile = async (req, res) => {
         return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
+exports.updateInformation = async (req, res) => {
+    try {
+        const updateInfo = await userService.updateUserById(req.user.id, req.body);
+        if (updateInfo) {
+            const result = await userService.findUser(req.user.id);
+            return res.status(200).json({ msg: 'Update Profile success!!', data: result });
+          }
+    } catch (error) {
+        return res.status(404).json({ message: 'Error!', error: error.message });
+    }
+};
 
 exports.changePassword = async (req, res) => {
     const { oldPassword, newPassword, newPassword2 } = req.body;
@@ -45,9 +56,9 @@ exports.changePassword = async (req, res) => {
 };
 
 exports.getUserDetail = async (req, res) => {
-    const { id } = req.params;
+    // const { id } = req.params;
     try {
-        const userDetail = await userService.findUser(id);
+        const userDetail = await userService.findUser(req.user.id);
         return res.status(200).json({ message: 'Get User Detail Success!!', data: userDetail });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error: error.message });
