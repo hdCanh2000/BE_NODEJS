@@ -62,12 +62,21 @@ exports.deleteById = async (id) => {
 };
 
 exports.findAll = async ({ userId, query }) => {
-    const { page, limit, text } = query;
+    const { page, limit, text, departmentId, positionId, role } = query;
     let searchValue = '';
     if (text) searchValue = text.toLowerCase();
     const total = await model.users.count();
     const getUserById = await model.users.findOne({ where: { id: userId, isDelete: false } });
     if (getUserById.role === 'admin') {
+        const conditions = [{
+            [Op.or]: [
+                sequelize.where(sequelize.fn('LOWER', sequelize.col('users.name')), 'LIKE', `%${searchValue}%`),
+                sequelize.where(sequelize.fn('LOWER', sequelize.col('users.code')), 'LIKE', `%${searchValue}%`),
+            ],
+        }];
+        if (departmentId) { conditions.push({ department_id: departmentId }); }
+        if (positionId) { conditions.push({ position_id: positionId }); }
+        if (role) { conditions.push({ role }); }
         const data = await model.users.findAll({
             offset: (page - 1) * limit || 0,
             limit,
@@ -87,9 +96,7 @@ exports.findAll = async ({ userId, query }) => {
             ],
             where: {
                 isDelete: false,
-                [Op.or]: [
-                    sequelize.where(sequelize.fn('LOWER', sequelize.col('users.name')), 'LIKE', `%${searchValue}%`),
-                ],
+                [Op.and]: conditions,
             },
         });
         return { data, pagination: { page: parseInt(page), limit: parseInt(limit), totalRows: data.length, total } };
@@ -112,6 +119,7 @@ exports.findAll = async ({ userId, query }) => {
                 isDelete: false,
                 [Op.or]: [
                     sequelize.where(sequelize.fn('LOWER', sequelize.col('users.name')), 'LIKE', `%${searchValue}%`),
+                    sequelize.where(sequelize.fn('LOWER', sequelize.col('users.code')), 'LIKE', `%${searchValue}%`),
                 ],
             },
         });
