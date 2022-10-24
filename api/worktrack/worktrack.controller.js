@@ -140,7 +140,7 @@ const getWorkTrackByStatus = async (req, res) => {
         }
 
         if (req.user.role === 'manager') {
-            const workTrack = await worktrackService.getWorkTrackByStatus(status, req.user.id);
+            const workTrack = await worktrackService.getWorkTrackByDepartment(status, req.user.department_id);
             return res.status(200).json({ message: 'Success!', data: workTrack });
         }
     } catch (error) {
