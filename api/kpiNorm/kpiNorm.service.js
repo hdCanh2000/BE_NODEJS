@@ -24,7 +24,7 @@ exports.detailKpiNorm = async (id) => {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 exports.allKpiNorm = async ({ userId, query }) => {
-    const { page = 1, limit, text = '' } = query;
+    const { page = 1, limit, text = '', positionId } = query;
     let searchValue = '';
     if (text) searchValue = text.toLowerCase();
     const conditions = [{
@@ -32,6 +32,8 @@ exports.allKpiNorm = async ({ userId, query }) => {
             sequelize.where(sequelize.fn('LOWER', sequelize.col('kpiNorms.name')), 'LIKE', `%${searchValue}%`),
         ],
     }];
+
+    if (positionId) conditions.push({ position_id: positionId })
 
     const data = await model.kpiNorms.findAll({
         offset: (page - 1) * limit || 0,
