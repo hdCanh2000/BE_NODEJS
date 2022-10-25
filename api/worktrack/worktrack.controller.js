@@ -136,12 +136,12 @@ const getWorkTrackByStatus = async (req, res) => {
     try {
         if (req.user.role === 'admin') {
             const workTrack = await worktrackService.getWorkTrackByStatus(status);
-            return res.status(200).json({ message: 'Delete Success!', data: workTrack });
+            return res.status(200).json({ message: 'Success!', data: workTrack });
         }
 
         if (req.user.role === 'manager') {
-            const workTrack = await worktrackService.getWorkTrackByStatus(status, req.user.id);
-            return res.status(200).json({ message: 'Delete Success!', data: workTrack });
+            const workTrack = await worktrackService.getWorkTrackByDepartment(status, req.user.department_id);
+            return res.status(200).json({ message: 'Success!', data: workTrack });
         }
     } catch (error) {
         return res.status(400).json({ message: 'Error!', error: error.message });

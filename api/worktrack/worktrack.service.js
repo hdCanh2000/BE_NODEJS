@@ -220,31 +220,8 @@ const deleteWorkTrackUser = async (user_id, workTrack_id) => {
     }
 };
 
-const getWorkTrackByStatus = async (status, id) => {
+const getWorkTrackByStatus = async (status) => {
     try {
-        if (id) {
-            const data = await model.users.findOne({
-                where: {
-                    id,
-                },
-                include: [
-                    model.departments,
-                    {
-                        model: model.workTracks,
-                        as: 'workTracks',
-                        where: { status },
-                        include: [
-                            model.users,
-                            model.kpiNorms,
-                            model.missions,
-                            model.workTrackLogs,
-                        ],
-                    },
-                ],
-            });
-            return data;
-        }
-        if (!id) {
             const workTrackByStatus = await model.workTracks.findAll({
                 where: { status },
                 include: [
@@ -265,10 +242,36 @@ const getWorkTrackByStatus = async (status, id) => {
                     }],
             });
             return workTrackByStatus;
-        }
     } catch (error) {
         return error;
     }
 };
 
-module.exports = { getWorkTrackByStatus, getAllResource, getResourceById, getAllResourceByUserId, createResource, updateResourceById, updateStatusWorktrack, deleteResourceById, createWorkTrackUser, findUser, deleteWorkTrackUser, getWorkTrackByAdmin, getWorkTrackByManager };
+const getWorkTrackByDepartment = async (status, department_id) => {
+    try {
+            const workTrackByStatus = await model.workTracks.findAll({
+                where: { status },
+                include: [
+                    {
+                        model: model.kpiNorms,
+                    },
+                    {
+                        model: model.users,
+                        where: { department_id },
+                        include: {
+                            model: model.departments,
+                        },
+                    },
+                    {
+                        model: model.missions,
+                    },
+                    {
+                        model: model.workTrackLogs,
+                    }],
+            });
+            return workTrackByStatus;
+    } catch (error) {
+        return error;
+    }
+};
+module.exports = { getWorkTrackByDepartment, getWorkTrackByStatus, getAllResource, getResourceById, getAllResourceByUserId, createResource, updateResourceById, updateStatusWorktrack, deleteResourceById, createWorkTrackUser, findUser, deleteWorkTrackUser, getWorkTrackByAdmin, getWorkTrackByManager };
