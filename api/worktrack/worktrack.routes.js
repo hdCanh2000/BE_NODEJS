@@ -7,6 +7,7 @@ const router = express.Router();
 router.get('/', auth(['admin', 'manager', 'user']), worktrackController.getAll);
 router.get('/workTrackMe', auth(['admin', 'manager', 'user']), worktrackController.getWorkTrackOfMe);
 router.get('/user/:user_id', auth(['admin', 'manager', 'user']), worktrackController.getAllByUserId);
+router.get('/kpi_user/:kpiNorm_id/:user_id', auth(['admin', 'manager', 'user']), worktrackController.getByKpiNornAndUserId);
 router.get('/workTrackPending', auth(['admin', 'manager', 'user']), worktrackController.getWorkTrackByStatus);
 router.post('/', auth(['admin', 'manager', 'user']), worktrackController.addKpiNormForUser);
 router.get('/:id', auth(['admin', 'manager', 'user']), worktrackController.getById);

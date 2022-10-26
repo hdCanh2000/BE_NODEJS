@@ -33,7 +33,7 @@ exports.allKpiNorm = async ({ userId, query }) => {
         ],
     }];
 
-    if (positionId) conditions.push({ position_id: positionId })
+    if (positionId) conditions.push({ position_id: positionId });
 
     const data = await model.kpiNorms.findAll({
         offset: (page - 1) * limit || 0,
@@ -58,6 +58,13 @@ exports.allKpiNorm = async ({ userId, query }) => {
                 attributes: ['id', 'name', 'code'],
             },
         ],
+    });
+    return data;
+};
+
+exports.getKpiNormByParent = async (parentId) => {
+    const data = await model.kpiNorms.findAll({
+        where: { parent_id: parentId },
     });
     return data;
 };

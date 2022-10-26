@@ -1,5 +1,4 @@
 const kpiNormService = require('./kpiNorm.service');
-const ApiError = require('../../utils/ApiError');
 
 exports.addKpiNorm = async (req, res) => {
     try {
