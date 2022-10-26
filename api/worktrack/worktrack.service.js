@@ -76,6 +76,7 @@ const getWorkTrackByAdmin = async () => {
         return error;
     }
 };
+
 const getWorkTrackByManager = async (id) => {
     try {
         const data = await model.users.findOne({
@@ -148,6 +149,29 @@ const getAllResourceByUserId = async (user_id) => {
         throw new ApiError(404, 'User not found!');
     }
     return user;
+};
+
+const findWorkTrackByKpiNormAndUser = async (kpiNorm_id, user_id) => {
+    const result = await model.users.findAll({
+        where: {
+            id: user_id,
+        },
+        include: {
+            model: model.workTracks,
+            where: { kpiNorm_id },
+            include: { model: model.kpiNorms },
+        },
+    });
+    return result;
+};
+
+const updateParentId = async (id, parentId) => {
+    const result = model.workTracks.update({ parent_id: parentId }, {
+        where: {
+            id,
+        },
+    });
+    return result;
 };
 
 const createResource = async (data) => {
@@ -274,4 +298,5 @@ const getWorkTrackByDepartment = async (status, department_id) => {
         return error;
     }
 };
-module.exports = { getWorkTrackByDepartment, getWorkTrackByStatus, getAllResource, getResourceById, getAllResourceByUserId, createResource, updateResourceById, updateStatusWorktrack, deleteResourceById, createWorkTrackUser, findUser, deleteWorkTrackUser, getWorkTrackByAdmin, getWorkTrackByManager };
+
+module.exports = { getWorkTrackByDepartment, getWorkTrackByStatus, getAllResource, getResourceById, getAllResourceByUserId, findWorkTrackByKpiNormAndUser, createResource, updateResourceById, updateStatusWorktrack, deleteResourceById, createWorkTrackUser, findUser, deleteWorkTrackUser, getWorkTrackByAdmin, getWorkTrackByManager, updateParentId };
