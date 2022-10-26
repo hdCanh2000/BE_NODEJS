@@ -89,10 +89,10 @@ exports.exportExcel = async (req, res) => {
             { header: 'Tên nhiệm vụ', key: 'name', width: 70 },
             { header: 'Số lượng', key: 'quantity', width: 10 },
             { header: 'Loại nhiệm vụ', key: 'taskType', width: 25 },
-            { header: 'Vị trí đảm nhiệm', key: 'position', width: 30 },
-            { header: 'Thuộc nhiệm vụ cha', key: 'parent', width: 30 },
-            { header: 'Thang điểm', key: 'kpi_value', width: 20 },
-            { header: 'Tương đương với kết quả', key: 'descriptionKpiValue', width: 50 },
+            { header: 'Vị trí đảm nhiệm', key: 'position', width: 25 },
+            { header: 'Thuộc nhiệm vụ cha', key: 'parent', width: 25 },
+            { header: 'Thang điểm', key: 'kpi_value', width: 15 },
+            { header: 'Tương đương với kết quả', key: 'descriptionKpiValue', width: 30 },
             { header: 'Mô tả /Diễn giải', key: 'description', width: 25 },
         ];
         let count = 1;
