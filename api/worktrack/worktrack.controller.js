@@ -1,4 +1,6 @@
+const { isEmpty } = require('lodash');
 const worktrackService = require('./worktrack.service');
+const userService = require('../user/user.service');
 const ApiError = require('../../utils/ApiError');
 
 const getAll = async (req, res) => {
@@ -75,10 +77,28 @@ const getAllByUserId = async (req, res) => {
     }
 };
 
+const getByKpiNornAndUserId = async (req, res) => {
+    const { kpiNorm_id, user_id } = req.params;
+    try {
+        const worktracks = await worktrackService.findWorkTrackByKpiNormAndUser(kpiNorm_id, user_id);
+        if (!worktracks) {
+            throw new ApiError(404, 'Not Found');
+        }
+        return res.status(200).json({ message: 'Success!', data: worktracks });
+    } catch (error) {
+        return res.status(404).json({ message: 'Not Found!', error: error.message });
+    }
+};
+
 const addKpiNormForUser = async (req, res) => {
     try {
+        const { kpiNorm_id, user_id } = req.body;
+        const findUser = await userService.findUser(user_id);
+        const getWTByKpiNormAndUser = await worktrackService.findWorkTrackByKpiNormAndUser(kpiNorm_id, user_id);
+        if (!isEmpty(getWTByKpiNormAndUser)) {
+            return res.status(400).json({ message: 'Công việc đã tồn tại.', data: null });
+        }
         const workTrack = await worktrackService.createResource(req.body);
-        const findUser = await worktrackService.findUser(req.body.user_id);
         const userCreate = await worktrackService.findUser(req.user.id);
         if (findUser) {
             const addUser = await workTrack.addUser(findUser, { through: { isResponsible: true } });
@@ -87,6 +107,14 @@ const addKpiNormForUser = async (req, res) => {
                 throw new ApiError(400, 'Bad Request');
             }
         }
+        // if (kpiNorm.parent_id !== null) {
+        //     const worktrackByKpiNormAndUser = await worktrackService.findWorkTrackByKpiNormAndUser(kpiNorm.parent_id, user_id);
+        //     if (!isEmpty(worktrackByKpiNormAndUser)) {
+        //         const parentId = await worktrackService.getResourceById(worktrackByKpiNormAndUser?.workTracks?.[0]?.id);
+        //         const workTrackParent = await worktrackService.updateParentId(workTrack.id, parentId?.id);
+        //         return res.status(200).json({ message: 'Create Success!', data: workTrackParent });
+        //     }
+        // }
         return res.status(200).json({ message: 'Create Success!', data: workTrack });
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error: error.message });
@@ -148,4 +176,15 @@ const getWorkTrackByStatus = async (req, res) => {
     }
 };
 
-module.exports = { getWorkTrackByStatus, getAll, getById, getAllByUserId, addKpiNormForUser, updateWorkTrackById, updateStatusWorkTrackById, deleteById, getWorkTrackOfMe };
+module.exports = {
+    getWorkTrackByStatus,
+    getAll,
+    getById,
+    getAllByUserId,
+    addKpiNormForUser,
+    updateWorkTrackById,
+    updateStatusWorkTrackById,
+    deleteById,
+    getWorkTrackOfMe,
+    getByKpiNornAndUserId,
+};
