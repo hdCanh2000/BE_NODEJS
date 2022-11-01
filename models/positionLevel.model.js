@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
   positionLevels.init({
     name: DataTypes.STRING,
     code: DataTypes.STRING,
+    description: DataTypes.TEXT,
   }, {
     sequelize,
     modelName: 'positionLevels',
