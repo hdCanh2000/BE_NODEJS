@@ -79,6 +79,9 @@ exports.getAllUserByDepartmentId = async (req, res) => {
     try {
         const getUserById = await model.users.findOne({ where: { id: req.user.id, isDelete: false } });
         if (getUserById.role === 'admin') {
+            const total = await model.users.count({
+                where: { department_id, isDelete: false },
+            });
             const allUser = await model.users.findAll({
                 where: { department_id, isDelete: false },
                 include: [
@@ -90,11 +93,14 @@ exports.getAllUserByDepartmentId = async (req, res) => {
                     },
                 ],
             });
-            return res.status(200).json({ message: 'Get All User Success!', data: allUser });
+            return res.status(200).json({ message: 'Get All User Success!', data: allUser, pagination: { totalRows: allUser.length, total } });
         }
         if (getUserById.role !== 'admin') {
+            const total = await model.users.count({
+                where: { department_id: getUserById.department_id, isDelete: false },
+            });
             const allUser = await model.users.findAll({ where: { department_id: getUserById.department_id, isDelete: false } });
-            return res.status(200).json({ message: 'Get All User Success!', data: allUser });
+            return res.status(200).json({ message: 'Get All User Success!', data: allUser, pagination: { totalRows: allUser.length, total } });
         }
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error: error.message });
