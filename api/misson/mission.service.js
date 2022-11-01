@@ -20,7 +20,11 @@ exports.getAllMission = async (query) => {
         ],
     }];
 
-    const total = await model.missions.count();
+    const total = await model.missions.count({
+        where: {
+            [Op.and]: conditions,
+        },
+    });
     const data = await model.missions.findAll({
         offset: (page - 1) * limit || 0,
         limit,

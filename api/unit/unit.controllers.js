@@ -2,7 +2,6 @@ const { Op } = require('sequelize');
 const sequelize = require('sequelize');
 const unitService = require('./unit.service');
 const model = require('../../models/index');
-const ApiError = require('../../utils/ApiError');
 
 exports.addUnit = async (req, res) => {
     try {
@@ -41,7 +40,14 @@ exports.getAllUnit = async (req, res) => {
     let searchValue = '';
     if (text) searchValue = text.toString().toLowerCase();
     else searchValue = '';
-    const total = await model.units.count();
+    const total = await model.units.count({
+        where: {
+            [Op.or]: [
+                sequelize.where(sequelize.fn('LOWER', sequelize.col('name')), 'LIKE', `%${searchValue}%`),
+                sequelize.where(sequelize.fn('LOWER', sequelize.col('code')), 'LIKE', `%${searchValue}%`),
+            ],
+        },
+    });
     try {
         const units = await model.units.findAndCountAll({
             offset: (page - 1) * limit || 0,

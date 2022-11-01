@@ -8,7 +8,14 @@ const getAllResource = async (page, limit, text) => {
     if (text) searchValue = text.toLowerCase();
     else searchValue = '';
 
-    const total = await model.positionLevels.count();
+    const total = await model.positionLevels.count({
+        where: {
+            [Op.or]: [
+                sequelize.where(sequelize.fn('LOWER', sequelize.col('name')), 'LIKE', `%${searchValue}%`),
+                sequelize.where(sequelize.fn('LOWER', sequelize.col('code')), 'LIKE', `%${searchValue}%`),
+            ],
+        },
+    });
 
     const data = await model.positionLevels.findAndCountAll({
         offset: (page - 1) * limit || 0,

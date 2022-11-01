@@ -27,7 +27,11 @@ exports.allPosition = async (query) => {
         ],
     }];
 
-    const total = await model.positions.count();
+    const total = await model.positions.count({
+        where: {
+            [Op.and]: conditions,
+        },
+    });
     const data = await model.positions.findAll({
         offset: (page - 1) * limit || 0,
         limit,

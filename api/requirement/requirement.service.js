@@ -8,7 +8,14 @@ const getAllResource = async (query) => {
     let searchValue = '';
     if (text) searchValue = text.toString();
     else searchValue = '';
-    const total = await model.requirements.count();
+    const total = await model.requirements.count({
+        where: {
+            [Op.or]: [
+                sequelize.where(sequelize.fn('LOWER', sequelize.col('name')), 'LIKE', `%${searchValue}%`),
+                sequelize.where(sequelize.fn('LOWER', sequelize.col('description')), 'LIKE', `%${searchValue}%`),
+            ],
+        },
+    });
     const data = await model.requirements.findAndCountAll({
         offset: (page - 1) * limit || 0,
         limit,
