@@ -9,7 +9,7 @@ router.get('/workTrackMe', auth(['admin', 'manager', 'user']), worktrackControll
 router.get('/user/:user_id', auth(['admin', 'manager', 'user']), worktrackController.getAllByUserId);
 router.get('/kpi_user/:kpiNorm_id/:user_id', auth(['admin', 'manager', 'user']), worktrackController.getByKpiNornAndUserId);
 router.get('/workTrackPending', auth(['admin', 'manager', 'user']), worktrackController.getWorkTrackByStatus);
-router.post('/', auth(['admin', 'manager', 'user']), worktrackController.addKpiNormForUser);
+router.post('/', auth(['admin', 'manager', 'user']), worktrackController.addWorkTrack);
 router.get('/:id', auth(['admin', 'manager', 'user']), worktrackController.getById);
 router.put('/:id', auth(['admin', 'manager', 'user']), worktrackController.updateWorkTrackById);
 router.patch('/:id', auth(['admin', 'manager', 'user']), worktrackController.updateStatusWorkTrackById);

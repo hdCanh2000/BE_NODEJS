@@ -68,8 +68,12 @@ const getWorkTrackByAdmin = async () => {
                     model: model.missions,
                 },
                 {
+                    model: model.keys,
+                },
+                {
                     model: model.workTrackLogs,
-                }],
+                },
+            ],
         });
         return data;
     } catch (error) {
