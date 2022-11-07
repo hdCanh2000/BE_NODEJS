@@ -24,6 +24,11 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'position_id',
                 onDelete: 'SET NULL',
             });
+            positions.hasMany(models.keys, {
+                targetKey: 'id',
+                foreignKey: 'position_id',
+                onDelete: 'SET NULL',
+            });
         }
     }
     positions.init({

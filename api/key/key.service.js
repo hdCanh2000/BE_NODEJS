@@ -3,16 +3,22 @@ const sequelize = require('sequelize');
 const model = require('../../models/index');
 const ApiError = require('../../utils/ApiError');
 
-const getAllResource = async (page, limit, text) => {
+const getAllResource = async (page, limit, text, positionId) => {
     let searchValue = '';
     if (text) searchValue = text.toLowerCase();
     else searchValue = '';
 
+    const conditions = [{
+        [Op.or]: [
+            sequelize.where(sequelize.fn('LOWER', sequelize.col('keys.name')), 'LIKE', `%${searchValue}%`),
+        ],
+    }];
+
+    if (positionId) { conditions.push({ position_id: positionId }); }
+
     const total = await model.keys.count({
         where: {
-            [Op.or]: [
-                sequelize.where(sequelize.fn('LOWER', sequelize.col('keys.name')), 'LIKE', `%${searchValue}%`),
-            ],
+            [Op.and]: conditions,
         },
     });
 
@@ -23,14 +29,18 @@ const getAllResource = async (page, limit, text) => {
             ['id', 'DESC'],
         ],
         where: {
-            [Op.or]: [
-                sequelize.where(sequelize.fn('LOWER', sequelize.col('keys.name')), 'LIKE', `%${searchValue}%`),
-            ],
+            where: {
+                [Op.and]: conditions,
+            },
         },
         include: [
             {
                 model: model.units,
                 attributes: ['id', 'name', 'code'],
+            },
+            {
+                model: model.positions,
+                attributes: ['id', 'name'],
             },
         ],
     });
@@ -48,9 +58,11 @@ const getResourceById = async (id) => {
 
 const createResource = async (data) => {
     const existedEntity = await model.keys.findOne({
-        where:
-        {
-            name: data.name,
+        where: {
+            [Op.and]: {
+                name: data.name,
+                position_id: data.position_id,
+            },
         },
     });
     if (existedEntity) {

@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             keys.belongsTo(models.units, { foreignKey: 'unit_id', targetKey: 'id' });
+            keys.belongsTo(models.positions, { foreignKey: 'position_id', targetKey: 'id' });
         }
     }
     keys.init({

@@ -224,6 +224,28 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        name: 'Trưởng bộ phận dịch vụ bán hàng',
+        description: 'Trưởng bộ phận dịch vụ bán hàng',
+        code: 'TBP_DVBH',
+        address: 'VP Hà Nội',
+        manager: 4,
+        position_levels_id: 8,
+        department_id: 13,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        name: 'Trưởng bộ phận Trade Marketing',
+        description: 'Trưởng bộ phận Trade Marketing',
+        code: 'TBP_TM',
+        address: 'VP Hà Nội',
+        manager: 4,
+        position_levels_id: 8,
+        department_id: 13,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ]);
   },
 
