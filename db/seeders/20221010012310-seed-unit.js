@@ -52,6 +52,18 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        name: 'Số',
+        code: 'DV09',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        name: '%',
+        code: 'DV10',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ]);
   },
 
