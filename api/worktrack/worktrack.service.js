@@ -95,6 +95,7 @@ const getWorkTrackByManager = async (id) => {
                         model.users,
                         model.kpiNorms,
                         model.missions,
+                        model.keys,
                         model.workTrackLogs,
                     ],
                 },

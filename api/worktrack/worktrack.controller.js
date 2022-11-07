@@ -110,15 +110,15 @@ const addWorkTrack = async (req, res) => {
             }
         }
         // keys
-        if (req.body.keys && !isEmpty(req.body.keys)) {
-            const { keys } = req.body;
-            keys.forEach(async (key) => {
-                const addKey = await workTrack.addKey(key.id, { through: { quantity: key.quantity } });
-                if (!addKey) {
-                    throw new ApiError(400, 'Bad Request');
-                }
-            });
-        }
+        // if (req.body.keys && !isEmpty(req.body.keys)) {
+        //     const { keys } = req.body;
+        //     keys.forEach(async (key) => {
+        //         const addKey = await workTrack.addKey(key.id, { through: { quantity: key.quantity } });
+        //         if (!addKey) {
+        //             throw new ApiError(400, 'Bad Request');
+        //         }
+        //     });
+        // }
         // add parent id
         // if (kpiNorm.parent_id !== null) {
         //     const worktrackByKpiNormParentAndUser = await worktrackService.findWorkTrackByKpiNormAndUser(kpiNorm.parent_id, user_id);

@@ -14,6 +14,12 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             keys.belongsTo(models.units, { foreignKey: 'unit_id', targetKey: 'id' });
             keys.belongsTo(models.positions, { foreignKey: 'position_id', targetKey: 'id' });
+            keys.belongsTo(models.departments, { foreignKey: 'department_id', targetKey: 'id' });
+            keys.hasMany(models.workTracks, {
+                targetKey: 'id',
+                foreignKey: 'key_id',
+                onDelete: 'SET NULL',
+            });
         }
     }
     keys.init({

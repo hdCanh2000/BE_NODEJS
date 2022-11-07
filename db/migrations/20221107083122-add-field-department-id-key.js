@@ -1,16 +1,18 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.addColumn(
-      'workTracks',
-      'key_id',
+      'keys',
+      'department_id',
       {
         type: Sequelize.INTEGER,
         onDelete: 'SET NULL',
         references: {
-          model: 'keys',
+          model: 'departments',
           key: 'id',
         },
       },
@@ -18,6 +20,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn('workTracks', 'key_id');
+    await queryInterface.removeColumn('keys', 'department_id');
   },
 };
