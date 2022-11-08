@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const ApiError = require('../../utils/ApiError');
 const model = require('../../models/index');
 
@@ -51,9 +52,17 @@ const getAllResource = async (id) => {
     }
 };
 
-const getWorkTrackByAdmin = async () => {
+const getWorkTrackByAdmin = async (start, end) => {
+    const endDate = new Date().setDate(new Date(end).getDate());
     try {
         const data = await model.workTracks.findAll({
+            where: {
+                [Op.and]: {
+                    createdAt: {
+                        [Op.between]: [new Date(start), endDate],
+                    },
+                },
+            },
             include: [
                 {
                     model: model.kpiNorms,
@@ -81,7 +90,8 @@ const getWorkTrackByAdmin = async () => {
     }
 };
 
-const getWorkTrackByManager = async (id) => {
+const getWorkTrackByManager = async (id, start, end) => {
+    const endDate = new Date().setDate(new Date(end).getDate());
     try {
         const data = await model.users.findOne({
             where: {
@@ -91,6 +101,13 @@ const getWorkTrackByManager = async (id) => {
                 model.departments,
                 {
                     model: model.workTracks,
+                    where: {
+                        [Op.and]: {
+                            createdAt: {
+                                [Op.between]: [new Date(start), new Date(endDate)],
+                            },
+                        },
+                    },
                     include: [
                         model.users,
                         model.kpiNorms,
@@ -251,26 +268,26 @@ const deleteWorkTrackUser = async (user_id, workTrack_id) => {
 
 const getWorkTrackByStatus = async (status) => {
     try {
-            const workTrackByStatus = await model.workTracks.findAll({
-                where: { status },
-                include: [
-                    {
-                        model: model.kpiNorms,
+        const workTrackByStatus = await model.workTracks.findAll({
+            where: { status },
+            include: [
+                {
+                    model: model.kpiNorms,
+                },
+                {
+                    model: model.users,
+                    include: {
+                        model: model.departments,
                     },
-                    {
-                        model: model.users,
-                        include: {
-                            model: model.departments,
-                        },
-                    },
-                    {
-                        model: model.missions,
-                    },
-                    {
-                        model: model.workTrackLogs,
-                    }],
-            });
-            return workTrackByStatus;
+                },
+                {
+                    model: model.missions,
+                },
+                {
+                    model: model.workTrackLogs,
+                }],
+        });
+        return workTrackByStatus;
     } catch (error) {
         return error;
     }
@@ -278,30 +295,124 @@ const getWorkTrackByStatus = async (status) => {
 
 const getWorkTrackByDepartment = async (status, department_id) => {
     try {
-            const workTrackByStatus = await model.workTracks.findAll({
-                where: { status },
-                include: [
-                    {
-                        model: model.kpiNorms,
+        const workTrackByStatus = await model.workTracks.findAll({
+            where: { status },
+            include: [
+                {
+                    model: model.kpiNorms,
+                },
+                {
+                    model: model.users,
+                    where: { department_id },
+                    include: {
+                        model: model.departments,
                     },
-                    {
-                        model: model.users,
-                        where: { department_id },
-                        include: {
-                            model: model.departments,
-                        },
-                    },
-                    {
-                        model: model.missions,
-                    },
-                    {
-                        model: model.workTrackLogs,
-                    }],
-            });
-            return workTrackByStatus;
+                },
+                {
+                    model: model.missions,
+                },
+                {
+                    model: model.workTrackLogs,
+                }],
+        });
+        return workTrackByStatus;
     } catch (error) {
         return error;
     }
 };
 
-module.exports = { getWorkTrackByDepartment, getWorkTrackByStatus, getAllResource, getResourceById, getAllResourceByUserId, findWorkTrackByKpiNormAndUser, createResource, updateResourceById, updateStatusWorktrack, deleteResourceById, createWorkTrackUser, findUser, deleteWorkTrackUser, getWorkTrackByAdmin, getWorkTrackByManager, updateParentId };
+// report
+const reportWorktrackUser = async (workTrackId, start, end) => {
+    const endDate = new Date().setDate(new Date(end).getDate());
+    try {
+        const worktrack = await model.workTracks.findOne({
+            where: {
+                id: workTrackId,
+            },
+        });
+        const workTrackLogByWorktrackIds = await model.workTrackLogs.findAll({
+            where: {
+                [Op.and]: {
+                    workTrack_id: workTrackId,
+                    createdAt: {
+                        [Op.between]: [new Date(start), new Date(endDate)],
+                    },
+                },
+            },
+            attributes: ['id', 'status', 'date', 'quantity', 'workTrack_id'],
+        });
+        const totalQuantity = workTrackLogByWorktrackIds.reduce((prev, curr) => prev + curr.quantity, 0);
+        const percentCompleted = Math.round((totalQuantity / worktrack.quantity) * 100) || 0;
+        return { quantity: worktrack.quantity, total: totalQuantity, progress: percentCompleted, workTrackLogs: workTrackLogByWorktrackIds };
+    } catch (error) {
+        return error;
+    }
+};
+
+const reportAllWorktrackUser = async (userId, startDate, endDate) => {
+    try {
+        const workTracks = await getAllResourceByUserId(userId);
+        const result = [];
+        let total = 0;
+        workTracks.workTracks.forEach((item) => {
+            total += item.quantity;
+            // result.push({
+            //     ...item,
+            //     progress: 0,
+            //     total: 0,
+            // });
+        });
+        return total;
+        // const result = [];
+        // workTracks.workTracks.forEach(async (workTrack) => {
+        //     try {
+        //         const worktrack = await getResourceById(workTrack.id);
+        //         const workTrackLogs = await model.workTrackLogs.findAll({
+        //             where: {
+        //                 [Op.and]: {
+        //                     workTrack_id: workTrack.id,
+        //                     date: {
+        //                         [Op.between]: [startDate, endDate],
+        //                     },
+        //                 },
+        //             },
+        //             attributes: ['id', 'status', 'date', 'quantity', 'workTrack_id'],
+        //         });
+        //         const totalQuantity = workTrackLogs.reduce((prev, curr) => prev + curr.quantity, 0);
+        //         const percentCompleted = Math.round((totalQuantity / worktrack.quantity) * 100) || 0;
+        //         result.push({
+        //             ...workTrack,
+        //             progress: percentCompleted,
+        //             total: totalQuantity,
+        //         });
+        //     } catch (error) {
+        //         return error;
+        //     }
+        // });
+        // return { quantity: 0, workTrackLogs: result };
+    } catch (error) {
+        return error;
+    }
+};
+
+module.exports = {
+    getWorkTrackByDepartment,
+    getWorkTrackByStatus,
+    getAllResource,
+    getResourceById,
+    getAllResourceByUserId,
+    findWorkTrackByKpiNormAndUser,
+    createResource,
+    updateResourceById,
+    updateStatusWorktrack,
+    deleteResourceById,
+    createWorkTrackUser,
+    findUser,
+    deleteWorkTrackUser,
+    getWorkTrackByAdmin,
+    getWorkTrackByManager,
+    updateParentId,
+    // report
+    reportWorktrackUser,
+    reportAllWorktrackUser,
+};

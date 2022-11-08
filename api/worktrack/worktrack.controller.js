@@ -5,13 +5,14 @@ const userService = require('../user/user.service');
 const ApiError = require('../../utils/ApiError');
 
 const getAll = async (req, res) => {
+    const { startDate, endDate } = req.query;
     try {
         if (req.user.role === 'admin') {
-            const workTracks = await worktrackService.getWorkTrackByAdmin(req.user.id);
+            const workTracks = await worktrackService.getWorkTrackByAdmin(startDate, endDate);
             return res.status(200).json({ message: 'Success!', data: workTracks });
         }
         if (req.user.role === 'manager') {
-            const workTracks = await worktrackService.getWorkTrackByManager(req.user.id);
+            const workTracks = await worktrackService.getWorkTrackByManager(req.user.id, startDate, endDate);
             return res.status(200).json({ message: 'Success!', data: workTracks });
         }
         if (req.user.role === 'user') {
@@ -189,6 +190,51 @@ const getWorkTrackByStatus = async (req, res) => {
     }
 };
 
+const reportWorktrack = async (req, res) => {
+    const { startDate, endDate, workTrackId } = req.query;
+    try {
+        // if (req.user.role === 'admin') {
+        //     const workTrack = await worktrackService.getWorkTrackByStatus(status);
+        //     return res.status(200).json({ message: 'Success!', data: workTrack });
+        // }
+
+        // if (req.user.role === 'manager') {
+        //     const workTrack = await worktrackService.getWorkTrackByDepartment(status, req.user.department_id);
+        //     return res.status(200).json({ message: 'Success!', data: workTrack });
+        // }
+
+        if (req.user.role === 'user') {
+            const workTrack = await worktrackService.reportWorktrackUser(workTrackId, startDate, endDate);
+            return res.status(200).json({ message: 'Success!', data: workTrack });
+        }
+    } catch (error) {
+        return res.status(400).json({ message: 'Error!', error: error.message });
+    }
+};
+
+const reportWorktrackAll = async (req, res) => {
+    const { startDate, endDate } = req.query;
+    const userId = req.user.id;
+    try {
+        // if (req.user.role === 'admin') {
+        //     const workTrack = await worktrackService.getWorkTrackByStatus(status);
+        //     return res.status(200).json({ message: 'Success!', data: workTrack });
+        // }
+
+        // if (req.user.role === 'manager') {
+        //     const workTrack = await worktrackService.getWorkTrackByDepartment(status, req.user.department_id);
+        //     return res.status(200).json({ message: 'Success!', data: workTrack });
+        // }
+
+        if (req.user.role === 'user') {
+            const workTrack = await worktrackService.reportAllWorktrackUser(userId, startDate, endDate);
+            return res.status(200).json({ message: 'Success!', data: workTrack });
+        }
+    } catch (error) {
+        return res.status(400).json({ message: 'Error!', error: error.message });
+    }
+};
+
 module.exports = {
     getWorkTrackByStatus,
     getAll,
@@ -200,4 +246,6 @@ module.exports = {
     deleteById,
     getWorkTrackOfMe,
     getByKpiNornAndUserId,
+    reportWorktrack,
+    reportWorktrackAll,
 };
