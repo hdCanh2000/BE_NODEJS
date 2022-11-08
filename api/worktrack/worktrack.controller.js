@@ -1,6 +1,7 @@
 const { isEmpty } = require('lodash');
 const worktrackService = require('./worktrack.service');
 const userService = require('../user/user.service');
+// const kpiNormService = require('../kpiNorm/kpiNorm.service');
 const ApiError = require('../../utils/ApiError');
 
 const getAll = async (req, res) => {
@@ -90,9 +91,10 @@ const getByKpiNornAndUserId = async (req, res) => {
     }
 };
 
-const addKpiNormForUser = async (req, res) => {
+const addWorkTrack = async (req, res) => {
     try {
         const { kpiNorm_id, user_id } = req.body;
+        // const kpiNorm = await kpiNormService.detailKpiNorm(kpiNorm_id);
         const findUser = await userService.findUser(user_id);
         const getWTByKpiNormAndUser = await worktrackService.findWorkTrackByKpiNormAndUser(kpiNorm_id, user_id);
         if (!isEmpty(getWTByKpiNormAndUser)) {
@@ -107,10 +109,21 @@ const addKpiNormForUser = async (req, res) => {
                 throw new ApiError(400, 'Bad Request');
             }
         }
+        // keys
+        // if (req.body.keys && !isEmpty(req.body.keys)) {
+        //     const { keys } = req.body;
+        //     keys.forEach(async (key) => {
+        //         const addKey = await workTrack.addKey(key.id, { through: { quantity: key.quantity } });
+        //         if (!addKey) {
+        //             throw new ApiError(400, 'Bad Request');
+        //         }
+        //     });
+        // }
+        // add parent id
         // if (kpiNorm.parent_id !== null) {
-        //     const worktrackByKpiNormAndUser = await worktrackService.findWorkTrackByKpiNormAndUser(kpiNorm.parent_id, user_id);
-        //     if (!isEmpty(worktrackByKpiNormAndUser)) {
-        //         const parentId = await worktrackService.getResourceById(worktrackByKpiNormAndUser?.workTracks?.[0]?.id);
+        //     const worktrackByKpiNormParentAndUser = await worktrackService.findWorkTrackByKpiNormAndUser(kpiNorm.parent_id, user_id);
+        //     if (!isEmpty(worktrackByKpiNormParentAndUser)) {
+        //         const parentId = await worktrackService.getResourceById(worktrackByKpiNormParentAndUser?.workTracks?.[0]?.id);
         //         const workTrackParent = await worktrackService.updateParentId(workTrack.id, parentId?.id);
         //         return res.status(200).json({ message: 'Create Success!', data: workTrackParent });
         //     }
@@ -181,7 +194,7 @@ module.exports = {
     getAll,
     getById,
     getAllByUserId,
-    addKpiNormForUser,
+    addWorkTrack,
     updateWorkTrackById,
     updateStatusWorkTrackById,
     deleteById,

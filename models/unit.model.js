@@ -22,6 +22,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'unit_id',
         onDelete: 'SET NULL',
       });
+      units.hasMany(models.keys, {
+        targetKey: 'id',
+        foreignKey: 'unit_id',
+        onDelete: 'SET NULL',
+      });
     }
   }
   units.init({

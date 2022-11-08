@@ -68,8 +68,12 @@ const getWorkTrackByAdmin = async () => {
                     model: model.missions,
                 },
                 {
+                    model: model.keys,
+                },
+                {
                     model: model.workTrackLogs,
-                }],
+                },
+            ],
         });
         return data;
     } catch (error) {
@@ -91,6 +95,7 @@ const getWorkTrackByManager = async (id) => {
                         model.users,
                         model.kpiNorms,
                         model.missions,
+                        model.keys,
                         model.workTrackLogs,
                     ],
                 },

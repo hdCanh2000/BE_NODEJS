@@ -21,12 +21,17 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'id',
         foreignKey: 'department_id',
         onDelete: 'SET NULL',
-    });
-    departments.hasMany(models.positions, {
-      targetKey: 'id',
-      foreignKey: 'department_id',
-      onDelete: 'SET NULL',
-  });
+      });
+      departments.hasMany(models.positions, {
+        targetKey: 'id',
+        foreignKey: 'department_id',
+        onDelete: 'SET NULL',
+      });
+      departments.hasMany(models.keys, {
+        targetKey: 'id',
+        foreignKey: 'department_id',
+        onDelete: 'SET NULL',
+      });
     }
   }
   departments.init({
