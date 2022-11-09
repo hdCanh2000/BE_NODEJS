@@ -12,7 +12,7 @@ const getAll = async (req, res) => {
             return res.status(200).json({ message: 'Success!', data: workTracks });
         }
         if (req.user.role === 'manager') {
-            const workTracks = await worktrackService.getWorkTrackByManager(req.user.id, startDate, endDate);
+            const workTracks = await worktrackService.getWorkTrackByManager(req.user.id);
             return res.status(200).json({ message: 'Success!', data: workTracks });
         }
         if (req.user.role === 'user') {

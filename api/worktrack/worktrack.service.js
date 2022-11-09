@@ -104,20 +104,7 @@ const getWorkTrackByAdmin = async (start, end) => {
     }
 };
 
-const getWorkTrackByManager = async (id, start, end) => {
-    let endDate = null;
-    const conditions = [];
-    if (start) {
-        conditions.push({
-            [Op.gte]: new Date(start),
-        });
-    }
-    if (end) {
-        endDate = new Date().setDate(new Date(end).getDate());
-        conditions.push({
-            [Op.lte]: endDate,
-        });
-    }
+const getWorkTrackByManager = async (id) => {
     try {
         const data = await model.users.findOne({
             where: {
@@ -127,9 +114,6 @@ const getWorkTrackByManager = async (id, start, end) => {
                 model.departments,
                 {
                     model: model.workTracks,
-                    where: {
-                        [Op.and]: conditions,
-                    },
                     include: [
                         model.users,
                         model.kpiNorms,
@@ -387,7 +371,7 @@ const reportAllWorktrackUser = async (userId, startDate, endDate) => {
     try {
         const workTracks = await getAllResourceByUserId(userId);
         const result = [];
-        workTracks.workTracks.forEach(async (workTrack) => {
+        await workTracks.workTracks.forEach(async (workTrack) => {
             const worktrack = await getResourceById(workTrack.id);
             try {
                 const workTrackLogs = await model.workTrackLogs.findAll({
