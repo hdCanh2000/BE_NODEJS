@@ -53,15 +53,29 @@ const getAllResource = async (id) => {
 };
 
 const getWorkTrackByAdmin = async (start, end) => {
-    const endDate = new Date().setDate(new Date(end).getDate());
+    let endDate = null;
+    const conditions = [];
+    if (start) {
+        conditions.push({
+            [Op.gte]: new Date(start),
+        });
+    }
+    if (end) {
+        endDate = new Date().setDate(new Date(end).getDate());
+        conditions.push({
+            [Op.lte]: endDate,
+        });
+    }
+
     try {
         const data = await model.workTracks.findAll({
             where: {
-                [Op.and]: {
-                    createdAt: {
-                        [Op.between]: [new Date(start), endDate],
-                    },
-                },
+                [Op.and]: conditions,
+                // {
+                //     createdAt: {
+                //         [Op.between]: conditions,
+                //     },
+                // },
             },
             include: [
                 {
@@ -91,7 +105,19 @@ const getWorkTrackByAdmin = async (start, end) => {
 };
 
 const getWorkTrackByManager = async (id, start, end) => {
-    const endDate = new Date().setDate(new Date(end).getDate());
+    let endDate = null;
+    const conditions = [];
+    if (start) {
+        conditions.push({
+            [Op.gte]: new Date(start),
+        });
+    }
+    if (end) {
+        endDate = new Date().setDate(new Date(end).getDate());
+        conditions.push({
+            [Op.lte]: endDate,
+        });
+    }
     try {
         const data = await model.users.findOne({
             where: {
@@ -102,11 +128,7 @@ const getWorkTrackByManager = async (id, start, end) => {
                 {
                     model: model.workTracks,
                     where: {
-                        [Op.and]: {
-                            createdAt: {
-                                [Op.between]: [new Date(start), new Date(endDate)],
-                            },
-                        },
+                        [Op.and]: conditions,
                     },
                     include: [
                         model.users,
@@ -323,21 +345,33 @@ const getWorkTrackByDepartment = async (status, department_id) => {
 
 // report
 const reportWorktrackUser = async (workTrackId, start, end) => {
-    const endDate = new Date().setDate(new Date(end).getDate());
+    let endDate = null;
+    const conditions = [];
+    if (start) {
+        conditions.push({
+            createdAt: {
+                [Op.gte]: new Date(start),
+            },
+        });
+    }
+    if (end) {
+        endDate = new Date().setDate(new Date(end).getDate());
+        conditions.push({
+            createdAt: {
+                [Op.lte]: new Date(endDate),
+            },
+        });
+    }
     try {
         const worktrack = await model.workTracks.findOne({
             where: {
                 id: workTrackId,
             },
         });
+        if (worktrack) conditions.push({ workTrack_id: workTrackId });
         const workTrackLogByWorktrackIds = await model.workTrackLogs.findAll({
             where: {
-                [Op.and]: {
-                    workTrack_id: workTrackId,
-                    createdAt: {
-                        [Op.between]: [new Date(start), new Date(endDate)],
-                    },
-                },
+                [Op.and]: conditions,
             },
             attributes: ['id', 'status', 'date', 'quantity', 'workTrack_id'],
         });
@@ -353,43 +387,32 @@ const reportAllWorktrackUser = async (userId, startDate, endDate) => {
     try {
         const workTracks = await getAllResourceByUserId(userId);
         const result = [];
-        let total = 0;
-        workTracks.workTracks.forEach((item) => {
-            total += item.quantity;
-            // result.push({
-            //     ...item,
-            //     progress: 0,
-            //     total: 0,
-            // });
+        workTracks.workTracks.forEach(async (workTrack) => {
+            const worktrack = await getResourceById(workTrack.id);
+            try {
+                const workTrackLogs = await model.workTrackLogs.findAll({
+                    where: {
+                        [Op.and]: {
+                            workTrack_id: workTrack.id,
+                            date: {
+                                [Op.between]: [startDate, endDate],
+                            },
+                        },
+                    },
+                    attributes: ['id', 'status', 'date', 'quantity', 'workTrack_id'],
+                });
+                const totalQuantity = workTrackLogs.reduce((prev, curr) => prev + curr.quantity, 0);
+                const percentCompleted = Math.round((totalQuantity / worktrack.quantity) * 100) || 0;
+                result.push({
+                    ...workTrack,
+                    progress: percentCompleted,
+                    total: totalQuantity,
+                });
+            } catch (error) {
+                return error;
+            }
         });
-        return total;
-        // const result = [];
-        // workTracks.workTracks.forEach(async (workTrack) => {
-        //     try {
-        //         const worktrack = await getResourceById(workTrack.id);
-        //         const workTrackLogs = await model.workTrackLogs.findAll({
-        //             where: {
-        //                 [Op.and]: {
-        //                     workTrack_id: workTrack.id,
-        //                     date: {
-        //                         [Op.between]: [startDate, endDate],
-        //                     },
-        //                 },
-        //             },
-        //             attributes: ['id', 'status', 'date', 'quantity', 'workTrack_id'],
-        //         });
-        //         const totalQuantity = workTrackLogs.reduce((prev, curr) => prev + curr.quantity, 0);
-        //         const percentCompleted = Math.round((totalQuantity / worktrack.quantity) * 100) || 0;
-        //         result.push({
-        //             ...workTrack,
-        //             progress: percentCompleted,
-        //             total: totalQuantity,
-        //         });
-        //     } catch (error) {
-        //         return error;
-        //     }
-        // });
-        // return { quantity: 0, workTrackLogs: result };
+        return { quantity: 0, workTrackLogs: result };
     } catch (error) {
         return error;
     }
