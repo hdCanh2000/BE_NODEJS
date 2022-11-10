@@ -53,20 +53,11 @@ const getAllResource = async (id) => {
 };
 
 const getWorkTrackByAdmin = async (start, end) => {
-    // let endDate = null;
     const conditions = [];
-    if (start) {
+    if (start && end) {
         conditions.push({
             createdAt: {
-                [Op.gte]: new Date(start),
-            },
-        });
-    }
-    if (end) {
-        // endDate = new Date().setDate(new Date(end).getDate());
-        conditions.push({
-            createdAt: {
-                [Op.lte]: new Date(end),
+                [Op.between]: [new Date(start), new Date(end)],
             },
         });
     }
@@ -103,20 +94,11 @@ const getWorkTrackByAdmin = async (start, end) => {
 };
 
 const getWorkTrackByManager = async (id, start, end) => {
-    // let endDate = null;
     const conditions = [];
-    if (start) {
+    if (start && end) {
         conditions.push({
             createdAt: {
-                [Op.gte]: new Date(start),
-            },
-        });
-    }
-    if (end) {
-        // endDate = new Date().setDate(new Date(end).getDate());
-        conditions.push({
-            createdAt: {
-                [Op.lte]: new Date(end),
+                [Op.between]: [new Date(start), new Date(end)],
             },
         });
     }
@@ -175,25 +157,32 @@ const getResourceById = async (id) => {
 };
 
 const getAllResourceByUserId = async (user_id, start, end) => {
-    // let endDate = null;
     const conditions = [];
-    if (start) {
+    if (start && end) {
         conditions.push({
             createdAt: {
-                [Op.gte]: new Date(start),
-            },
-        });
-    }
-    if (end) {
-        // endDate = new Date().setDate(new Date(end).getDate());
-        conditions.push({
-            createdAt: {
-                [Op.lte]: new Date(end),
+                [Op.between]: [new Date(start), new Date(end)],
             },
         });
     }
     const user = await model.users.findOne({
         where: { id: user_id },
+        // include: [
+        //     model.departments,
+        //     {
+        //         model: model.workTracks,
+        //         where: {
+        //             [Op.and]: conditions,
+        //         },
+        //         include: [
+        //             model.users,
+        //             model.kpiNorms,
+        //             model.missions,
+        //             model.keys,
+        //             model.workTrackLogs,
+        //         ],
+        //     },
+        // ],
         include: [
             {
                 model: model.workTracks,
@@ -203,6 +192,7 @@ const getAllResourceByUserId = async (user_id, start, end) => {
                 include: [
                     model.kpiNorms,
                     model.missions,
+                    model.keys,
                     model.workTrackLogs,
                 ],
             },
