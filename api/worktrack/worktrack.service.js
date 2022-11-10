@@ -53,7 +53,7 @@ const getAllResource = async (id) => {
 };
 
 const getWorkTrackByAdmin = async (start, end) => {
-    let endDate = null;
+    // let endDate = null;
     const conditions = [];
     if (start) {
         conditions.push({
@@ -63,10 +63,10 @@ const getWorkTrackByAdmin = async (start, end) => {
         });
     }
     if (end) {
-        endDate = new Date().setDate(new Date(end).getDate());
+        // endDate = new Date().setDate(new Date(end).getDate());
         conditions.push({
             createdAt: {
-                [Op.lte]: new Date(endDate),
+                [Op.lte]: new Date(end),
             },
         });
     }
@@ -103,7 +103,7 @@ const getWorkTrackByAdmin = async (start, end) => {
 };
 
 const getWorkTrackByManager = async (id, start, end) => {
-    let endDate = null;
+    // let endDate = null;
     const conditions = [];
     if (start) {
         conditions.push({
@@ -113,10 +113,10 @@ const getWorkTrackByManager = async (id, start, end) => {
         });
     }
     if (end) {
-        endDate = new Date().setDate(new Date(end).getDate());
+        // endDate = new Date().setDate(new Date(end).getDate());
         conditions.push({
             createdAt: {
-                [Op.lte]: new Date(endDate),
+                [Op.lte]: new Date(end),
             },
         });
     }
@@ -175,7 +175,7 @@ const getResourceById = async (id) => {
 };
 
 const getAllResourceByUserId = async (user_id, start, end) => {
-    let endDate = null;
+    // let endDate = null;
     const conditions = [];
     if (start) {
         conditions.push({
@@ -185,10 +185,10 @@ const getAllResourceByUserId = async (user_id, start, end) => {
         });
     }
     if (end) {
-        endDate = new Date().setDate(new Date(end).getDate());
+        // endDate = new Date().setDate(new Date(end).getDate());
         conditions.push({
             createdAt: {
-                [Op.lte]: new Date(endDate),
+                [Op.lte]: new Date(end),
             },
         });
     }
