@@ -57,25 +57,23 @@ const getWorkTrackByAdmin = async (start, end) => {
     const conditions = [];
     if (start) {
         conditions.push({
-            [Op.gte]: new Date(start),
+            createdAt: {
+                [Op.gte]: new Date(start),
+            },
         });
     }
     if (end) {
         endDate = new Date().setDate(new Date(end).getDate());
         conditions.push({
-            [Op.lte]: endDate,
+            createdAt: {
+                [Op.lte]: new Date(endDate),
+            },
         });
     }
-
     try {
         const data = await model.workTracks.findAll({
             where: {
                 [Op.and]: conditions,
-                // {
-                //     createdAt: {
-                //         [Op.between]: conditions,
-                //     },
-                // },
             },
             include: [
                 {
@@ -104,7 +102,24 @@ const getWorkTrackByAdmin = async (start, end) => {
     }
 };
 
-const getWorkTrackByManager = async (id) => {
+const getWorkTrackByManager = async (id, start, end) => {
+    let endDate = null;
+    const conditions = [];
+    if (start) {
+        conditions.push({
+            createdAt: {
+                [Op.gte]: new Date(start),
+            },
+        });
+    }
+    if (end) {
+        endDate = new Date().setDate(new Date(end).getDate());
+        conditions.push({
+            createdAt: {
+                [Op.lte]: new Date(endDate),
+            },
+        });
+    }
     try {
         const data = await model.users.findOne({
             where: {
@@ -114,6 +129,9 @@ const getWorkTrackByManager = async (id) => {
                 model.departments,
                 {
                     model: model.workTracks,
+                    where: {
+                        [Op.and]: conditions,
+                    },
                     include: [
                         model.users,
                         model.kpiNorms,
@@ -156,12 +174,32 @@ const getResourceById = async (id) => {
     return data;
 };
 
-const getAllResourceByUserId = async (user_id) => {
+const getAllResourceByUserId = async (user_id, start, end) => {
+    let endDate = null;
+    const conditions = [];
+    if (start) {
+        conditions.push({
+            createdAt: {
+                [Op.gte]: new Date(start),
+            },
+        });
+    }
+    if (end) {
+        endDate = new Date().setDate(new Date(end).getDate());
+        conditions.push({
+            createdAt: {
+                [Op.lte]: new Date(endDate),
+            },
+        });
+    }
     const user = await model.users.findOne({
         where: { id: user_id },
         include: [
             {
                 model: model.workTracks,
+                where: {
+                    [Op.and]: conditions,
+                },
                 include: [
                     model.kpiNorms,
                     model.missions,

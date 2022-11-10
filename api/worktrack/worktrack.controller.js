@@ -12,21 +12,21 @@ const getAll = async (req, res) => {
             return res.status(200).json({ message: 'Success!', data: workTracks });
         }
         if (req.user.role === 'manager') {
-            const workTracks = await worktrackService.getWorkTrackByManager(req.user.id);
+            const workTracks = await worktrackService.getWorkTrackByManager(req.user.id, startDate, endDate);
             return res.status(200).json({ message: 'Success!', data: workTracks });
         }
         if (req.user.role === 'user') {
-            const workTracks = await worktrackService.getAllResourceByUserId(req.user.id);
+            const workTracks = await worktrackService.getAllResourceByUserId(req.user.id, startDate, endDate);
             if (!workTracks) {
                 throw new ApiError(404, 'Not Found');
             }
-            const check = workTracks.dataValues?.workTracks;
-            for (let i = 0; i < check.length; i++) {
-                const checkCreated = check[i].dataValues?.workTrackUsers?.dataValues?.isCreated;
-                if (!(checkCreated === true)) {
-                    check.splice(i, 1);
-                }
-            }
+            // const check = workTracks.dataValues?.workTracks;
+            // for (let i = 0; i < check.length; i++) {
+            //     const checkCreated = check[i].dataValues?.workTrackUsers?.dataValues?.isCreated;
+            //     if (!(checkCreated === true)) {
+            //         check.splice(i, 1);
+            //     }
+            // }
             return res.status(200).json({ message: 'Success!', data: workTracks });
         }
     } catch (error) {
