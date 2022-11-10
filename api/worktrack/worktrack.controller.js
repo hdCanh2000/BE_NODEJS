@@ -68,8 +68,9 @@ const getWorkTrackOfMe = async (req, res) => {
 
 const getAllByUserId = async (req, res) => {
     const { user_id } = req.params;
+    const { startDate, endDate } = req.query;
     try {
-        const worktracks = await worktrackService.getAllResourceByUserId(user_id);
+        const worktracks = await worktrackService.getAllResourceByUserId(user_id, startDate, endDate);
         if (!worktracks) {
             throw new ApiError(404, 'Not Found');
         }
