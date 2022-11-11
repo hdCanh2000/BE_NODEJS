@@ -167,28 +167,12 @@ const getAllResourceByUserId = async (user_id, start, end) => {
     }
     const user = await model.users.findOne({
         where: { id: user_id },
-        // include: [
-        //     model.departments,
-        //     {
-        //         model: model.workTracks,
-        //         where: {
-        //             [Op.and]: conditions,
-        //         },
-        //         include: [
-        //             model.users,
-        //             model.kpiNorms,
-        //             model.missions,
-        //             model.keys,
-        //             model.workTrackLogs,
-        //         ],
-        //     },
-        // ],
         include: [
             {
                 model: model.workTracks,
-                where: {
-                    [Op.and]: conditions,
-                },
+                // where: {
+                //     [Op.and]: conditions,
+                // },s
                 include: [
                     model.kpiNorms,
                     model.missions,
