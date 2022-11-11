@@ -111,9 +111,9 @@ const getWorkTrackByManager = async (id, start, end) => {
                 model.departments,
                 {
                     model: model.workTracks,
-                    where: {
-                        [Op.and]: conditions,
-                    },
+                    // where: {
+                    //     [Op.and]: conditions,
+                    // },
                     include: [
                         model.users,
                         model.kpiNorms,
