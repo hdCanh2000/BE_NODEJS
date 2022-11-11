@@ -20,13 +20,13 @@ const getAll = async (req, res) => {
             if (!workTracks) {
                 throw new ApiError(404, 'Not Found');
             }
-            // const check = workTracks.dataValues?.workTracks;
-            // for (let i = 0; i < check.length; i++) {
-            //     const checkCreated = check[i].dataValues?.workTrackUsers?.dataValues?.isCreated;
-            //     if (!(checkCreated === true)) {
-            //         check.splice(i, 1);
-            //     }
-            // }
+            const check = workTracks.dataValues?.workTracks;
+            for (let i = 0; i < check.length; i++) {
+                const checkCreated = check[i].dataValues?.workTrackUsers?.dataValues?.isCreated;
+                if (!(checkCreated === true)) {
+                    check.splice(i, 1);
+                }
+            }
             return res.status(200).json({ message: 'Success!', data: workTracks });
         }
     } catch (error) {
@@ -54,13 +54,13 @@ const getWorkTrackOfMe = async (req, res) => {
         if (!getWorkTrackMe) {
             throw new ApiError(404, 'Not Found');
         }
-        // const check = getWorkTrackMe.dataValues?.workTracks;
-        // for (let i = 0; i < check.length; i++) {
-        //     const checkResponsible = check[i].dataValues?.workTrackUsers?.dataValues?.isResponsible;
-        //     if (!(checkResponsible === true)) {
-        //         check.splice(i, 1);
-        //     }
-        // }
+        const check = getWorkTrackMe.dataValues?.workTracks;
+        for (let i = 0; i < check.length; i++) {
+            const checkResponsible = check[i].dataValues?.workTrackUsers?.dataValues?.isResponsible;
+            if (!(checkResponsible === true)) {
+                check.splice(i, 1);
+            }
+        }
         return res.status(200).json({ message: 'Success!', data: getWorkTrackMe });
     } catch (error) {
         return error;
