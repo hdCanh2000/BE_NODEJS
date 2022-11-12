@@ -51,16 +51,13 @@ const getWorkTrackOfMe = async (req, res) => {
     const { startDate, endDate } = req.query;
     try {
         const getWorkTrackMe = await worktrackService.getAllResourceByUserId(req.user.id, startDate, endDate);
-        if (!getWorkTrackMe) {
-            throw new ApiError(404, 'Not Found');
-        }
-        const check = getWorkTrackMe.dataValues?.workTracks;
-        for (let i = 0; i < check.length; i++) {
-            const checkResponsible = check[i].dataValues?.workTrackUsers?.dataValues?.isResponsible;
-            if (!(checkResponsible === true)) {
-                check.splice(i, 1);
-            }
-        }
+        // const check = getWorkTrackMe.dataValues?.workTracks;
+        // for (let i = 0; i < check.length; i++) {
+        //     const checkResponsible = check[i].dataValues?.workTrackUsers?.dataValues?.isResponsible;
+        //     if (!(checkResponsible === true)) {
+        //         check.splice(i, 1);
+        //     }
+        // }
         return res.status(200).json({ message: 'Success!', data: getWorkTrackMe });
     } catch (error) {
         return error;
@@ -72,9 +69,6 @@ const getAllByUserId = async (req, res) => {
     const { startDate, endDate } = req.query;
     try {
         const worktracks = await worktrackService.getAllResourceByUserId(user_id, startDate, endDate);
-        if (!worktracks) {
-            throw new ApiError(404, 'Not Found');
-        }
         return res.status(200).json({ message: 'Success!', data: worktracks });
     } catch (error) {
         return res.status(404).json({ message: 'Not Found!', error: error.message });

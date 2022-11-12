@@ -111,9 +111,9 @@ const getWorkTrackByManager = async (id, start, end) => {
                 model.departments,
                 {
                     model: model.workTracks,
-                    // where: {
-                    //     [Op.and]: conditions,
-                    // },
+                    where: {
+                        [Op.and]: conditions,
+                    },
                     include: [
                         model.users,
                         model.kpiNorms,
@@ -165,30 +165,33 @@ const getAllResourceByUserId = async (user_id, start, end) => {
             },
         });
     }
-    const user = await model.users.findOne({
-        where: { id: user_id },
-        include: [
-            {
-                model: model.workTracks,
-                // where: {
-                //     [Op.and]: conditions,
-                // },s
-                include: [
-                    model.kpiNorms,
-                    model.missions,
-                    model.keys,
-                    model.workTrackLogs,
-                ],
+    try {
+        const data = await model.users.findOne({
+            where: {
+                id: user_id,
             },
-            {
-                model: model.departments,
-            },
-        ],
-    });
-    if (!user) {
-        throw new ApiError(404, 'User not found!');
+            include: [
+                {
+                    model: model.departments,
+                },
+                {
+                    model: model.workTracks,
+                    where: {
+                        [Op.and]: conditions,
+                    },
+                    include: [
+                        model.kpiNorms,
+                        model.missions,
+                        model.keys,
+                        model.workTrackLogs,
+                    ],
+                },
+            ],
+        });
+        return data;
+    } catch (error) {
+        return error;
     }
-    return user;
 };
 
 const findWorkTrackByKpiNormAndUser = async (kpiNorm_id, user_id) => {
