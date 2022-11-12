@@ -97,6 +97,11 @@ exports.findAll = async ({ userId, query }) => {
                 },
                 {
                     model: model.workTracks,
+                    include: [
+                        {
+                            model: model.workTrackLogs,
+                        },
+                    ],
                 },
             ],
             where: {
@@ -127,6 +132,11 @@ exports.findAll = async ({ userId, query }) => {
                 },
                 {
                     model: model.workTracks,
+                    include: [
+                        {
+                            model: model.workTrackLogs,
+                        },
+                    ],
                 },
             ],
             where: {
