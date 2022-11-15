@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     }
     workTracks.init({
+        name: DataTypes.STRING,
         kpiNorm_id: DataTypes.INTEGER,
         parent_id: DataTypes.INTEGER,
         mission_id: DataTypes.INTEGER,
