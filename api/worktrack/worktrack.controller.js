@@ -1,4 +1,3 @@
-const { isEmpty } = require('lodash');
 const worktrackService = require('./worktrack.service');
 const userService = require('../user/user.service');
 // const kpiNormService = require('../kpiNorm/kpiNorm.service');
@@ -90,13 +89,13 @@ const getByKpiNornAndUserId = async (req, res) => {
 
 const addWorkTrack = async (req, res) => {
     try {
-        const { kpiNorm_id, user_id } = req.body;
+        const { user_id } = req.body;
         // const kpiNorm = await kpiNormService.detailKpiNorm(kpiNorm_id);
         const findUser = await userService.findUser(user_id);
-        const getWTByKpiNormAndUser = await worktrackService.findWorkTrackByKpiNormAndUser(kpiNorm_id, user_id);
-        if (!isEmpty(getWTByKpiNormAndUser)) {
-            return res.status(400).json({ message: 'Công việc đã tồn tại.', data: null });
-        }
+        // const getWTByKpiNormAndUser = await worktrackService.findWorkTrackByKpiNormAndUser(kpiNorm_id, user_id);
+        // if (!isEmpty(getWTByKpiNormAndUser)) {
+        //     return res.status(400).json({ message: 'Công việc đã tồn tại.', data: null });
+        // }
         const workTrack = await worktrackService.createResource(req.body);
         const userCreate = await worktrackService.findUser(req.user.id);
         if (findUser) {
