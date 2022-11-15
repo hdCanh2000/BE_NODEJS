@@ -72,6 +72,9 @@ exports.getKpiNormByParent = async (parentId) => {
 exports.getKpiNormByDepartment = async (id) => {
     const data = await model.kpiNorms.findAll({
         where: { department_id: id },
+        order: [
+            ['id', 'ASC'],
+        ],
         include: [model.units, model.departments, model.positions],
     });
     return data;
