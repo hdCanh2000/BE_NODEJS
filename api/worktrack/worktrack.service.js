@@ -66,6 +66,9 @@ const getWorkTrackByAdmin = async (start, end) => {
             where: {
                 [Op.and]: conditions,
             },
+            order: [
+                ['id', 'ASC'],
+            ],
             include: [
                 {
                     model: model.kpiNorms,
@@ -111,6 +114,9 @@ const getWorkTrackByManager = async (id, start, end) => {
                 model.departments,
                 {
                     model: model.workTracks,
+                    order: [
+                        ['id', 'ASC'],
+                    ],
                     where: {
                         [Op.and]: conditions,
                     },
@@ -176,6 +182,9 @@ const getAllResourceByUserId = async (user_id, start, end) => {
                 },
                 {
                     model: model.workTracks,
+                    order: [
+                        ['id', 'ASC'],
+                    ],
                     where: {
                         [Op.and]: conditions,
                     },
@@ -291,6 +300,9 @@ const getWorkTrackByStatus = async (status) => {
     try {
         const workTrackByStatus = await model.workTracks.findAll({
             where: { status },
+            order: [
+                ['id', 'ASC'],
+            ],
             include: [
                 {
                     model: model.kpiNorms,
@@ -318,6 +330,9 @@ const getWorkTrackByDepartment = async (status, department_id) => {
     try {
         const workTrackByStatus = await model.workTracks.findAll({
             where: { status },
+            order: [
+                ['id', 'ASC'],
+            ],
             include: [
                 {
                     model: model.kpiNorms,
