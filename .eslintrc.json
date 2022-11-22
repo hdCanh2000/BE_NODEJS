@@ -34,6 +34,7 @@
         "import/no-dynamic-require": "off",
         "global-require": "off",
         "no-octal": "off",
-        "radix": "off"
+        "radix": "off",
+        "no-tabs": "off"
     }
 }
