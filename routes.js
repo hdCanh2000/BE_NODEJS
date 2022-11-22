@@ -12,6 +12,7 @@ const requirementRoutes = require('./api/requirement/requirement.routes');
 const positionRoutes = require('./api/position/position.routes');
 const taskRoutes = require('./api/task/task.routes');
 const keyRoutes = require('./api/key/key.routes');
+const fileReportRoutes = require('./api/fileReport/fileReport.routes');
 
 const router = express.Router();
 
@@ -28,5 +29,6 @@ router.use('/requirements', requirementRoutes);
 router.use('/positions', positionRoutes);
 router.use('/task', taskRoutes);
 router.use('/keys', keyRoutes);
+router.use('/file', fileReportRoutes);
 
 module.exports = router;

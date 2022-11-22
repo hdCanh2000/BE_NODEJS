@@ -1,14 +1,16 @@
+const ExcelJs = require('exceljs');
+const { isEmpty } = require('lodash');
 const worktrackService = require('./worktrack.service');
 const userService = require('../user/user.service');
-// const kpiNormService = require('../kpiNorm/kpiNorm.service');
 const ApiError = require('../../utils/ApiError');
+const { calcCurrentKPIOfWorkTrack } = require('../../utils/function');
 
 const getAll = async (req, res) => {
     const { startDate, endDate } = req.query;
     try {
         if (req.user.role === 'admin') {
             const workTracks = await worktrackService.getWorkTrackByAdmin(startDate, endDate);
-            return res.status(200).json({ message: 'Success!', data: workTracks });
+            return res.status(200).json({ message: 'Success!', data: isEmpty(workTracks) ? [] : workTracks });
         }
         if (req.user.role === 'manager') {
             const workTracks = await worktrackService.getWorkTrackByManager(req.user.id, startDate, endDate);
@@ -90,12 +92,7 @@ const getByKpiNornAndUserId = async (req, res) => {
 const addWorkTrack = async (req, res) => {
     try {
         const { user_id } = req.body;
-        // const kpiNorm = await kpiNormService.detailKpiNorm(kpiNorm_id);
         const findUser = await userService.findUser(user_id);
-        // const getWTByKpiNormAndUser = await worktrackService.findWorkTrackByKpiNormAndUser(kpiNorm_id, user_id);
-        // if (!isEmpty(getWTByKpiNormAndUser)) {
-        //     return res.status(400).json({ message: 'Công việc đã tồn tại.', data: null });
-        // }
         const workTrack = await worktrackService.createResource(req.body);
         const userCreate = await worktrackService.findUser(req.user.id);
         if (findUser) {
@@ -114,15 +111,6 @@ const addWorkTrack = async (req, res) => {
         //             throw new ApiError(400, 'Bad Request');
         //         }
         //     });
-        // }
-        // add parent id
-        // if (kpiNorm.parent_id !== null) {
-        //     const worktrackByKpiNormParentAndUser = await worktrackService.findWorkTrackByKpiNormAndUser(kpiNorm.parent_id, user_id);
-        //     if (!isEmpty(worktrackByKpiNormParentAndUser)) {
-        //         const parentId = await worktrackService.getResourceById(worktrackByKpiNormParentAndUser?.workTracks?.[0]?.id);
-        //         const workTrackParent = await worktrackService.updateParentId(workTrack.id, parentId?.id);
-        //         return res.status(200).json({ message: 'Create Success!', data: workTrackParent });
-        //     }
         // }
         return res.status(200).json({ message: 'Create Success!', data: workTrack });
     } catch (error) {
@@ -230,6 +218,71 @@ const reportWorktrackAll = async (req, res) => {
     }
 };
 
+const exportExcel = async (req, res) => {
+    const { startDate, endDate, user_id } = req.query;
+    const userId = user_id || req.user.id;
+    // const dayList = days();
+    try {
+        const worktracks = await worktrackService.getAllResourceByUserId(userId, startDate, endDate);
+        const workbook = new ExcelJs.Workbook();
+        const worksheet = workbook.addWorksheet('Thông tin công việc');
+        const worksheetLog = workbook.addWorksheet('Báo cáo công việc');
+        // const monthsArray = dayList.map((str) => (
+        //     { header: str, key: str, width: 5 }
+        // ));
+
+        // worksheet thông tin
+        worksheet.columns = [
+            { header: 'STT', key: 'stt', width: 5 },
+            { header: 'Tên nhiệm vụ', key: 'name', width: 50 },
+            { header: 'Số lượng', key: 'quantity', width: 10 },
+            { header: 'Tổng điểm KPI', key: 'kpi_value', width: 15 },
+        ];
+
+        const workLogs = [];
+        worktracks.workTracks.forEach((item) => {
+            workLogs.push(...item.workTrackLogs);
+        });
+
+        const workTrackList = worktracks.workTracks?.sort((a, b) => a.id - b.id)?.filter((item) => item?.workTrackUsers?.isResponsible === true)?.map((item) => ({
+            ...item,
+            name: item.name ? item.name : item.kpiNorm.name,
+            quantity: item.quantity,
+            kpi_value: calcCurrentKPIOfWorkTrack(item),
+        }));
+
+        let count = 1;
+        workTrackList.forEach((e) => {
+            e.stt = count;
+            worksheet.addRow(e);
+            count += 1;
+        });
+
+        // worksheet log
+
+        worksheetLog.columns = [
+            { header: 'STT', key: 'stt', width: 5 },
+            { header: 'Tên nhiệm vụ', key: 'name', width: 50 },
+            { header: 'Số lượng', key: 'quantity', width: 10 },
+            { header: 'Gi chú', key: 'note', width: 15 },
+        ];
+
+        workLogs?.sort((a, b) => a.workTrack_id - b.workTrack_id)?.map((item) => ({
+            name: item.workTrack.name,
+            quantity: item.quantity,
+            note: item.note,
+        })).forEach((e, index) => {
+            e.stt = index + 1;
+            worksheetLog.addRow(e);
+        });
+
+        await workbook.xlsx.writeFile('Báo cáo nhiệm vụ tháng.xlsx');
+        res.download('Báo cáo nhiệm vụ tháng.xlsx');
+    } catch (error) {
+        return res.status(404).json({ message: 'Error!', error: error.message });
+    }
+};
+
 module.exports = {
     getWorkTrackByStatus,
     getAll,
@@ -243,4 +296,5 @@ module.exports = {
     getByKpiNornAndUserId,
     reportWorktrack,
     reportWorktrackAll,
+    exportExcel,
 };

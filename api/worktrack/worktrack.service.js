@@ -192,7 +192,10 @@ const getAllResourceByUserId = async (user_id, start, end) => {
                         model.kpiNorms,
                         model.missions,
                         model.keys,
-                        model.workTrackLogs,
+                        {
+                            model: model.workTrackLogs,
+                            include: model.workTracks,
+                        },
                     ],
                 },
             ],

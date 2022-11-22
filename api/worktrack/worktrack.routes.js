@@ -11,6 +11,9 @@ router.get('/kpi_user/:kpiNorm_id/:user_id', auth(['admin', 'manager', 'user']),
 router.get('/workTrackPending', auth(['admin', 'manager', 'user']), worktrackController.getWorkTrackByStatus);
 router.get('/workTrackReport', auth(['admin', 'manager', 'user']), worktrackController.reportWorktrack);
 router.get('/workTrackReportAll', auth(['admin', 'manager', 'user']), worktrackController.reportWorktrackAll);
+
+router.get('/export', worktrackController.exportExcel);
+
 router.post('/', auth(['admin', 'manager', 'user']), worktrackController.addWorkTrack);
 router.get('/:id', auth(['admin', 'manager', 'user']), worktrackController.getById);
 router.put('/:id', auth(['admin', 'manager', 'user']), worktrackController.updateWorkTrackById);

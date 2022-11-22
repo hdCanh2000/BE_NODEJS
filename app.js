@@ -9,56 +9,10 @@ const routes = require('./routes');
 
 const app = express();
 
-// const whitelist = [
-//   'http://localhost',
-//   'http://localhost:3000',
-//   'https://dwt-one.vercel.app',
-//   'https://dwt.tbht.vn',
-//   'http://localhost:3000/',
-//   'https://dwt-one.vercel.app/',
-//   'https://dwt.tbht.vn/',
-// ];
-
-// const corsOptions = {
-//   credentials: true,
-//   origin: (origin, callback) => {
-//     const originIsWhitelisted = whitelist.indexOf(origin) !== -1;
-//     callback(null, originIsWhitelisted);
-//   },
-//   methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
-//   allowedHeaders: '*',
-// };
-// const corsOptions = {
-//   origin: 'http://localhost:3000',
-//   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-// };
-
-// app.use(cors(corsOptions));
-const whitelist = [
-  'http://localhost',
-  'http://localhost:3000',
-  'https://dwt-one.vercel.app',
-  'https://dwt-dev.vercel.app',
-  'http://159.223.93.249:3002/',
-  'http://159.223.93.249:3002',
-  'https://dwt.tbht.vn',
-  'http://localhost:3000/',
-  'https://dwt-one.vercel.app/',
-  'https://dwt.tbht.vn/',
-  'https://dwt-dev.vercel.app/',
-];
+// eslint-disable-next-line no-underscore-dangle
+global.__basedir = __dirname;
 
 app.use(cors());
-// app.use(cors({
-//   origin(origin, callback) {
-//     if (!origin) return callback(null, true);
-//     if (whitelist.indexOf(origin) === -1) {
-//       const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-//       return callback(new Error(msg), false);
-//     }
-//     return callback(null, true);
-//   },
-// }));
 
 // connect database
 const testDatabase = async () => {
