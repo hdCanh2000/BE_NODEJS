@@ -9,27 +9,27 @@ const routes = require('./routes');
 
 const app = express();
 
-const whitelist = [
-  'http://localhost',
-  'http://localhost:3000',
-  'https://dwt-one.vercel.app',
-  'https://dwt.tbht.vn',
-  'http://localhost:3000/',
-  'https://dwt-one.vercel.app/',
-  'https://dwt.tbht.vn/',
-];
+// const whitelist = [
+//   'http://localhost',
+//   'http://localhost:3000',
+//   'https://dwt-one.vercel.app',
+//   'https://dwt.tbht.vn',
+//   'http://localhost:3000/',
+//   'https://dwt-one.vercel.app/',
+//   'https://dwt.tbht.vn/',
+// ];
 
 app.use(cors());
-app.use(cors({
-  origin(origin, callback) {
-    if (!origin) return callback(null, true);
-    if (whitelist.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
-}));
+// app.use(cors({
+//   origin(origin, callback) {
+//     if (!origin) return callback(null, true);
+//     if (whitelist.indexOf(origin) === -1) {
+//       const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+//       return callback(new Error(msg), false);
+//     }
+//     return callback(null, true);
+//   },
+// }));
 
 // connect database
 const testDatabase = async () => {
