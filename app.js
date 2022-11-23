@@ -9,34 +9,6 @@ const routes = require('./routes');
 
 const app = express();
 
-// eslint-disable-next-line no-underscore-dangle
-global.__basedir = __dirname;
-
-// const whitelist = [
-//   'http://localhost',
-//   'http://localhost:3000',
-//   'https://dwt-one.vercel.app',
-//   'https://dwt.tbht.vn',
-//   'http://localhost:3000/',
-//   'https://dwt-one.vercel.app/',
-//   'https://dwt.tbht.vn/',
-// ];
-
-// const corsOptions = {
-//   credentials: true,
-//   origin: (origin, callback) => {
-//     const originIsWhitelisted = whitelist.indexOf(origin) !== -1;
-//     callback(null, originIsWhitelisted);
-//   },
-//   methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
-//   allowedHeaders: '*',
-// };
-// const corsOptions = {
-//   origin: 'http://localhost:3000',
-//   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-// };
-
-// app.use(cors(corsOptions));
 const whitelist = [
   'http://localhost',
   'http://localhost:3000',
@@ -48,16 +20,16 @@ const whitelist = [
 ];
 
 app.use(cors());
-// app.use(cors({
-//   origin(origin, callback) {
-//     if (!origin) return callback(null, true);
-//     if (whitelist.indexOf(origin) === -1) {
-//       const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-//       return callback(new Error(msg), false);
-//     }
-//     return callback(null, true);
-//   },
-// }));
+app.use(cors({
+  origin(origin, callback) {
+    if (!origin) return callback(null, true);
+    if (whitelist.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+}));
 
 // connect database
 const testDatabase = async () => {
@@ -92,6 +64,9 @@ app.use('/api', routes);
 
 app.use(passport.initialize());
 passport.use('jwt', config.jwtStrategy);
+
+// eslint-disable-next-line no-underscore-dangle
+global.__basedir = __dirname;
 
 const PORT = process.env.PORT || 3002;
 
