@@ -14,5 +14,13 @@
     "host": "157.230.35.54",
     "dialect": "postgres",
     "logging": false
+  },
+  "staging": {
+    "username": "appuser",
+    "password": "mtDH.2018TH",
+    "database": "dwtapp",
+    "host": "159.223.93.249",
+    "dialect": "postgres",
+    "logging": false
   }
 }
