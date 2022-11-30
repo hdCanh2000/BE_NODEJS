@@ -57,7 +57,7 @@ const getWorkTrackByAdmin = async (start, end) => {
     if (start && end) {
         conditions.push({
             createdAt: {
-                [Op.between]: [new Date(start), new Date(end)],
+                [Op.between]: [new Date(`${start} 00:00:01`), new Date(`${end} 23:59:59`)],
             },
         });
     }
@@ -101,7 +101,7 @@ const getWorkTrackByManager = async (id, start, end) => {
     if (start && end) {
         conditions.push({
             createdAt: {
-                [Op.between]: [new Date(start), new Date(end)],
+                [Op.between]: [new Date(`${start} 00:00:01`), new Date(`${end} 23:59:59`)],
             },
         });
     }
@@ -167,7 +167,7 @@ const getAllResourceByUserId = async (user_id, start, end) => {
     if (start && end) {
         conditions.push({
             createdAt: {
-                [Op.between]: [new Date(start), new Date(end)],
+                [Op.between]: [new Date(`${start} 00:00:01`), new Date(`${end} 23:59:59`)],
             },
         });
     }
