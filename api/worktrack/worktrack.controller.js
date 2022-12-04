@@ -84,7 +84,7 @@ const exportAllWorkTracks = async (req, res) => {
           filesArr.forEach((filename) => {
             //IMPORTANT: IF DOMAIN NAME CHANGED => CHANGE THIS
             const host = req.get('host') || "https://dwtapi.doppelherz.vn";
-            const staticPath = "files";
+            const staticPath = "uploads";
             reportFiles += `${host}/${staticPath}/${filename}, `;
           });
         }
@@ -108,8 +108,8 @@ const exportAllWorkTracks = async (req, res) => {
       });
       counter++;
     });
-    await workbook.xlsx.writeFile('Báo cáo công việc.xlsx');
-    res.download('Báo cáo công việc.xlsx');
+    await workbook.xlsx.writeFile('./resources/static/files/Báo cáo công việc.xlsx');
+    res.download('./resources/static/files/Báo cáo công việc.xlsx');
   } catch (err) {
     console.log(err);
     return res.status(500).json({message: 'Internal Error!', error: err.message});

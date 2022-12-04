@@ -21,7 +21,8 @@ const app = express();
 
 app.use(cors());
 //serve static assets so we can use it in form of url no need to get byte to byte via http request
-app.use("/files", express.static(__dirname + '/resources/static/uploads'));
+app.use("/uploads", express.static(__dirname + '/resources/static/uploads'));
+app.use("/files", express.static(__dirname + '/resources/static/files'));
 // app.use(cors({
 //   origin(origin, callback) {
 //     if (!origin) return callback(null, true);
