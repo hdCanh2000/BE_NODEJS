@@ -108,8 +108,14 @@ const exportAllWorkTracks = async (req, res) => {
       });
       counter++;
     });
-    await workbook.xlsx.writeFile('./resources/static/files/Báo cáo công việc.xlsx');
-    res.download('./resources/static/files/Báo cáo công việc.xlsx');
+
+    const fileName = `dwt_${startDate || ""}_${endDate || ""}.xlsx`;
+    await workbook.xlsx.writeFile(`./resources/static/files/${fileName}`);
+    return res.json({
+      message: 'Success!', data: {
+        fileName
+      }
+    });
   } catch (err) {
     console.log(err);
     return res.status(500).json({message: 'Internal Error!', error: err.message});
