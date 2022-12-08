@@ -4,6 +4,7 @@ const worktrackService = require('./worktrack.service');
 const userService = require('../user/user.service');
 const ApiError = require('../../utils/ApiError');
 const {calcCurrentKPIOfWorkTrack, calcProgressTask, calcTotalKPIOfWorkTrack} = require('../../utils/function');
+const kpiNormService = require("../kpiNorm/kpiNorm.service");
 
 const getAll = async (req, res) => {
   const {startDate, endDate} = req.query;
@@ -37,80 +38,261 @@ const getAll = async (req, res) => {
 
 const exportAllWorkTracks = async (req, res) => {
   const {startDate, endDate} = req.query;
+  //THIS LIST FOR CHECK THE VALUE OF CELL IN EXCEL CORRESPONDING TO THE DAY OF THE MONTH
+//START AT o is the first day of the month
+//END AT 30 is the last day of the month
+  const LIST_DAYS = [
+    'O', // 1st
+    'P', // 2nd
+    'Q', // 3rd
+    'R', // 4th
+    'S', // 5th
+    'T', // 6th
+    'U', // 7th
+    'V', // 8th
+    'W', // 9th
+    'X', // 10th
+    'Y', // 11th
+    'Z', // 12th
+    'AA', // 13th
+    'AB', // 14th
+    'AC', // 15th
+    'AD', // 16th
+    'AE', // 17th
+    'AF', // 18th
+    'AG', // 19th
+    'AH', // 20th
+    'AI', // 21st
+    'AJ', // 22nd
+    'AK', // 23rd
+    'AL', // 24th
+    'AM', // 25th
+    'AN', // 26th
+    'AO', // 27th
+    'AP', // 28th
+    'AQ', // 29th
+    'AR', // 30th
+    'AS', // 31st
+  ]
   try {
     const workTracks = await worktrackService.getWorkTrackByAdmin(startDate, endDate);
+    const listKPINorm = await kpiNormService.allKpiNorm({userId: null, query: {page: 1, limit: 9999, text: ''}});
+
+
     const workbook = new ExcelJs.Workbook();
-    const worksheet = workbook.addWorksheet('Báo cáo công việc');
-    worksheet.columns = [
-      {header: 'STT', key: 'counter', width: 5},
-      {header: 'Tên nhiệm vụ', key: 'workName', width: 50},
-      {header: 'Tỉ lệ hoàn thành', key: 'progress', width: 10},
-      {header: 'Tổng điểm KPI', key: 'totalKPI', width: 15},
-      {header: 'KPI tạm tính', key: 'currentKPI', width: 15},
-      {header: 'KPI thực tế', key: 'kpiPoint', width: 15},
-      {header: 'Số lượng hoàn thành', key: 'quantity', width: 15},
-      {header: 'Ngày báo cáo', key: 'reportDate', width: 15},
-      {header: 'Nội dung báo cáo', key: 'reportNote', width: 30},
-      {header: 'File báo cáo', key: 'reportFiles', width: 30},
-    ];
-    //sort by created date => it is better if we sorted by sql query not by this js way
-    const sortedWorkTracks = workTracks.sort((a, b) => {
-      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-    });
-    //normilize data
-    let counter = 1;
-    sortedWorkTracks.forEach((workTrack) => {
-      const workName = workTrack.kpiNorm.name;
-      const progress = calcProgressTask(workTrack);
-      const totalKPI = calcTotalKPIOfWorkTrack(workTrack);
-      const currentKPI = calcCurrentKPIOfWorkTrack(workTrack);
-      const kpiPoint = workTrack.kpiNorm.kpi_value;
-      const quantity = workTrack.quantity;
-      const row = {workName, progress, totalKPI, currentKPI, kpiPoint, quantity};
-      //work logs
-      if (workTrack.workTrackLogs.length === 0) {
-        //if no work log => add row with empty report date, report note, report file
-        worksheet.addRow({counter, ...row, reportDate: '', reportNote: '', reportFile: ''});
-        counter++;
-        return;
+    const sample = await workbook.xlsx.readFile('./resources/static/files/sample.xlsx')
+    const sheet = sample.getWorksheet('Mẫu xuất báo cáo');
+
+    let count = 1;
+    let currentRow = 9;
+    for (let i = 0; i < listKPINorm.length; i++) {
+      const kpi = listKPINorm[i];
+      const name = kpi.name;
+      const description = kpi.description || "";
+      const manDay = `${kpi.manday || 1} MD`;
+      const kpiValue = kpi.kpi_value;
+      const qty = kpi.quantity || 1
+      const unit = kpi?.unit?.name || '';
+      const process = "";
+      const totalKPI = `${kpi.kpi_value || 1 * qty}`;
+      const rowValues = [
+        '',
+        count,
+        name,
+        "",
+        description,
+        manDay,
+        kpiValue,
+        qty,
+        unit,
+        process,
+        totalKPI
+      ];
+      // need to keep the first row because these other rows will inherit the style of the first row
+      if (i === 0) {
+        const row = sheet.getRow(8);
+        const counterCell = row.getCell('B');
+        counterCell.value = count;
+        const nameCell = row.getCell('C');
+        nameCell.value = name;
+        const descriptionCell = row.getCell('E');
+        descriptionCell.value = description;
+        const manDayCell = row.getCell('F');
+        manDayCell.value = manDay;
+        const kpiValueCell = row.getCell('G');
+        kpiValueCell.value = kpiValue;
+        const qtyCell = row.getCell('H');
+        qtyCell.value = qty;
+        const unitCell = row.getCell('I');
+        unitCell.value = unit;
+        const processCell = row.getCell('J');
+        processCell.value = process;
+        const totalKPICell = row.getCell('K');
+        totalKPICell.value = totalKPI;
+        count++;
+        continue;
       }
-      //if has work log => add row for each work log
-      workTrack.workTrackLogs.forEach((workLog, index) => {
-        const reportDate = workLog.date;
-        const reportNote = workLog.note;
-        let reportFiles = "";
+      const row = sheet.insertRow(currentRow, rowValues, 'i+');
+      // row.getCell(LIST_DAYS[6]).value = 'x';
+      const upperRow = sheet.getRow(currentRow - 1);
+      row.getCell(1).merge(upperRow.getCell(1))
+
+      count++;
+      currentRow++;
+    }
+
+
+    //insert work track
+    const ROW_GAP_TO_NEXT_TABLE = 6;
+    let workTrackCounter = 1;
+    let startInsertWorkTrackRow = currentRow + ROW_GAP_TO_NEXT_TABLE;
+
+
+    const listWorkTrack = workTracks;
+    for (let i = 0; i < listWorkTrack.length; i++) {
+      const workTrack = listWorkTrack[i];
+      const name = workTrack.kpiNorm.name;
+      const description = workTrack.kpiNorm.description || "";
+      const workLogs = workTrack.workTrackLogs;
+      //first row just content to make these other row inherit the style of the first row
+      if (i === 0) {
+        const row = sheet.getRow(startInsertWorkTrackRow - 1);
+        const counterCell = row.getCell('B');
+        counterCell.value = workTrackCounter;
+        const nameCell = row.getCell('C');
+        nameCell.value = name;
+        const descriptionCell = row.getCell('E');
+        descriptionCell.value = description;
+        if (!workLogs || workLogs.length === 0) {
+          workTrackCounter++;
+          continue;
+        }
+        for (let j = 0; j < workLogs.length; j++) {
+          const workLog = workLogs[j];
+          const date = workLog.date;
+          const dayOfTheMonth = +date.split('-')[0];
+          const status = workLog.quantity || 1;
+          let fileNames = "";
+          if (workLog.files && workLog.files.length > 0) {
+            const filesArr = JSON.parse(workLog.files)
+            filesArr.forEach((filename) => {
+              //IMPORTANT: IF DOMAIN NAME CHANGED => CHANGE THIS
+              const host = req.get('host') || "https://dwtapi.doppelherz.vn";
+              const staticPath = "files";
+              fileNames += `https://${host}/${staticPath}/${filename}, `;
+            });
+          }
+
+          const note = workLog.note;
+          if (j === 0) {
+            //first work logs insert to current row
+            const noteCell = row.getCell('G');
+            noteCell.value = note;
+            const statusCell = row.getCell('I');
+            statusCell.value = status;
+            const filesCell = row.getCell('L');
+            filesCell.value = fileNames;
+            row.getCell(LIST_DAYS[dayOfTheMonth - 1]).value = 'x';
+            continue;
+          }
+          //insert other work logs to new row
+          const newRow = sheet.insertRow(startInsertWorkTrackRow, [], 'i+');
+          //merge cells
+          // merge E and F
+          sheet.mergeCells(`E${startInsertWorkTrackRow}:F${startInsertWorkTrackRow}`);
+          //merge G and H column
+          sheet.mergeCells(`G${startInsertWorkTrackRow}:H${startInsertWorkTrackRow}`);
+          //merge I, J adn K column
+          sheet.mergeCells(`I${startInsertWorkTrackRow}:K${startInsertWorkTrackRow}`);
+          //insert value to new row
+          newRow.getCell('G').value = note;
+          newRow.getCell('I').value = status;
+          newRow.getCell('L').value = fileNames;
+          newRow.getCell(LIST_DAYS[dayOfTheMonth - 1]).value = 'x';
+          //merge first cell with upper row
+          newRow.getCell(1).merge(sheet.getRow(startInsertWorkTrackRow - 1).getCell(1));
+          startInsertWorkTrackRow++;
+        }
+        workTrackCounter++;
+        continue;
+      }
+      // insert to new row
+      const newRow = sheet.insertRow(startInsertWorkTrackRow, [], 'i+');
+      // // merge E and F column
+
+      sheet.mergeCells(`E${startInsertWorkTrackRow}:F${startInsertWorkTrackRow}`);
+      // //merge G and H column
+      sheet.mergeCells(`G${startInsertWorkTrackRow}:H${startInsertWorkTrackRow}`);
+      // //merge I, J adn K column
+      sheet.mergeCells(`I${startInsertWorkTrackRow}:K${startInsertWorkTrackRow}`);
+
+
+      //insert value to new row
+      newRow.getCell('B').value = workTrackCounter;
+      newRow.getCell('C').value = name;
+      newRow.getCell('E').value = description;
+
+      if (!workLogs || workLogs.length === 0) {
+        workTrackCounter++;
+        startInsertWorkTrackRow++;
+        continue;
+      }
+      for (let j = 0; j < workLogs.length; j++) {
+        const workLog = workLogs[j];
+        const date = workLog.date;
+        const dayOfTheMonth = +date.split('-')[0];
+        const status = workLog.quantity || 1;
+        let fileNames = "";
         if (workLog.files && workLog.files.length > 0) {
           const filesArr = JSON.parse(workLog.files)
           filesArr.forEach((filename) => {
             //IMPORTANT: IF DOMAIN NAME CHANGED => CHANGE THIS
             const host = req.get('host') || "https://dwtapi.doppelherz.vn";
-            const staticPath = "uploads";
-            reportFiles += `${host}/${staticPath}/${filename}, `;
+            const staticPath = "files";
+            fileNames += `https://${host}/${staticPath}/${filename}, `;
           });
         }
-        if (index === 0) {
-          worksheet.addRow({counter, ...row, reportDate, reportNote, reportFiles});
-        } else {
-          worksheet.addRow(
-            {
-              workName: '',
-              progress: '',
-              totalKPI: '',
-              currentKPI: '',
-              kpiPoint: '',
-              quantity: '',
-              counter: '',
-              reportDate,
-              reportNote,
-              reportFiles
-            });
+        const note = workLog.note;
+        if (j === 0) {
+          //first work logs insert to current row
+          const noteCell = newRow.getCell('G');
+          noteCell.value = note;
+          const statusCell = newRow.getCell('I');
+          statusCell.value = status;
+          const filesCell = newRow.getCell('L');
+          filesCell.value = fileNames;
+
+          newRow.getCell(LIST_DAYS[dayOfTheMonth - 1]).value = 'x';
+          startInsertWorkTrackRow++;
+          continue;
         }
-      });
-      counter++;
-    });
+        //insert other work logs to new row
+        const logRow = sheet.insertRow(startInsertWorkTrackRow, [], 'i+');
+        //merge cells
+        // merge E and F
+        sheet.mergeCells(`E${startInsertWorkTrackRow}:F${startInsertWorkTrackRow}`);
+        //merge G and H column
+        sheet.mergeCells(`G${startInsertWorkTrackRow}:H${startInsertWorkTrackRow}`);
+        //merge I, J adn K column
+        sheet.mergeCells(`I${startInsertWorkTrackRow}:K${startInsertWorkTrackRow}`);
+        //insert value to new row
+        logRow.getCell('G').value = note;
+        logRow.getCell('I').value = status;
+        logRow.getCell('L').value = fileNames;
+
+        //merge first cell with upper row
+        logRow.getCell(1).merge(sheet.getRow(startInsertWorkTrackRow - 1).getCell(1));
+        logRow.getCell(LIST_DAYS[dayOfTheMonth - 1]).value = 'x';
+
+        startInsertWorkTrackRow++;
+      }
+      // startInsertWorkTrackRow++;
+      workTrackCounter++;
+    }
+
 
     const fileName = `dwt_${startDate || ""}_${endDate || ""}.xlsx`;
-    await workbook.xlsx.writeFile(`./resources/static/files/${fileName}`);
+    await workbook.xlsx.writeFile('./resources/static/files/' + fileName)
     return res.json({
       message: 'Success!', data: {
         fileName
