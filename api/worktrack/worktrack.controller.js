@@ -37,10 +37,11 @@ const getAll = async (req, res) => {
 };
 
 const exportAllWorkTracks = async (req, res) => {
-  const {startDate, endDate} = req.query;
-  //THIS LIST FOR CHECK THE VALUE OF CELL IN EXCEL CORRESPONDING TO THE DAY OF THE MONTH
-//START AT o is the first day of the month
-//END AT 30 is the last day of the month
+  const {startDate, endDate, userId} = req.query;
+  /* THIS LIST FOR CHECK THE VALUE OF CELL IN EXCEL CORRESPONDING TO THE DAY OF THE MONTH
+  * START AT o is the first day of the month
+  * END AT 30 is the last day of the month
+  */
   const LIST_DAYS = [
     'O', // 1st
     'P', // 2nd
@@ -75,8 +76,19 @@ const exportAllWorkTracks = async (req, res) => {
     'AS', // 31st
   ]
   try {
-    const workTracks = await worktrackService.getWorkTrackByAdmin(startDate, endDate);
-    const listKPINorm = await kpiNormService.allKpiNorm({userId: null, query: {page: 1, limit: 9999, text: ''}});
+    let workTracks = [];
+    //output file name
+    let fileName = ""
+    if (userId) {
+      const user = await userService.findUser(userId);
+      fileName = `${user.name.replace(" ", "_")}_dwt_${startDate || ""}_${endDate || ""}.xlsx`;
+      const data = await worktrackService.getWorkTrackByManager(userId, startDate, endDate);
+      workTracks = data.workTracks;
+    } else {
+      workTracks = await worktrackService.getWorkTrackByAdmin(startDate, endDate);
+      fileName = `all_dwt_${startDate || ""}_${endDate || ""}.xlsx`;
+    }
+    const listKPINorm = await kpiNormService.allKpiNorm({userId, query: {page: 1, limit: 9999, text: ''}});
 
 
     const workbook = new ExcelJs.Workbook();
@@ -291,7 +303,6 @@ const exportAllWorkTracks = async (req, res) => {
     }
 
 
-    const fileName = `dwt_${startDate || ""}_${endDate || ""}.xlsx`;
     await workbook.xlsx.writeFile('./resources/static/files/' + fileName)
     return res.json({
       message: 'Success!', data: {
