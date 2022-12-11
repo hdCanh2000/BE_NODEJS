@@ -77,6 +77,7 @@ const exportAllWorkTracks = async (req, res) => {
   ]
   try {
     let workTracks = [];
+    let listKPINorm = await kpiNormService.allKpiNorm({userId, query: {page: 1, limit: 9999, text: ''}});
     //output file name
     let fileName = ""
     if (userId) {
@@ -84,19 +85,25 @@ const exportAllWorkTracks = async (req, res) => {
       fileName = `${user.name.replace(" ", "_")}_dwt_${startDate || ""}_${endDate || ""}.xlsx`;
       const data = await worktrackService.getWorkTrackByManager(userId, startDate, endDate);
       workTracks = data.workTracks;
+      const userKPINorm = [];
+      workTracks.forEach(workTrack => {
+        const kpiNorm = listKPINorm.find(kpi => kpi.id === workTrack.kpiNorm_id);
+        if (kpiNorm && !userKPINorm.find(kpi => kpi.id === kpiNorm.id)) {
+          userKPINorm.push(kpiNorm);
+        }
+      });
+      listKPINorm = userKPINorm;
     } else {
       workTracks = await worktrackService.getWorkTrackByAdmin(startDate, endDate);
       fileName = `all_dwt_${startDate || ""}_${endDate || ""}.xlsx`;
     }
-    const listKPINorm = await kpiNormService.allKpiNorm({userId, query: {page: 1, limit: 9999, text: ''}});
-
-
     const workbook = new ExcelJs.Workbook();
     const sample = await workbook.xlsx.readFile('./resources/static/files/sample.xlsx')
     const sheet = sample.getWorksheet('Mẫu xuất báo cáo');
 
     let count = 1;
     let currentRow = 9;
+
     for (let i = 0; i < listKPINorm.length; i++) {
       const kpi = listKPINorm[i];
       const name = kpi.name;
@@ -105,8 +112,25 @@ const exportAllWorkTracks = async (req, res) => {
       const kpiValue = kpi.kpi_value;
       const qty = kpi.quantity || 1
       const unit = kpi?.unit?.name || '';
-      const process = "";
-      const totalKPI = `${kpi.kpi_value || 1 * qty}`;
+      let processNumber = 0;
+      // calculate process
+      const thisKpiWorkTracks = workTracks.filter(wt => wt.kpiNorm_id === kpi.id);
+      for (let j = 0; j < thisKpiWorkTracks.length; j++) {
+        const workTrack = thisKpiWorkTracks[j];
+        const totalQty = workTrack.quantity || 1;
+        let workDone = 0;
+        const workTrackLogs = workTrack.workTrackLogs;
+        workTrackLogs.forEach(wtl => {
+          if (wtl.status === "completed") {
+            workDone += wtl.quantity || 1;
+          }
+        })
+        const currentProcess = workDone / totalQty * 100;
+        processNumber += currentProcess;
+      }
+      //end calculate process
+      const process = `${processNumber.toFixed(2)} %`;
+      const totalKPI = `${(kpi.kpi_value || 1) * qty}`;
       const rowValues = [
         '',
         count,
@@ -166,6 +190,7 @@ const exportAllWorkTracks = async (req, res) => {
       const name = workTrack.kpiNorm.name;
       const description = workTrack.kpiNorm.description || "";
       const workLogs = workTrack.workTrackLogs;
+      const totalQuantity = workTrack.quantity || 1;
       //first row just content to make these other row inherit the style of the first row
       if (i === 0) {
         const row = sheet.getRow(startInsertWorkTrackRow - 1);
@@ -179,11 +204,15 @@ const exportAllWorkTracks = async (req, res) => {
           workTrackCounter++;
           continue;
         }
+        let currentQuantity = 0;
         for (let j = 0; j < workLogs.length; j++) {
           const workLog = workLogs[j];
           const date = workLog.date;
           const dayOfTheMonth = +date.split('-')[0];
-          const status = workLog.quantity || 1;
+          if (workLog.status === "completed") {
+            currentQuantity += workLog.quantity || 1;
+          }
+          const status = `${currentQuantity}/${totalQuantity}`;
           let fileNames = "";
           if (workLog.files && workLog.files.length > 0) {
             const filesArr = JSON.parse(workLog.files)
@@ -249,11 +278,15 @@ const exportAllWorkTracks = async (req, res) => {
         startInsertWorkTrackRow++;
         continue;
       }
+      let currentQuantity = 0;
       for (let j = 0; j < workLogs.length; j++) {
         const workLog = workLogs[j];
         const date = workLog.date;
         const dayOfTheMonth = +date.split('-')[0];
-        const status = workLog.quantity || 1;
+        if (workLog.status === "completed") {
+          currentQuantity += workLog.quantity || 1;
+        }
+        const status = `${currentQuantity}/${totalQuantity}`;
         let fileNames = "";
         if (workLog.files && workLog.files.length > 0) {
           const filesArr = JSON.parse(workLog.files)
@@ -302,7 +335,8 @@ const exportAllWorkTracks = async (req, res) => {
       workTrackCounter++;
     }
 
-
+    workbook.clearThemes()
+    // sheet.removeConditionalFormatting();
     await workbook.xlsx.writeFile('./resources/static/files/' + fileName)
     return res.json({
       message: 'Success!', data: {
