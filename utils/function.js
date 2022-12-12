@@ -50,10 +50,19 @@ const days = () => {
 	return result;
 };
 
+const calcProgressTask = (worktrack) => {
+	if (!worktrack.quantity) return '--';
+	const progress = Math.round(
+		(calcCurrentKPIOfWorkTrack(worktrack) / calcTotalKPIOfWorkTrack(worktrack)) * 100,
+	);
+	return `${progress}%`;
+};
+
 module.exports = {
 	calcTotalKPIOfWorkTrack,
 	calcTotalFromWorkTrackLogs,
 	calcCurrentKPIOfWorkTrack,
 	columns,
 	days,
+	calcProgressTask
 };

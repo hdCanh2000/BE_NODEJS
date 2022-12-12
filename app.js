@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const config = require('./config/passport');
 const db = require('./models/index');
 const routes = require('./routes');
-
+const path = require('path');
 const app = express();
 
 // const whitelist = [
@@ -20,6 +20,9 @@ const app = express();
 // ];
 
 app.use(cors());
+//serve static assets so we can use it in form of url no need to get byte to byte via http request
+app.use("/uploads", express.static(__dirname + '/resources/static/uploads'));
+app.use("/files", express.static(__dirname + '/resources/static/files'));
 // app.use(cors({
 //   origin(origin, callback) {
 //     if (!origin) return callback(null, true);
@@ -47,7 +50,7 @@ testDatabase();
 app.use(
   methodOverride((req) => {
     if (req.body && typeof req.body === 'object' && '_method' in req.body) {
-      const { method } = req.body;
+      const {method} = req.body;
       delete req.body.method;
       return method;
     }
@@ -56,11 +59,12 @@ app.use(
 );
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
 // api routes
 app.use('/api', routes);
+//static content
 
 app.use(passport.initialize());
 passport.use('jwt', config.jwtStrategy);

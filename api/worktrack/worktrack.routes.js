@@ -13,6 +13,7 @@ router.get('/workTrackReport', auth(['admin', 'manager', 'user']), worktrackCont
 router.get('/workTrackReportAll', auth(['admin', 'manager', 'user']), worktrackController.reportWorktrackAll);
 
 router.get('/export', worktrackController.exportExcel);
+router.get('/export_all', worktrackController.exportAllWorkTracks);
 
 router.post('/', auth(['admin', 'manager', 'user']), worktrackController.addWorkTrack);
 router.get('/:id', auth(['admin', 'manager', 'user']), worktrackController.getById);
