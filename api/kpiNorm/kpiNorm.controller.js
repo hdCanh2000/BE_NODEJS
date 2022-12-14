@@ -1,6 +1,7 @@
 const ExcelJs = require('exceljs');
 const kpiNormService = require('./kpiNorm.service');
 const model = require('../../models/index');
+const {query} = require("express");
 
 exports.addKpiNorm = async (req, res) => {
     try {
