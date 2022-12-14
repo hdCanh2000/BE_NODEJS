@@ -249,7 +249,9 @@ const exportAllWorkTracks = async (req, res) => {
           newRow.getCell('G').value = note;
           newRow.getCell('I').value = status;
           newRow.getCell('L').value = fileNames;
-          newRow.getCell(LIST_DAYS[dayOfTheMonth - 1]).value = 'x';
+          if (workLog.status === "completed") {
+            newRow.getCell(LIST_DAYS[dayOfTheMonth - 1]).value = 'x';
+          }
           //merge first cell with upper row
           newRow.getCell(1).merge(sheet.getRow(startInsertWorkTrackRow - 1).getCell(1));
           startInsertWorkTrackRow++;
@@ -306,8 +308,10 @@ const exportAllWorkTracks = async (req, res) => {
           statusCell.value = status;
           const filesCell = newRow.getCell('L');
           filesCell.value = fileNames;
+          if(workLog.status === "completed") {
+            newRow.getCell(LIST_DAYS[dayOfTheMonth - 1]).value = 'x';
+          }
 
-          newRow.getCell(LIST_DAYS[dayOfTheMonth - 1]).value = 'x';
           startInsertWorkTrackRow++;
           continue;
         }
