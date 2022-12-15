@@ -219,7 +219,7 @@ const exportAllWorkTracks = async (req, res) => {
             filesArr.forEach((filename) => {
               //IMPORTANT: IF DOMAIN NAME CHANGED => CHANGE THIS
               const host = req.get('host') || "https://dwtapi.doppelherz.vn";
-              const staticPath = "files";
+              const staticPath = "uploads";
               fileNames += `https://${host}/${staticPath}/${filename}, `;
             });
           }
@@ -295,7 +295,7 @@ const exportAllWorkTracks = async (req, res) => {
           filesArr.forEach((filename) => {
             //IMPORTANT: IF DOMAIN NAME CHANGED => CHANGE THIS
             const host = req.get('host') || "https://dwtapi.doppelherz.vn";
-            const staticPath = "files";
+            const staticPath = "uploads";
             fileNames += `https://${host}/${staticPath}/${filename}, `;
           });
         }
