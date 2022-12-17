@@ -24,8 +24,8 @@ module.exports = {
       noticedStatus: {
         type: Sequelize.STRING
       },
-      noticedTime: {
-        type: Sequelize.DATE
+      noticedDate: {
+        type: Sequelize.DATEONLY
       },
       createdAt: {
         allowNull: false,
@@ -44,7 +44,7 @@ module.exports = {
           key: 'id',
         }
       },
-      reportDate: Sequelize.DATE,
+      reportDate: Sequelize.DATEONLY,
     });
   },
   async down(queryInterface, Sequelize) {

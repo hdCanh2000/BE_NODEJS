@@ -21,8 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     status: DataTypes.STRING,
     files: DataTypes.TEXT,
     noticedStatus: DataTypes.STRING,
-    noticedTime: DataTypes.DATE,
-    reportDate: DataTypes.DATE,
+    noticedDate: DataTypes.DATEONLY,
+    reportDate: DataTypes.DATEONLY,
     targetId: {
       type: DataTypes.INTEGER,
       allowNull: false,
