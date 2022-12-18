@@ -46,7 +46,63 @@ const searchTargets = async query => {
   })
   return targets
 }
+const getTargetById = async targetId => {
+  const target = await model.Target.findOne({
+    include: [
+      {
+        model: model.users,
+        attributes: userDTO,
+        include: [
+          {
+            model: model.departments,
+          },
+          {
+            model: model.positions,
+          },
+        ],
+      },
+      {
+        model: model.TargetLog,
+      },
+      {
+        model: model.units,
+      },
+    ],
+    where: { id: targetId },
+  })
+  return target
+}
+const createOrUpdateTargetLog = async data => {
+  const { id = -1, note, status, targetId, files, reportDate, noticedDate, noticedStatus, quantity } = data
+  const targetLog = await model.TargetLog.findOne({ where: { id } })
+  if (!targetLog) {
+    const targetLog = await model.TargetLog.create({
+      note,
+      status,
+      targetId,
+      files,
+      reportDate,
+      noticedDate,
+      noticedStatus,
+      quantity,
+    })
+    return targetLog
+  }
+  const targetLogUpdated = await targetLog.update({
+    note,
+    status,
+    targetId,
+    files,
+    reportDate,
+    noticedDate,
+    noticedStatus,
+    quantity,
+  })
+  return targetLogUpdated
+}
 
 module.exports = {
   searchTargets,
+  getTargetById,
+  createOrUpdateTargetLog,
 }
