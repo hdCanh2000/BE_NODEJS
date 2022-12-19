@@ -7,10 +7,11 @@ const {calcCurrentKPIOfWorkTrack, calcProgressTask, calcTotalKPIOfWorkTrack} = r
 const kpiNormService = require("../kpiNorm/kpiNorm.service");
 
 const getAll = async (req, res) => {
-  const {startDate, endDate} = req.query;
+  const {startDate, endDate, name} = req.query;
   try {
     if (req.user.role === 'admin') {
-      const workTracks = await worktrackService.getWorkTrackByAdmin(startDate, endDate);
+      const searchQuery = name || ""
+      const workTracks = await worktrackService.getWorkTrackByAdmin(startDate, endDate, searchQuery);
       return res.status(200).json({message: 'Success!', data: isEmpty(workTracks) ? [] : workTracks});
     }
     if (req.user.role === 'manager') {
