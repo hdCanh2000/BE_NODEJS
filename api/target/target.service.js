@@ -4,7 +4,9 @@ const sequelize = require('sequelize')
 const userDTO = ['id', 'email', 'role', 'name', 'sex', 'dateOfBirth', 'dateOfJoin', 'address', 'phone', 'createdAt', 'updatedAt', 'isDelete']
 const searchTargets = async query => {
   const { userId, start, end, q } = query
+  //deleted is null
   const conditions = []
+  conditions.push({ deletedAt: { [Op.is]: null } })
   if (userId) {
     conditions.push({ userId })
   }
@@ -101,8 +103,22 @@ const createOrUpdateTargetLog = async data => {
   return targetLogUpdated
 }
 
+const deleteTarget = async id => {
+  const target = await model.Target.findOne({ where: { id } })
+  if (!target) {
+    throw new Error('Target not found')
+  }
+  const targetDeleted = await target.update({ deletedAt: new Date() })
+  return targetDeleted
+}
+const createTarget = async data => {
+  const target = await model.Target.create(data)
+  return target
+}
 module.exports = {
   searchTargets,
   getTargetById,
   createOrUpdateTargetLog,
+  deleteTarget,
+  createTarget
 }

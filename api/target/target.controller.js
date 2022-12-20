@@ -87,3 +87,32 @@ exports.createOrUpdateTargetLog = async (req, res) => {
     })
   }
 }
+
+exports.deleteTarget = async (req, res) => {
+  try {
+    const id = req.params.id
+    await targetService.deleteTarget(id)
+    res.status(200).send({ message: 'Delete target successfully' })
+  } catch (err) {
+    res.status(500).send({
+      message: `Internal server error: ${err}`,
+    })
+  }
+}
+
+exports.createTarget = async (req, res) => {
+  try {
+    const data = req.body
+    const { name, description, deadline, managerId, quantity, manDay, userId, unitId } = data
+    if (!name || !description || !deadline || !managerId || !quantity || !manDay || !userId || !unitId) {
+      return res.status(400).send({ message: 'Missing required fields' })
+    }
+    data.status = 'inProgress'
+    const target = await targetService.createTarget(data)
+    res.status(200).send(target)
+  } catch (err) {
+    res.status(500).send({
+      message: `Internal server error: ${err}`,
+    })
+  }
+}
