@@ -8,5 +8,6 @@ router.get('/', targetController.getTarget)
 router.post('/upload', auth(['admin', 'user', 'manager']), targetController.upload)
 router.post('/target_logs', auth(['admin', 'user', 'manager']), targetController.createOrUpdateTargetLog)
 router.delete('/:id', auth(['admin', 'manager']), targetController.deleteTarget)
-router.post('/', targetController.createTarget)
+router.post('/', auth(['admin']), targetController.createTarget)
+router.put('/:id', auth(['admin', 'manager']), targetController.updateTarget)
 module.exports = router

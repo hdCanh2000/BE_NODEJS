@@ -19,11 +19,11 @@ module.exports = {
       },
       deadline: {
         type: Sequelize.DATE,
-        allowNull: false,
+        allowNull: true,
       },
       managerId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       quantity: {
         type: Sequelize.INTEGER,
@@ -45,10 +45,19 @@ module.exports = {
       },
       userId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         onDelete: 'SET NULL',
         references: {
           model: 'users',
+          key: 'id',
+        }
+      },
+      positionId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        onDelete: 'SET NULL',
+        references: {
+          model: 'positions',
           key: 'id',
         }
       },
@@ -59,6 +68,10 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
+        type: Sequelize.DATE
+      },
+      deletedAt: {
+        allowNull: true,
         type: Sequelize.DATE
       }
     });
