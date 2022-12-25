@@ -31,6 +31,7 @@ module.exports = {
           createdAt: new Date(),
           updatedAt: new Date(),
           userId: 35,
+          positionId: 1,
         },
       ],
       {},

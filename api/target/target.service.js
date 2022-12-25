@@ -3,8 +3,17 @@ const { Op } = require('sequelize')
 const sequelize = require('sequelize')
 const userDTO = ['id', 'email', 'role', 'name', 'sex', 'dateOfBirth', 'dateOfJoin', 'address', 'phone', 'createdAt', 'updatedAt', 'isDelete']
 const searchTargets = async query => {
-  const { userId, start, end, q } = query
+  const { userId, start, end, q, status } = query
+  //deleted is null
   const conditions = []
+  conditions.push({ deletedAt: { [Op.is]: null } })
+  if (status) {
+    if (status === 'assigned') {
+      conditions.push({ userId: { [Op.not]: null } })
+    } else if (status === 'unassigned') {
+      conditions.push({ userId: { [Op.is]: null } })
+    }
+  }
   if (userId) {
     conditions.push({ userId })
   }
@@ -40,6 +49,14 @@ const searchTargets = async query => {
       },
       {
         model: model.units,
+      },
+      {
+        model: model.positions,
+        include: [
+          {
+            model: model.departments,
+          },
+        ],
       },
     ],
     where: conditions,
@@ -101,8 +118,33 @@ const createOrUpdateTargetLog = async data => {
   return targetLogUpdated
 }
 
+const deleteTarget = async id => {
+  const target = await model.Target.findOne({ where: { id } })
+  if (!target) {
+    throw new Error('Target not found')
+  }
+  const targetDeleted = await target.update({ deletedAt: new Date() })
+  return targetDeleted
+}
+const createTarget = async data => {
+  const target = await model.Target.create(data)
+  return target
+}
+
+const updateTarget = async (id, data) => {
+  const target = await model.Target.findOne({ where: { id } })
+  if (!target) {
+    throw new Error('Target not found')
+  }
+  const targetUpdated = await target.update(data)
+  return targetUpdated
+}
+
 module.exports = {
   searchTargets,
   getTargetById,
   createOrUpdateTargetLog,
+  deleteTarget,
+  createTarget,
+  updateTarget,
 }
