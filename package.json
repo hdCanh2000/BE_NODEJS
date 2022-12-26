@@ -8,7 +8,7 @@
     "start": "node app.js",
     "dev": "nodemon app.js",
     "migrate": "npx sequelize-cli db:migrate",
-    "undo": "npx sequelize-cli db:migrate:undo:all",
+    "undo": "npx sequelize-cli db:migrate:undo",
     "seed": "npx sequelize-cli db:seed:all"
   },
   "repository": {
