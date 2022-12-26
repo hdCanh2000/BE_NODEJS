@@ -2,7 +2,7 @@ const model = require('../../models/index')
 const { Op } = require('sequelize')
 const sequelize = require('sequelize')
 const userDTO = ['id', 'email', 'role', 'name', 'sex', 'dateOfBirth', 'dateOfJoin', 'address', 'phone', 'createdAt', 'updatedAt', 'isDelete']
-const searchTargets = async query => {
+const searchDailyWorks = async query => {
   const { userId, start, end, q, status } = query
   //deleted is null
   const conditions = []
@@ -24,13 +24,12 @@ const searchTargets = async query => {
   if (q) {
     conditions.push({
       [Op.or]: [
-        sequelize.where(sequelize.fn('LOWER', sequelize.col('Target.name')), 'LIKE', `%${q}%`),
-        sequelize.where(sequelize.fn('LOWER', sequelize.col('Target.description')), 'LIKE', `%${q}%`),
+        sequelize.where(sequelize.fn('LOWER', sequelize.col('DailyWork.name')), 'LIKE', `%${q}%`),
       ],
     })
   }
 
-  const targets = await model.Target.findAll({
+  const dailyWorks = await model.DailyWork.findAll({
     include: [
       {
         model: model.users,
@@ -45,28 +44,20 @@ const searchTargets = async query => {
         ],
       },
       {
-        model: model.TargetLog,
+        model: model.DailyWorkLog,
       },
       {
         model: model.units,
-      },
-      {
-        model: model.positions,
-        include: [
-          {
-            model: model.departments,
-          },
-        ],
       },
     ],
     where: conditions,
     //sort
     order: [['createdAt', 'DESC']],
   })
-  return targets
+  return dailyWorks
 }
-const getTargetById = async targetId => {
-  const target = await model.Target.findOne({
+const getDailyWorkById = async id => {
+  const dailyWork = await model.DailyWork.findOne({
     include: [
       {
         model: model.users,
@@ -81,72 +72,72 @@ const getTargetById = async targetId => {
         ],
       },
       {
-        model: model.TargetLog,
+        model: model.DailyWorkLog,
       },
       {
         model: model.units,
       },
     ],
-    where: { id: targetId },
+    where: { id: id },
   })
-  return target
+  return dailyWork
 }
-const createOrUpdateTargetLog = async data => {
-  const { id = -1, note, status, targetId, files, reportDate, noticedDate, noticedStatus, quantity } = data
-  const targetLog = await model.TargetLog.findOne({ where: { id } })
-  if (!targetLog) {
-    const targetLog = await model.TargetLog.create({
+const createOrUpdateDailyWorkLogs = async data => {
+  const { id = -1, note, status, dailyWorkId, files, reportDate, noticedDate, noticedStatus, quantity } = data
+  const dailyWorkLog = await model.DailyWorkLog.findOne({ where: { id } })
+  if (!dailyWorkLog) {
+    const dailyWorkLog = await model.DailyWorkLog.create({
       note,
       status,
-      targetId,
+      dailyWorkId,
       files,
       reportDate,
       noticedDate,
       noticedStatus,
       quantity,
     })
-    return targetLog
+    return dailyWorkLog
   }
-  const targetLogUpdated = await targetLog.update({
+  const dailyWorkLogUpdated = await dailyWorkLog.update({
     note,
     status,
-    targetId,
+    dailyWorkId,
     files,
     reportDate,
     noticedDate,
     noticedStatus,
     quantity,
   })
-  return targetLogUpdated
+  return dailyWorkLogUpdated
 }
 
-const deleteTarget = async id => {
-  const target = await model.Target.findOne({ where: { id } })
-  if (!target) {
-    throw new Error('Target not found')
+const deleteDailyWork = async id => {
+  const dailyWork = await model.DailyWork.findOne({ where: { id } })
+  if (!dailyWork) {
+    throw new Error('daily work not found')
   }
-  const targetDeleted = await target.update({ deletedAt: new Date() })
-  return targetDeleted
+  const deleted = await dailyWork.update({ deletedAt: new Date() })
+  return deleted
 }
-const createTarget = async data => {
-  const target = await model.Target.create(data)
-  return target
+const createDailyWork = async data => {
+  const res = await model.DailyWork.create(data)
+  return res
 }
 
-const updateTarget = async (id, data) => {
-  const target = await model.Target.findOne({ where: { id } })
-  if (!target) {
-    throw new Error('Target not found')
+const updateDailyWork = async (id, data) => {
+  const dailyWork = await model.DailyWork.findOne({ where: { id } })
+  if (!dailyWork) {
+    throw new Error('daily work not found')
   }
-  const targetUpdated = await target.update(data)
-  return targetUpdated
+  const res = await dailyWork.update(data)
+  return res
 }
 
 module.exports = {
-  searchTargets,
-  getTargetById,
-  createOrUpdateTargetLog,
-  deleteTarget,
-  createTarget,
-  updateTarget,
+  searchDailyWorks,
+  getDailyWorkById,
+  createOrUpdateDailyWorkLogs,
+  deleteDailyWork,
+  createDailyWork,
+  updateDailyWork,
 }

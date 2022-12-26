@@ -31,5 +31,6 @@ router.use('/task', taskRoutes);
 router.use('/keys', keyRoutes);
 router.use('/file', fileReportRoutes);
 router.use('/targets', targetRoutes);
+router.use('/dailyWorks', require('./api/dailyWork/dailyWork.routes'));
 
 module.exports = router;
