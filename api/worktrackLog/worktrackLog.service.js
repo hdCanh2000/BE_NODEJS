@@ -2,7 +2,21 @@ const model = require('../../models/index');
 const ApiError = require('../../utils/ApiError');
 
 const getAllResource = async () => {
-    const data = await model.workTrackLogs.findAll({});
+    const data = await model.workTrackLogs.findAll({
+        include: [
+            {
+                model: model.workTracks,
+                include: [
+                    {
+                        model: model.kpiNorms
+                    },
+                    {
+                        model: model.users,
+                    }
+                ]
+            },
+        ]
+    });
     return data;
 };
 

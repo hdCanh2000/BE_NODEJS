@@ -49,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
       status: DataTypes.STRING,
       unitId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
       positionId: {
         type: DataTypes.INTEGER,
