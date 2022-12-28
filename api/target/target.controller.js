@@ -103,8 +103,8 @@ exports.deleteTarget = async (req, res) => {
 exports.createTarget = async (req, res) => {
   try {
     const data = req.body
-    const { name, quantity, manDay, unitId } = data
-    if (!name || !quantity || !manDay || !unitId) {
+    const { quantity } = data
+    if (!quantity) {
       return res.status(400).send({ message: 'Missing required fields' })
     }
     data.status = 'inProgress'
