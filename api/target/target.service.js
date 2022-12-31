@@ -18,7 +18,7 @@ const searchTargets = async query => {
     conditions.push({ userId })
   }
   if (start && end) {
-    conditions.push({ createdAt: { [Op.between]: [start, end] } })
+    conditions.push({ createdAt: { [Op.between]: [`${start} 00:00:01`, `${end} 23:59:59`] } })
   }
   if (departmentId) {
     //find list positionId by departmentId
