@@ -1,20 +1,39 @@
-module.exports.tokenModel = require('./token.model');
-module.exports.userModel = require('./user.model');
-module.exports.departmentModel = require('./department.model');
-module.exports.unitModel = require('./unit.model');
-module.exports.requirementModel = require('./requirement.model');
-module.exports.positionLevelModel = require('./positionLevel.model');
-module.exports.kpiNormModel = require('./kpiNorm.model');
-module.exports.positionModel = require('./position.model');
-module.exports.positionRequirement = require('./positionRequirement.model');
-module.exports.keyModel = require('./key.model');
-module.exports.missionModel = require('./mission.model');
-module.exports.keyMission = require('./keyMission.model');
-module.exports.departmentMission = require('./departmentMission.model');
-module.exports.taskModel = require('./task.model');
-module.exports.kpiNormTask = require('./kpinormTask.model');
-module.exports.taskDepartment = require('./departmentTask.model');
-module.exports.userTask = require('./taskUser.model');
-module.exports.workTrackModel = require('./workTrack.model');
-module.exports.workTrackLogModel = require('./workTrackLog.model');
-module.exports.workTrackKpiNormModel = require('./worktrackKpiNorm.model');
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+const Sequelize = require('sequelize');
+const process = require('process');
+
+const basename = path.basename(__filename);
+const env = process.env.NODE_ENV || 'development';
+
+const config = require('../config/database.json')[env];
+
+const db = {};
+
+let sequelize;
+if (config.use_env_variable) {
+  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+} else {
+  sequelize = new Sequelize(config.database, config.username, config.password, config);
+}
+
+fs
+  .readdirSync(__dirname)
+  .filter((file) => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
+  .forEach((file) => {
+    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+    db[model.name] = model;
+  });
+
+Object.keys(db).forEach((modelName) => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
+
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+module.exports = db;

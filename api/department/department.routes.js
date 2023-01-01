@@ -8,5 +8,6 @@ router.get('/', auth(['admin', 'manager']), departmentController.getAllDepartmen
 router.get('/:id', auth('admin'), departmentController.getDepartmentDetail);
 router.post('/', auth('admin'), departmentController.addDepartment);
 router.put('/:id', auth('admin'), departmentController.updateDepartment);
+router.delete('/:id', auth('admin'), departmentController.deleteDepartment);
 
 module.exports = router;

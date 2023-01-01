@@ -1,80 +1,87 @@
+const { Op } = require('sequelize');
+const sequelize = require('sequelize');
 const model = require('../../models/index');
 const ApiError = require('../../utils/ApiError');
 
 exports.createKpiNorm = async (data) => {
-    try {
-        const result = model.kpiNormModel.create(data);
-        return result;
-    } catch (error) {
-        return error;
-    }
+    const result = model.kpiNorms.create(data);
+    return result;
 };
 
 exports.updateKpiNormById = async (id, data) => {
-    try {
-        const update = await model.kpiNormModel.update(data, {
-            where: { id },
-        });
-        return update;
-    } catch (error) {
-        return error;
-    }
+    const update = await model.kpiNorms.update(data, {
+        where: { id },
+    });
+    return update;
 };
 
 exports.detailKpiNorm = async (id) => {
-    try {
-        const detail = await model.kpiNormModel.findOne({
-            where: { id },
-        });
-        return detail;
-    } catch (error) {
-        return error;
-    }
+    const detail = await model.kpiNorms.findOne({
+        where: { id },
+    });
+    return detail;
 };
 
-exports.allKpiNorm = async (id) => {
-    const getUserById = await model.userModel.findOne({ where: { id } });
-    try {
-        if (getUserById.role === 'admin') {
-            const data = await model.kpiNormModel.findAll({
-                include: [
-                    {
-                        model: model.unitModel,
-                    },
-                    {
-                        model: model.departmentModel,
-                    },
-                    {
-                        model: model.positionModel,
-                    },
-                ],
-            });
-            return data;
-        }
-        if (getUserById.role === 'manager') {
-            const data = await model.kpiNormModel.findAll({
-                include: [
-                    {
-                        model: model.unitModel,
-                    },
-                    {
-                        model: model.departmentModel,
-                    },
-                    {
-                        model: model.positionModel,
-                    },
-                ],
-                where: { department_id: getUserById.department_id },
-            });
-            return data;
-        }
-    } catch (error) {
-        return error;
-    }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+exports.allKpiNorm = async ({ userId, query }) => {
+    const { page = 1, limit, text = '', positionId } = query;
+    let searchValue = '';
+    if (text) searchValue = text.toLowerCase();
+    const conditions = [{
+        [Op.or]: [
+            sequelize.where(sequelize.fn('LOWER', sequelize.col('kpiNorms.name')), 'LIKE', `%${searchValue}%`),
+        ],
+    }];
+
+    if (positionId) conditions.push({ position_id: positionId });
+
+    const data = await model.kpiNorms.findAll({
+        offset: (page - 1) * limit || 0,
+        limit,
+        order: [
+            ['id', 'ASC'],
+        ],
+        where: {
+            [Op.and]: conditions,
+        },
+        include: [
+            {
+                model: model.units,
+                attributes: ['id', 'name', 'code'],
+            },
+            {
+                model: model.departments,
+                attributes: ['id', 'name', 'code', 'organizationLevel', 'parent_id'],
+            },
+            {
+                model: model.positions,
+                attributes: ['id', 'name', 'code'],
+            },
+        ],
+    });
+    return data;
+};
+
+exports.getKpiNormByParent = async (parentId) => {
+    const data = await model.kpiNorms.findAll({
+        where: { parent_id: parentId },
+    });
+    return data;
+};
+
+exports.getKpiNormByDepartment = async (id) => {
+    const data = await model.kpiNorms.findAll({
+        where: { department_id: id },
+        order: [
+            ['id', 'ASC'],
+        ],
+        include: [model.units, model.departments, model.positions],
+    });
+    return data;
 };
 
 exports.deleteById = async (id) => {
-    const resource = await model.kpiNormModel.findOne({
+    const resource = await model.kpiNorms.findOne({
         where: { id },
     });
     if (!resource) {

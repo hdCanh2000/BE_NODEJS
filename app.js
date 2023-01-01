@@ -4,9 +4,9 @@ const methodOverride = require('method-override');
 const passport = require('passport');
 const morgan = require('morgan');
 const config = require('./config/passport');
-const db = require('./config/database');
+const db = require('./models/index');
 const routes = require('./routes');
-
+const path = require('path');
 const app = express();
 
 // const whitelist = [
@@ -19,47 +19,25 @@ const app = express();
 //   'https://dwt.tbht.vn/',
 // ];
 
-// const corsOptions = {
-//   credentials: true,
-//   origin: (origin, callback) => {
-//     const originIsWhitelisted = whitelist.indexOf(origin) !== -1;
-//     callback(null, originIsWhitelisted);
+app.use(cors());
+//serve static assets so we can use it in form of url no need to get byte to byte via http request
+app.use("/uploads", express.static(__dirname + '/resources/static/uploads'));
+app.use("/files", express.static(__dirname + '/resources/static/files'));
+// app.use(cors({
+//   origin(origin, callback) {
+//     if (!origin) return callback(null, true);
+//     if (whitelist.indexOf(origin) === -1) {
+//       const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+//       return callback(new Error(msg), false);
+//     }
+//     return callback(null, true);
 //   },
-//   methods: ['GET', 'PUT', 'POST', 'PATCH', 'DELETE'],
-//   allowedHeaders: '*',
-// };
-// const corsOptions = {
-//   origin: 'http://localhost:3000',
-//   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-// };
-
-// app.use(cors(corsOptions));
-const whitelist = [
-  'http://localhost',
-  'http://localhost:3000',
-  'https://dwt-one.vercel.app',
-  'https://dwt-dev.vercel.app',
-  'https://dwt.tbht.vn',
-  'http://localhost:3000/',
-  'https://dwt-one.vercel.app/',
-  'https://dwt.tbht.vn/',
-  'https://dwt-dev.vercel.app/',
-];
-app.use(cors({
-  origin(origin, callback) {
-    if (!origin) return callback(null, true);
-    if (whitelist.indexOf(origin) === -1) {
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
-}));
+// }));
 
 // connect database
 const testDatabase = async () => {
   try {
-    await db.authenticate();
+    await db.sequelize.authenticate();
     // eslint-disable-next-line no-console
     console.log('Connection has been established successfully.');
   } catch (error) {
@@ -72,7 +50,7 @@ testDatabase();
 app.use(
   methodOverride((req) => {
     if (req.body && typeof req.body === 'object' && '_method' in req.body) {
-      const { method } = req.body;
+      const {method} = req.body;
       delete req.body.method;
       return method;
     }
@@ -81,14 +59,18 @@ app.use(
 );
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
 // api routes
 app.use('/api', routes);
+//static content
 
 app.use(passport.initialize());
 passport.use('jwt', config.jwtStrategy);
+
+// eslint-disable-next-line no-underscore-dangle
+global.__basedir = __dirname;
 
 const PORT = process.env.PORT || 3002;
 

@@ -1,14 +1,27 @@
-const worktrackLogModel = require('../../models/workTrackLog.model');
-const worktrackModel = require('../../models/workTrack.model');
+const model = require('../../models/index');
 const ApiError = require('../../utils/ApiError');
 
 const getAllResource = async () => {
-    const data = await worktrackLogModel.findAll({});
+    const data = await model.workTrackLogs.findAll({
+        include: [
+            {
+                model: model.workTracks,
+                include: [
+                    {
+                        model: model.kpiNorms
+                    },
+                    {
+                        model: model.users,
+                    }
+                ]
+            },
+        ]
+    });
     return data;
 };
 
 const getResourceById = async (id) => {
-    const data = await worktrackLogModel.findOne({
+    const data = await model.workTrackLogs.findOne({
         where: {
             id,
         },
@@ -17,13 +30,13 @@ const getResourceById = async (id) => {
 };
 
 const getAllResourceByWorktrackId = async (workTrack_id) => {
-    const worktrack = await worktrackModel.findOne({
+    const worktrack = await model.workTrackLogs.findOne({
         id: workTrack_id,
     });
     if (!worktrack) {
         throw new ApiError(404, 'Worktrack not found!');
     }
-    const data = await worktrackLogModel.findAll({
+    const data = await model.workTrackLogs.findAll({
         where: {
             workTrack_id,
         },
@@ -32,12 +45,12 @@ const getAllResourceByWorktrackId = async (workTrack_id) => {
 };
 
 const createResource = async (data) => {
-    const result = worktrackLogModel.create(data);
+    const result = model.workTrackLogs.create(data);
     return result;
 };
 
 const updateResourceById = async (id, data) => {
-    const result = await worktrackLogModel.update(data, {
+    const result = await model.workTrackLogs.update(data, {
         where: {
             id,
         },
@@ -46,7 +59,7 @@ const updateResourceById = async (id, data) => {
 };
 
 const deleteResourceById = async (id) => {
-    const resource = await worktrackLogModel.findOne({
+    const resource = await model.workTrackLogs.findOne({
         where:
         {
             id,

@@ -10,9 +10,10 @@ const worktrackLogRoutes = require('./api/worktrackLog/worktrackLog.routes');
 const kpiNormRoutes = require('./api/kpiNorm/kpiNorm.routes');
 const requirementRoutes = require('./api/requirement/requirement.routes');
 const positionRoutes = require('./api/position/position.routes');
-const worktrackKpiNormRoutes = require('./api/worktrackKpiNorm/worktrackKpiNorm.routes');
 const taskRoutes = require('./api/task/task.routes');
-
+const keyRoutes = require('./api/key/key.routes');
+const fileReportRoutes = require('./api/fileReport/fileReport.routes');
+const targetRoutes = require('./api/target/target.routes');
 const router = express.Router();
 
 router.use('/departments', departmentRoutes);
@@ -20,13 +21,16 @@ router.use('/users', userRoutes);
 router.use('/auth', authRoutes);
 router.use('/positionLevels', positionLevelRouter);
 router.use('/units', unitRoutes);
-router.use('/mission', missionRouters);
+router.use('/missions', missionRouters);
 router.use('/worktracks', worktrackRoutes);
 router.use('/worktrackLogs', worktrackLogRoutes);
 router.use('/kpiNorms', kpiNormRoutes);
 router.use('/requirements', requirementRoutes);
 router.use('/positions', positionRoutes);
-router.use('/worktrackKpiNorms', worktrackKpiNormRoutes);
 router.use('/task', taskRoutes);
+router.use('/keys', keyRoutes);
+router.use('/file', fileReportRoutes);
+router.use('/targets', targetRoutes);
+router.use('/dailyWorks', require('./api/dailyWork/dailyWork.routes'));
 
 module.exports = router;

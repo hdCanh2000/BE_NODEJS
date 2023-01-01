@@ -3,10 +3,10 @@ const requirementService = require('./requirement.service');
 
 const getAll = async (req, res) => {
     try {
-        const requirements = await requirementService.getAllResource();
-        return res.status(200).json({ message: 'Success!', data: requirements });
+        const requirements = await requirementService.getAllResource(req.query);
+        return res.status(200).json(requirements);
     } catch (error) {
-        return res.status(400).json({ message: 'Error!', error });
+        return res.status(400).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -19,7 +19,7 @@ const getById = async (req, res) => {
         }
         return res.status(200).json({ message: 'Success!', data: requirement });
     } catch (error) {
-        return res.status(400).json({ message: 'Error!', error });
+        return res.status(400).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -28,7 +28,7 @@ const create = async (req, res) => {
         const requirement = await requirementService.createResource(req.body);
         return res.status(200).json({ message: 'Success!', data: requirement });
     } catch (error) {
-        return res.status(400).json({ message: 'Error!', error });
+        return res.status(400).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -41,7 +41,7 @@ const updateById = async (req, res) => {
             return res.status(200).json({ message: 'Success!', data: result });
         }
     } catch (error) {
-        return res.status(400).json({ message: 'Error!', error });
+        return res.status(400).json({ message: 'Error!', error: error.message });
     }
 };
 
@@ -51,7 +51,7 @@ const deleteById = async (req, res) => {
         const requirement = await requirementService.deleteResourceById(id);
         return res.status(200).json({ message: 'Success!', data: requirement });
     } catch (error) {
-        return res.status(400).json({ message: 'Error!', error });
+        return res.status(400).json({ message: 'Error!', error: error.message });
     }
 };
 

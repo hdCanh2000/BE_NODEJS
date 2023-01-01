@@ -1,13 +1,40 @@
-const positionLevelModel = require('../../models/positionLevel.model');
+const { Op } = require('sequelize');
+const sequelize = require('sequelize');
+const model = require('../../models/index');
 const ApiError = require('../../utils/ApiError');
 
-const getAllResource = async () => {
-    const data = await positionLevelModel.findAll({});
-    return data;
+const getAllResource = async (page, limit, text) => {
+    let searchValue = '';
+    if (text) searchValue = text.toLowerCase();
+    else searchValue = '';
+
+    const total = await model.positionLevels.count({
+        where: {
+            [Op.or]: [
+                sequelize.where(sequelize.fn('LOWER', sequelize.col('name')), 'LIKE', `%${searchValue}%`),
+                sequelize.where(sequelize.fn('LOWER', sequelize.col('code')), 'LIKE', `%${searchValue}%`),
+            ],
+        },
+    });
+
+    const data = await model.positionLevels.findAndCountAll({
+        offset: (page - 1) * limit || 0,
+        limit,
+        order: [
+            ['id', 'DESC'],
+        ],
+        where: {
+            [Op.or]: [
+                sequelize.where(sequelize.fn('LOWER', sequelize.col('name')), 'LIKE', `%${searchValue}%`),
+                sequelize.where(sequelize.fn('LOWER', sequelize.col('code')), 'LIKE', `%${searchValue}%`),
+            ],
+        },
+    });
+    return { data: data.rows, pagination: { page: parseInt(page), limit: parseInt(limit), totalRows: data.rows.length, total } };
 };
 
 const getResourceById = async (id) => {
-    const data = await positionLevelModel.findOne({
+    const data = await model.positionLevels.findOne({
         where: {
             id,
         },
@@ -16,7 +43,7 @@ const getResourceById = async (id) => {
 };
 
 const createResource = async (data) => {
-    const existedEntity = await positionLevelModel.findOne({
+    const existedEntity = await model.positionLevels.findOne({
         where:
         {
             code: data.code,
@@ -28,12 +55,12 @@ const createResource = async (data) => {
             existed: true,
         };
     }
-    const result = positionLevelModel.create(data);
+    const result = model.positionLevels.create(data);
     return result;
 };
 
 const updateResourceById = async (id, data) => {
-    const result = await positionLevelModel.update(data, {
+    const result = await model.positionLevels.update(data, {
         where: {
             id,
         },
@@ -42,7 +69,7 @@ const updateResourceById = async (id, data) => {
 };
 
 const deleteResourceById = async (id) => {
-    const resource = await positionLevelModel.findOne({
+    const resource = await model.positionLevels.findOne({
         where:
         {
             id,

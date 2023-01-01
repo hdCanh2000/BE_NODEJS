@@ -1,23 +1,31 @@
-const { DataTypes } = require('sequelize');
-const db = require('../config/database');
+'use strict';
+const {
+  Model,
+} = require('sequelize');
 
-const positionLevels = db.define('positionLevels', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false,
-        autoIncrement: true,
-    },
-    name: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-        unique: true,
-    },
-    code: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-        unique: true,
-    },
-});
-
-module.exports = positionLevels;
+module.exports = (sequelize, DataTypes) => {
+  class positionLevels extends Model {
+    /**
+     * Helper method for defining associations.
+     * This method is not a part of Sequelize lifecycle.
+     * The `models/index` file will call this method automatically.
+     */
+    static associate(models) {
+      // define association here
+      positionLevels.hasMany(models.positions, {
+        targetKey: 'id',
+        foreignKey: 'position_levels_id',
+        onDelete: 'SET NULL',
+    });
+    }
+  }
+  positionLevels.init({
+    name: DataTypes.STRING,
+    code: DataTypes.STRING,
+    description: DataTypes.TEXT,
+  }, {
+    sequelize,
+    modelName: 'positionLevels',
+  });
+  return positionLevels;
+};

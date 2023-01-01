@@ -1,29 +1,33 @@
-const { DataTypes } = require('sequelize');
-const db = require('../config/database');
-const { unitModel } = require('./index');
+'use strict';
+const {
+    Model,
+} = require('sequelize');
 
-const keys = db.define('keys', {
-    id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false,
-        autoIncrement: true,
-    },
-    name: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-        unique: true,
-    },
-    unit_id: {
-        type: DataTypes.INTEGER,
-    },
-
-});
-
-unitModel.hasMany(keys, {
-    targetKey: 'id',
-    foreignKey: 'unit_id',
-});
-keys.belongsTo(unitModel, { foreignKey: 'unit_id', targetKey: 'id' });
-
-module.exports = keys;
+module.exports = (sequelize, DataTypes) => {
+    class keys extends Model {
+        /**
+         * Helper method for defining associations.
+         * This method is not a part of Sequelize lifecycle.
+         * The `models/index` file will call this method automatically.
+         */
+        static associate(models) {
+            // define association here
+            keys.belongsTo(models.units, { foreignKey: 'unit_id', targetKey: 'id' });
+            keys.belongsTo(models.positions, { foreignKey: 'position_id', targetKey: 'id' });
+            keys.belongsTo(models.departments, { foreignKey: 'department_id', targetKey: 'id' });
+            keys.hasMany(models.workTracks, {
+                targetKey: 'id',
+                foreignKey: 'key_id',
+                onDelete: 'SET NULL',
+            });
+        }
+    }
+    keys.init({
+        name: DataTypes.STRING,
+        description: DataTypes.TEXT,
+    }, {
+        sequelize,
+        modelName: 'keys',
+    });
+    return keys;
+};
