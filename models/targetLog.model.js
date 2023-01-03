@@ -26,7 +26,8 @@ module.exports = (sequelize, DataTypes) => {
     targetId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    }
+    },
+    deletedAt: DataTypes.DATE,
   }, {
     sequelize,
     modelName: 'TargetLog',

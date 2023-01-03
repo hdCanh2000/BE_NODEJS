@@ -147,6 +147,14 @@ const updateTarget = async (id, data) => {
   const targetUpdated = await target.update(data)
   return targetUpdated
 }
+const deleteTargetLog = async id => {
+  const targetLog = await model.TargetLog.findOne({ where: { id } })
+  if (!targetLog) {
+    throw new Error('TargetLog not found')
+  }
+  const targetLogDeleted = await targetLog.update({ deletedAt: new Date() })
+  return targetLogDeleted
+}
 
 module.exports = {
   searchTargets,
@@ -155,4 +163,5 @@ module.exports = {
   deleteTarget,
   createTarget,
   updateTarget,
+  deleteTargetLog,
 }
