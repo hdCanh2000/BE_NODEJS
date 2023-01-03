@@ -148,12 +148,13 @@ const updateTarget = async (id, data) => {
   return targetUpdated
 }
 const deleteTargetLog = async id => {
-  const targetLog = await model.TargetLog.findOne({ where: { id } })
-  if (!targetLog) {
-    throw new Error('TargetLog not found')
-  }
-  const targetLogDeleted = await targetLog.update({ deletedAt: new Date() })
-  return targetLogDeleted
+  //for fix old data which cause bugs still show target log after delete -> delete all logs with deletedAt != null
+  await model.TargetLog.destroy({
+    where: {
+      deletedAt: { [Op.not]: null },
+    },
+  })
+  const targetLog = await model.TargetLog.destroy({ where: { id } })
 }
 
 module.exports = {
