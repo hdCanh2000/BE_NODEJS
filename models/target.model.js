@@ -8,10 +8,8 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      Target.belongsTo(models.users, { foreignKey: 'userId', targetKey: 'id' })
+      Target.belongsToMany(models.users, { through: models.TargetsUsers, onDelete: 'CASCADE' })
       Target.belongsTo(models.units, { foreignKey: 'unitId', targetKey: 'id' })
-      Target.belongsTo(models.positions, { foreignKey: 'positionId', targetKey: 'id' })
       Target.hasMany(models.TargetLog, {
         targetKey: 'id',
         foreignKey: 'targetId',
@@ -48,14 +46,6 @@ module.exports = (sequelize, DataTypes) => {
       managerComment: DataTypes.TEXT,
       status: DataTypes.STRING,
       unitId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      positionId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      userId: {
         type: DataTypes.INTEGER,
         allowNull: true,
       },

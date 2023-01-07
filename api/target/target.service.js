@@ -3,28 +3,14 @@ const { Op } = require('sequelize')
 const sequelize = require('sequelize')
 const userDTO = ['id', 'email', 'role', 'name', 'sex', 'dateOfBirth', 'dateOfJoin', 'address', 'phone', 'createdAt', 'updatedAt', 'isDelete']
 const searchTargets = async query => {
-  const { userId, start, end, q, status, departmentId } = query
+  const { start, end, q, status, departmentId, userId } = query
+
   //deleted is null
   const conditions = []
   conditions.push({ deletedAt: { [Op.is]: null } })
-  if (status) {
-    if (status === 'assigned') {
-      conditions.push({ userId: { [Op.not]: null } })
-    } else if (status === 'unassigned') {
-      conditions.push({ userId: { [Op.is]: null } })
-    }
-  }
-  if (userId) {
-    conditions.push({ userId })
-  }
+
   if (start && end) {
     conditions.push({ createdAt: { [Op.between]: [`${start} 00:00:01`, `${end} 23:59:59`] } })
-  }
-  if (departmentId) {
-    //find list positionId by departmentId
-    const positions = await model.positions.findAll({ where: { department_id: departmentId } })
-    const positionIds = positions.map(position => position.id)
-    conditions.push({ positionId: { [Op.in]: positionIds } })
   }
   //search by matching name and description
   if (q) {
@@ -56,19 +42,50 @@ const searchTargets = async query => {
       {
         model: model.units,
       },
+      //include position via join table
       {
         model: model.positions,
-        include: [
-          {
-            model: model.departments,
-          },
-        ],
       },
     ],
     where: conditions,
     //sort
     order: [['createdAt', 'DESC']],
   })
+
+  let filterTargets = targets
+  //this is a hack to filter target by status, departmentId and userId
+  if (status) {
+    if (status === 'assigned') {
+      filterTargets = targets.filter(target => target.users.length > 0)
+    } else if (status === 'unassigned') {
+      filterTargets = targets.filter(target => target.users.length === 0)
+    }
+  }
+  if (departmentId) {
+    const positions = await model.positions.findAll({ where: { department_id: departmentId } })
+    const positionIds = positions.map(position => position.id)
+
+    filterTargets = filterTargets.filter(target => {
+      const targetPositionIds = target.positions.map(position => position.id)
+      let isInclude = false
+      for (let i = 0; i < targetPositionIds.length; i++) {
+        if (positionIds.includes(targetPositionIds[i])) {
+          isInclude = true
+          break
+        }
+      }
+      return isInclude
+    })
+  }
+  if (userId) {
+    filterTargets = filterTargets.filter(target => {
+      const targetUserIds = target.users.map(user => user.id)
+      return targetUserIds.includes(+userId)
+    })
+  }
+  if (status || departmentId || userId) {
+    return filterTargets
+  }
   return targets
 }
 const getTargetById = async targetId => {
@@ -135,7 +152,18 @@ const deleteTarget = async id => {
   return targetDeleted
 }
 const createTarget = async data => {
-  const target = await model.Target.create(data)
+  const { users, positions, ...rest } = data
+
+  const target = await model.Target.create({
+    ...rest,
+  })
+  //update users and positions
+  if (users) {
+    await target.setUsers(users)
+  }
+  if (positions) {
+    await target.setPositions(positions)
+  }
   return target
 }
 
@@ -144,7 +172,15 @@ const updateTarget = async (id, data) => {
   if (!target) {
     throw new Error('Target not found')
   }
-  const targetUpdated = await target.update(data)
+  const { users, positions, ...rest } = data
+  const targetUpdated = await target.update(rest)
+  //update users and positions
+  if (users) {
+    await targetUpdated.setUsers(users)
+  }
+  if (positions) {
+    await targetUpdated.setPositions(positions)
+  }
   return targetUpdated
 }
 const deleteTargetLog = async id => {
