@@ -283,7 +283,9 @@ exports.exportTarget = async (req, res) => {
     const uploadUrl = 'https://report.sweetsica.com/api/report/upload'
     const formData = new FormData()
     formData.append('files', fs.createReadStream(fileName))
-    formData.append('userId', req.query.userId)
+    if (req.query.userId) {
+      formData.append('userId', req.query.userId)
+    }
     const uploadRes = await fetch(uploadUrl, {
       method: 'POST',
       body: formData,
