@@ -172,8 +172,8 @@ exports.exportTarget = async (req, res) => {
     let position = ''
     if (req.query.userId) {
       const user = await userServices.findUser(req.query.userId)
-      userName = user.name
-      position = user.position.name
+      userName = user?.name || ''
+      position = user?.position?.name || ''
     }
     if (req.query.departmentId) {
       const dpm = await departmentService.detailDepartment(req.query.departmentId)
@@ -274,11 +274,11 @@ exports.exportTarget = async (req, res) => {
     await workbook.xlsx.writeFile(fileName)
     //chmod file before send to avoid htaccess
     /*
-    * The number 777 in octal notation is the number 511 in decimal notation.
-    * fs.chmod(path, 0777) and fs.chmod(path, 511) do the same thing,
-    * but fs.chmod(path, 777) does not.
-    * https://stackoverflow.com/questions/20769023/using-nodejs-chmod-777-and-0777
-    * */
+     * The number 777 in octal notation is the number 511 in decimal notation.
+     * fs.chmod(path, 0777) and fs.chmod(path, 511) do the same thing,
+     * but fs.chmod(path, 777) does not.
+     * https://stackoverflow.com/questions/20769023/using-nodejs-chmod-777-and-0777
+     * */
     fs.chmodSync(fileName, 0o777)
     const uploadUrl = 'https://report.sweetsica.com/api/report/upload'
     const formData = new FormData()
