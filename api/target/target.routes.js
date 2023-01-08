@@ -5,6 +5,7 @@ const targetController = require('./target.controller')
 const router = express.Router()
 
 router.get('/', targetController.getTarget)
+router.get('/export', targetController.exportTarget)
 router.post('/upload', auth(['admin', 'user', 'manager']), targetController.upload)
 router.post('/target_logs', auth(['admin', 'user', 'manager']), targetController.createOrUpdateTargetLog)
 router.delete('/:id', auth(['admin', 'manager']), targetController.deleteTarget)

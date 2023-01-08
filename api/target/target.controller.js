@@ -1,12 +1,14 @@
 const ApiError = require('../../utils/ApiError')
 const targetService = require('./target.service')
 const uploadFile = require('../../middleware/upload')
+const dailyWorkServices = require('../dailyWork/dailyWork.service')
 
 exports.getTarget = async (req, res) => {
   try {
     const targets = await targetService.searchTargets(req.query)
     res.send(targets)
   } catch (err) {
+    console.log(err)
     res.status(500).send(err)
   }
 }
@@ -146,4 +148,13 @@ exports.updateTarget = async (req, res) => {
       message: `Internal server error: ${err}`,
     })
   }
+}
+
+exports.exportTarget = async (req, res) => {
+  const targets = await targetService.searchTargets(req.query)
+  const dailyWorks = await dailyWorkServices.searchDailyWorks(req.query)
+  return res.status(200).send({
+    targets,
+    dailyWorks,
+  })
 }
