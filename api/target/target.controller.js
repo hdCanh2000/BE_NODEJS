@@ -4,9 +4,11 @@ const uploadFile = require('../../middleware/upload')
 const dailyWorkServices = require('../dailyWork/dailyWork.service')
 
 exports.getTarget = async (req, res) => {
+  const { status, departmentId, userId } = req.query
   try {
     const targets = await targetService.searchTargets(req.query)
-    res.send(targets)
+
+    res.status(200).send(targets)
   } catch (err) {
     console.log(err)
     res.status(500).send(err)
@@ -131,6 +133,7 @@ exports.createTarget = async (req, res) => {
     const target = await targetService.createTarget(data)
     res.status(200).send(target)
   } catch (err) {
+    console.log(err)
     res.status(500).send({
       message: `Internal server error: ${err}`,
     })
