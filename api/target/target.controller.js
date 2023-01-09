@@ -1,12 +1,16 @@
 const ApiError = require('../../utils/ApiError')
 const targetService = require('./target.service')
 const uploadFile = require('../../middleware/upload')
+const { Op } = require('sequelize')
 
 exports.getTarget = async (req, res) => {
+  const { status, departmentId, userId } = req.query
   try {
     const targets = await targetService.searchTargets(req.query)
-    res.send(targets)
+
+    res.status(200).send(targets)
   } catch (err) {
+    console.log(err)
     res.status(500).send(err)
   }
 }
@@ -88,6 +92,24 @@ exports.createOrUpdateTargetLog = async (req, res) => {
   }
 }
 
+exports.deleteTargetLog = async (req, res) => {
+  try {
+    // only allow admin or manager to delete
+    const user = req.user
+    const userRole = user.role
+    if (!['admin', 'manager'].includes(userRole)) {
+      throw new ApiError('You must be logged in with Admin or Manager permission to delete target log.', 403)
+    }
+    const id = req.params.id
+    await targetService.deleteTargetLog(id)
+    res.status(200).send({ message: 'Delete target log successfully' })
+  } catch (err) {
+    res.status(500).send({
+      message: `Internal server error: ${err}`,
+    })
+  }
+}
+
 exports.deleteTarget = async (req, res) => {
   try {
     const id = req.params.id
@@ -111,6 +133,7 @@ exports.createTarget = async (req, res) => {
     const target = await targetService.createTarget(data)
     res.status(200).send(target)
   } catch (err) {
+    console.log(err)
     res.status(500).send({
       message: `Internal server error: ${err}`,
     })

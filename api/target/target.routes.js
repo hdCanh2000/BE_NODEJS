@@ -10,4 +10,5 @@ router.post('/target_logs', auth(['admin', 'user', 'manager']), targetController
 router.delete('/:id', auth(['admin', 'manager']), targetController.deleteTarget)
 router.post('/', auth(['admin']), targetController.createTarget)
 router.put('/:id', auth(['admin', 'manager']), targetController.updateTarget)
+router.delete('/target_logs/:id', auth(['admin', 'manager']), targetController.deleteTargetLog)
 module.exports = router

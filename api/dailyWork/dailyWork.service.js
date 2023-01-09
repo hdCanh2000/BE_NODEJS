@@ -18,14 +18,12 @@ const searchDailyWorks = async query => {
     conditions.push({ userId })
   }
   if (start && end) {
-    conditions.push({ createdAt: { [Op.between]: [start, end] } })
+    conditions.push({ createdAt: { [Op.between]: [`${start} 00:00:01`, `${end} 23:59:59`] } })
   }
   //search by matching name and description
   if (q) {
     conditions.push({
-      [Op.or]: [
-        sequelize.where(sequelize.fn('LOWER', sequelize.col('DailyWork.name')), 'LIKE', `%${q}%`),
-      ],
+      [Op.or]: [sequelize.where(sequelize.fn('LOWER', sequelize.col('DailyWork.name')), 'LIKE', `%${q}%`)],
     })
   }
 
