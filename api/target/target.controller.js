@@ -337,12 +337,22 @@ exports.updateTargetInfo = async (req, res) => {
   }
 }
 
-
 exports.getTargetInfo = async (req, res) => {
   try {
     const targets = await targetService.searchTargetInfos(req.query)
 
     res.status(200).send(targets)
+  } catch (err) {
+    console.log(err)
+    res.status(500).send(err)
+  }
+}
+exports.deleteTargetInfo = async (req, res) => {
+  try {
+    await targetService.deleteTargetInfo(req.params.id)
+    return res.status(200).send({
+      message: 'Delete target info successfully',
+    })
   } catch (err) {
     console.log(err)
     res.status(500).send(err)

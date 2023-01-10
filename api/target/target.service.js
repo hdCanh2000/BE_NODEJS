@@ -116,6 +116,8 @@ const searchTargetInfos = async query => {
   const { start, end, q, userId, departmentId, status } = query
 
   const conditions = []
+  //deletedAt is null
+  conditions.push({ deletedAt: { [Op.is]: null } })
   if (start && end) {
     conditions.push({ createdAt: { [Op.between]: [`${start} 00:00:01`, `${end} 23:59:59`] } })
   }
@@ -184,6 +186,15 @@ const searchTargetInfos = async query => {
 
   return targetInfos
 }
+const deleteTargetInfo = async id => {
+  //update deletedAt time
+  const targetInfo = await model.TargetInfos.findOne({ where: { id } })
+  if (!targetInfo) {
+    throw new Error('Target info not found')
+  }
+  targetInfo.update({ deletedAt: new Date() })
+}
+
 module.exports = {
   searchTargets,
   getTargetById,
@@ -196,4 +207,5 @@ module.exports = {
   createTargetInfo,
   updateTargetInfo,
   searchTargetInfos,
+  deleteTargetInfo,
 }
