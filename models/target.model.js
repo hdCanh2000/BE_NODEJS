@@ -7,15 +7,7 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      Target.belongsToMany(models.users, { through: models.TargetsUsers, onDelete: 'CASCADE' })
-      Target.belongsTo(models.units, { foreignKey: 'unitId', targetKey: 'id' })
-      Target.hasMany(models.TargetLog, {
-        targetKey: 'id',
-        foreignKey: 'targetId',
-        onDelete: 'SET NULL',
-      })
-    }
+    static associate(models) {}
   }
 
   Target.init(
@@ -28,27 +20,8 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: true,
       },
-      deadline: {
-        type: DataTypes.DATE,
-        allowNull: true,
-      },
-      managerId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      quantity: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
       executionPlan: DataTypes.TEXT,
       manDay: DataTypes.DOUBLE,
-      recentManDay: DataTypes.DOUBLE,
-      managerComment: DataTypes.TEXT,
-      status: DataTypes.STRING,
-      unitId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
       deletedAt: {
         type: DataTypes.DATE,
         allowNull: true,

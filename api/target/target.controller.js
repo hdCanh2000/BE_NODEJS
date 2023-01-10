@@ -7,11 +7,9 @@ const moment = require('moment')
 const userServices = require('../user/user.service')
 const departmentService = require('../department/department.service')
 const fetch = require('node-fetch')
-const { readFileSync } = require('fs')
 const fs = require('fs')
 const FormData = require('form-data')
 exports.getTarget = async (req, res) => {
-  const { status, departmentId, userId } = req.query
   try {
     const targets = await targetService.searchTargets(req.query)
 
@@ -47,7 +45,7 @@ exports.createOrUpdateTargetLog = async (req, res) => {
   try {
     const user = req.user
     const userRole = user.role
-    const { note, status, targetId, files, id, reportDate, noticedDate, noticedStatus, quantity } = req.body
+    const { note, status, targetInfoId, files, id, reportDate, noticedDate, noticedStatus, quantity } = req.body
     const isCreatNoticed = noticedDate
     if (isCreatNoticed && !['admin', 'manager'].includes(userRole)) {
       throw new ApiError('You must be logged in with Admin or Manager permission to create notice.', 403)
@@ -56,7 +54,7 @@ exports.createOrUpdateTargetLog = async (req, res) => {
       const targetLog = await targetService.createOrUpdateTargetLog({
         note,
         status,
-        targetId,
+        targetInfoId,
         files,
         id,
         reportDate,
@@ -66,24 +64,24 @@ exports.createOrUpdateTargetLog = async (req, res) => {
       })
       return res.status(200).send(targetLog)
     }
-    if (!note || !status || !targetId || !quantity) {
+    if (!note || !status || !targetInfoId || !quantity) {
       return res.status(400).send({ message: 'Missing required fields' })
     }
     if (!noticedDate && !reportDate) {
       return res.status(400).send({ message: 'Missing required report or notice date' })
     }
-    const target = await targetService.getTargetById(targetId)
-    if (!target) {
-      return res.status(404).send({ message: 'Target not found' })
+    const targetInfo = await targetService.getTargetInfoById(targetInfoId)
+    if (!targetInfo) {
+      return res.status(404).send({ message: 'Target info not found' })
     }
-    if (userRole === 'user' && target.userId !== user.id) {
+    if (userRole === 'user' && targetInfo.userId !== user.id) {
       return res.status(403).send({ message: 'Forbidden' })
     }
 
     const targetLog = await targetService.createOrUpdateTargetLog({
       note,
       status,
-      targetId,
+      targetInfoId,
       files,
       id,
       reportDate,
@@ -132,10 +130,6 @@ exports.deleteTarget = async (req, res) => {
 exports.createTarget = async (req, res) => {
   try {
     const data = req.body
-    const { quantity } = data
-    if (!quantity) {
-      return res.status(400).send({ message: 'Missing required fields' })
-    }
     data.status = 'inProgress'
     const target = await targetService.createTarget(data)
     res.status(200).send(target)
@@ -302,6 +296,56 @@ exports.exportTarget = async (req, res) => {
     res.status(500).send({
       message: `Internal server error: ${err}`,
     })
+  }
+}
+
+exports.createTargetInfo = async (req, res) => {
+  try {
+    const data = req.body
+    const { targetId, quantity } = data
+    if (!targetId || !quantity) {
+      return res.status(400).send({
+        message: 'Missing targetId or quantity',
+      })
+    }
+    const target = await targetService.getTargetById(targetId)
+    if (!target) {
+      return res.status(404).send({
+        message: 'Target not found',
+      })
+    }
+    const targetInfo = await targetService.createTargetInfo(data)
+    return res.status(200).send(targetInfo)
+  } catch (err) {
+    console.log(err)
+    res.status(500).send({
+      message: `Internal server error: ${err}`,
+    })
+  }
+}
+exports.updateTargetInfo = async (req, res) => {
+  const targetInfoId = req.params.id
+  try {
+    const data = req.body
+    const targetInfo = await targetService.updateTargetInfo(targetInfoId, data)
+    return res.status(200).send(targetInfo)
+  } catch (err) {
+    console.log(err)
+    res.status(500).send({
+      message: `Internal server error: ${err}`,
+    })
+  }
+}
+
+
+exports.getTargetInfo = async (req, res) => {
+  try {
+    const targets = await targetService.searchTargetInfos(req.query)
+
+    res.status(200).send(targets)
+  } catch (err) {
+    console.log(err)
+    res.status(500).send(err)
   }
 }
 
