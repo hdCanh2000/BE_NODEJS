@@ -1,5 +1,4 @@
 'use strict'
-const model = require('../../models')
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -69,65 +68,58 @@ module.exports = {
       },
     })
     //mỉgrate data from current target table to TargetInfos
-    console.log('Start migrate data from current target table to TargetInfos table')
-    const targets = await model.Target.findAll({
-      include: [
-        {
-          model: model.TargetLog,
-        },
-        {
-          model: model.positions,
-        },
-        {
-          model: model.users,
-        },
-      ],
-    })
-    console.log('Found:', targets.length, 'targets existed in databse')
+    const [data, medata] = await queryInterface.sequelize.query(`SELECT *
+                                                                 FROM "Targets"`)
     let success = 0
-    for (let i = 0; i < targets.length; i++) {
+    for (const target of data) {
       try {
-        const target = targets[i]
-        //skip deleted targets
-        if (target.deletedAt !== null) {
-          continue
-        }
         const targetInfo = {
           name: target.name,
-          executionPlan: target.executionPlan,
           description: target.description,
+          executionPlan: target.executionPlan,
           quantity: target.quantity,
-          unitId: target.unitId,
-          manDay: target.manDay,
           managerComment: target.managerComment,
           managerManDay: target.recentManDay,
           startDate: target.createdAt,
           deadline: target.deadline,
+          manDay: target.manDay,
           status: target.status,
           targetId: target.id,
+          unitId: target.unitId,
+          createdAt: new Date(),
+          updatedAt: new Date(),
         }
-        if (target.positions.length > 0) {
-          targetInfo.positionId = target.positions[0].id
+        //find position
+        const [positions] = await queryInterface.sequelize.query(`SELECT *
+                                                                  FROM "TargetsPositions"
+                                                                  WHERE "TargetId" = ${target.id}`)
+        if (positions.length > 0) {
+          targetInfo.positionId = positions[0].positionId
         }
-        if (target.users.length > 0) {
-          targetInfo.userId = target.users[0].id
+        // find user
+        const [users] = await queryInterface.sequelize.query(`SELECT *
+                                                              FROM "TargetsUsers"
+                                                              WHERE "TargetId" = ${target.id}`)
+        if (users.length > 0) {
+          targetInfo.userId = users[0].userId
         }
-        const savedTargetInfo = await model.TargetInfos.create(targetInfo)
-        const savedTargetInfoId = savedTargetInfo.id
-        //update targetLog
-        const targetLogs = target.TargetLogs.map(async targetLog => {
-          const inDbLogs = await model.TargetLog.findOne({ where: { id: targetLog.id } })
-          if (inDbLogs) {
-            const updated = await inDbLogs.update({ targetInfoId: savedTargetInfoId })
-          }
-        })
+        //save targetInfo
+        await queryInterface.insert(null, 'TargetInfos', targetInfo)
+        //get created targetInfo
+        const [targetInfos] = await queryInterface.sequelize.query(`SELECT *
+                                                                    FROM "TargetInfos"
+                                                                    WHERE "targetId" = ${target.id}`)
+        const targetInfoId = targetInfos[0].id
+        //update TaregetLogs'targetId to TargetInfo's id
+        await queryInterface.sequelize.query(`UPDATE "TargetLogs"
+                                              SET "targetId" = ${targetInfoId}
+                                              WHERE "targetId" = ${target.id}`)
         success++
       } catch (err) {
-        console.log('Save targetInfo error: ', err)
+        console.log(err)
       }
     }
-    console.log('Migrated successfully:', success, 'targets to TargetInfos table')
-    console.log('Failed: ', targets.length - success, 'targets')
+    console.log(`Migrate ${success} / ${data.length} targets to TargetInfos`)
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('TargetInfos')
