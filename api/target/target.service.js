@@ -3,7 +3,7 @@ const { Op } = require('sequelize')
 const sequelize = require('sequelize')
 const userDTO = ['id', 'email', 'role', 'name', 'sex', 'dateOfBirth', 'dateOfJoin', 'address', 'phone', 'createdAt', 'updatedAt', 'isDelete']
 const searchTargets = async query => {
-  const { start, end, q } = query
+  const { start, end, q, departmentId } = query
 
   //deleted is null
   const conditions = []
@@ -11,6 +11,11 @@ const searchTargets = async query => {
 
   if (start && end) {
     conditions.push({ createdAt: { [Op.between]: [`${start} 00:00:01`, `${end} 23:59:59`] } })
+  }
+  if (departmentId) {
+    const positions = await model.positions.findAll({ where: { department_id: departmentId } })
+    const positionIds = positions.map(position => position.id)
+    conditions.push({ positionId: { [Op.in]: positionIds } })
   }
   //search by matching name and description
   if (q) {
@@ -24,6 +29,11 @@ const searchTargets = async query => {
 
   const targets = await model.Target.findAll({
     where: conditions,
+    include: [
+      {
+        model: model.positions,
+      },
+    ],
     //sort
     order: [['createdAt', 'DESC']],
   })
