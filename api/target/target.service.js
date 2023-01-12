@@ -24,6 +24,11 @@ const searchTargets = async query => {
 
   const targets = await model.Target.findAll({
     where: conditions,
+    include: [
+      {
+        model: model.positions,
+      }
+    ],
     //sort
     order: [['createdAt', 'DESC']],
   })
