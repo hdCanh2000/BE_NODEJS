@@ -34,5 +34,5 @@ router.use('/file', fileReportRoutes);
 router.use('/targets', targetRoutes);
 router.use('/dailyWorks', require('./api/dailyWork/dailyWork.routes'));
 router.use('/reports', reportRoutes);
-
+router.use('/upload', require('./api/upload/upload.routes'));
 module.exports = router;
