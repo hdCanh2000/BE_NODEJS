@@ -84,6 +84,12 @@ const deleteTarget = async id => {
   return targetDeleted
 }
 const createTarget = async data => {
+  //find by name
+  const { name } = data
+  const targetInDb = await model.Target.findOne({ where: { name } })
+  if(targetInDb) {
+    throw new Error('Target already exists')
+  }
   const target = await model.Target.create(data)
   return target
 }
