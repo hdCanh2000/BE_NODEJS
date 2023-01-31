@@ -118,6 +118,12 @@ const deleteDailyWork = async id => {
   return deleted
 }
 const createDailyWork = async data => {
+  const { name } = data
+  //find by name
+  const dailyWork = await model.DailyWork.findOne({ where: { name } })
+  if (dailyWork) {
+    throw new Error('daily work already exists')
+  }
   const res = await model.DailyWork.create(data)
   return res
 }

@@ -159,7 +159,7 @@ exports.exportTarget = async (req, res) => {
     if (!req.query.start || !req.query.end) {
       return res.status(400).send(new ApiError('Missing start and end date', 400))
     }
-    const targets = await targetService.searchTargets(req.query)
+    const targets = await targetService.searchTargetInfos(req.query)
     const dailyWorks = await dailyWorkServices.searchDailyWorks(req.query)
     //get user
     let userName = ''
