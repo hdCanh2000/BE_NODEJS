@@ -7,7 +7,7 @@ const searchReports = async query => {
     return res.filter(item => {
       const peopleString = item.people
       const people = JSON.parse(peopleString)
-      return people.includes(userId)
+      return people.includes(Number(userId))
     })
   }
   return res
@@ -25,5 +25,5 @@ const createReport = async data => {
 }
 module.exports = {
   searchReports,
-  createReport
+  createReport,
 }
