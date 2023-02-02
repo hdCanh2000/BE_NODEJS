@@ -12,6 +12,7 @@ router.put('/me', auth(['admin', 'user', 'manager']), userController.updateInfor
 router.get('/:id', auth(['admin', 'user', 'manager']), userController.getUserDetail);
 router.put('/:id', auth('admin'), userController.updateProfile);
 router.get('/department/:department_id', auth(['admin', 'user', 'manager']), userController.getAllUserByDepartmentId);
+router.get('/departs/:department_id', auth(['admin', 'user', 'manager']), userController.getAllByDepartmentId);
 // router.delete('/', auth('admin'), userController.deleteUser);
 
 module.exports = router;
