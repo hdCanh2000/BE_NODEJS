@@ -1,11 +1,14 @@
 const bcrypt = require('bcrypt');
 const { Op } = require('sequelize');
 const sequelize = require('sequelize');
+const { Sequelize } = require('../../models/index');
 const model = require('../../models/index');
 const ApiError = require('../../utils/ApiError');
 
 exports.findUser = async (id) => {
+    let data;
     const findUser = await model.users.findOne({
+        data,
         where: { id },
         include: [model.departments, model.positions],
     });
@@ -152,3 +155,70 @@ exports.findAll = async ({ userId, query }) => {
     }
     return null;
 };
+
+const sequelize1 = new Sequelize('dwtapp', 'appuser', 'mtDH.2018TH', {
+    host: '159.223.93.249',
+    dialect: 'postgres',
+}) 
+
+exports.getUserByDepartmentId = async (departmentId) => {
+    const result = await sequelize1.query(
+        `WITH RECURSIVE cte (
+            ID,
+            parent_id,
+            department_id,
+            user_id,
+            user_name,
+            department_name,
+            positions_name
+        ) AS (
+            SELECT
+                departments. ID,
+                departments.parent_id,
+                departments. ID AS department_id,
+                users. ID,
+                users."name" AS user_name,
+                departments."name" AS department_name,
+                positions."name" AS position_name
+            FROM
+                departments
+            LEFT JOIN users ON departments. ID = users.department_id
+            LEFT JOIN positions ON positions. ID = users.position_id
+            WHERE
+                departments.parent_id IS NOT NULL
+            OR departments.parent_id IS NULL
+            UNION ALL
+                SELECT
+                    departments. ID,
+                    departments.parent_id,
+                    cte.department_id,
+                    users. ID,
+                    users."name" AS user_name,
+                    departments."name" AS department_name,
+                    positions."name" AS position_name
+                FROM
+                    departments
+                JOIN cte ON departments.parent_id = cte. ID
+                LEFT JOIN users ON departments. ID = users.department_id
+                LEFT JOIN positions ON positions. ID = users.position_id
+        ) SELECT DISTINCT
+            cte.user_id,
+            cte.user_name,
+            cte.department_name,
+            cte.positions_name,
+            users."role"
+        FROM
+            cte
+        JOIN users ON cte.user_id = users. ID
+        WHERE
+            cte.department_id = :departmentId
+        AND user_id IS NOT NULL
+        ORDER BY
+            user_name ASC`,
+        {
+            replacements: { departmentId },
+            type: sequelize1.QueryTypes.SELECT,
+        }
+    )
+    return { result };
+}
