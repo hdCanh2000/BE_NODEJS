@@ -276,6 +276,7 @@ const deleteResourceById = async (id) => {
 const createWorkTrackUser = async (data) => {
   try {
     const createWorkTrackUsers = await model.workTrackUsers.create(data);
+    console.log("data: ",data)
     if (!createWorkTrackUsers) {
       throw new ApiError(404, 'Not Found!');
     }
@@ -287,7 +288,8 @@ const createWorkTrackUser = async (data) => {
 
 const findUser = async (id) => {
   try {
-    const findOneUser = await model.users.findOne({where: {id}});
+    let data ;
+    const findOneUser = await model.users.findOne(data, {where: {id}});
     if (!findOneUser) {
       throw new ApiError(404, 'Not Found!');
     }
