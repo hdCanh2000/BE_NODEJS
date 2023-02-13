@@ -1,22 +1,22 @@
 const ExcelJs = require('exceljs');
-const {isEmpty} = require('lodash');
+const { isEmpty } = require('lodash');
 const worktrackService = require('./worktrack.service');
 const userService = require('../user/user.service');
 const ApiError = require('../../utils/ApiError');
-const {calcCurrentKPIOfWorkTrack, calcProgressTask, calcTotalKPIOfWorkTrack} = require('../../utils/function');
+const { calcCurrentKPIOfWorkTrack, calcProgressTask, calcTotalKPIOfWorkTrack } = require('../../utils/function');
 const kpiNormService = require("../kpiNorm/kpiNorm.service");
 
 const getAll = async (req, res) => {
-  const {startDate, endDate, name} = req.query;
+  const { startDate, endDate, name } = req.query;
   try {
     if (req.user.role === 'admin') {
       const searchQuery = name || ""
       const workTracks = await worktrackService.getWorkTrackByAdmin(startDate, endDate, searchQuery);
-      return res.status(200).json({message: 'Success!', data: isEmpty(workTracks) ? [] : workTracks});
+      return res.status(200).json({ message: 'Success!', data: isEmpty(workTracks) ? [] : workTracks });
     }
     if (req.user.role === 'manager') {
       const workTracks = await worktrackService.getWorkTrackByManager(req.user.id, startDate, endDate);
-      return res.status(200).json({message: 'Success!', data: workTracks});
+      return res.status(200).json({ message: 'Success!', data: workTracks });
     }
     if (req.user.role === 'user') {
       const workTracks = await worktrackService.getAllResourceByUserId(req.user.id, startDate, endDate);
@@ -30,15 +30,15 @@ const getAll = async (req, res) => {
           check.splice(i, 1);
         }
       }
-      return res.status(200).json({message: 'Success!', data: workTracks});
+      return res.status(200).json({ message: 'Success!', data: workTracks });
     }
   } catch (error) {
-    return res.status(404).json({message: 'Error!', error});
+    return res.status(404).json({ message: 'Error!', error });
   }
 };
 
 const exportAllWorkTracks = async (req, res) => {
-  const {startDate, endDate, userId} = req.query;
+  const { startDate, endDate, userId } = req.query;
   /* THIS LIST FOR CHECK THE VALUE OF CELL IN EXCEL CORRESPONDING TO THE DAY OF THE MONTH
   * START AT o is the first day of the month
   * END AT 30 is the last day of the month
@@ -78,7 +78,7 @@ const exportAllWorkTracks = async (req, res) => {
   ]
   try {
     let workTracks = [];
-    let listKPINorm = await kpiNormService.allKpiNorm({userId, query: {page: 1, limit: 9999, text: ''}});
+    let listKPINorm = await kpiNormService.allKpiNorm({ userId, query: { page: 1, limit: 9999, text: '' } });
     //output file name
     let fileName = ""
     if (userId) {
@@ -309,7 +309,7 @@ const exportAllWorkTracks = async (req, res) => {
           statusCell.value = status;
           const filesCell = newRow.getCell('L');
           filesCell.value = fileNames;
-          if(workLog.status === "completed") {
+          if (workLog.status === "completed") {
             newRow.getCell(LIST_DAYS[dayOfTheMonth - 1]).value = 'x';
           }
 
@@ -350,25 +350,25 @@ const exportAllWorkTracks = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({message: 'Internal Error!', error: err.message});
+    return res.status(500).json({ message: 'Internal Error!', error: err.message });
   }
 }
 
 const getById = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   try {
     const worktrack = await worktrackService.getResourceById(id);
     if (!worktrack) {
       throw new ApiError(404, 'Not Found');
     }
-    return res.status(200).json({message: 'Success!', data: worktrack});
+    return res.status(200).json({ message: 'Success!', data: worktrack });
   } catch (error) {
-    return res.status(404).json({message: 'Not Found!', error});
+    return res.status(404).json({ message: 'Not Found!', error });
   }
 };
 
 const getWorkTrackOfMe = async (req, res) => {
-  const {startDate, endDate} = req.query;
+  const { startDate, endDate } = req.query;
   try {
     const getWorkTrackMe = await worktrackService.getAllResourceByUserId(req.user.id, startDate, endDate);
     // const check = getWorkTrackMe.dataValues?.workTracks;
@@ -378,45 +378,45 @@ const getWorkTrackOfMe = async (req, res) => {
     //         check.splice(i, 1);
     //     }
     // }
-    return res.status(200).json({message: 'Success!', data: getWorkTrackMe});
+    return res.status(200).json({ message: 'Success!', data: getWorkTrackMe });
   } catch (error) {
     return error;
   }
 };
 
 const getAllByUserId = async (req, res) => {
-  const {user_id} = req.params;
-  const {startDate, endDate} = req.query;
+  const { user_id } = req.params;
+  const { startDate, endDate } = req.query;
   try {
     const worktracks = await worktrackService.getAllResourceByUserId(user_id, startDate, endDate);
-    return res.status(200).json({message: 'Success!', data: worktracks});
+    return res.status(200).json({ message: 'Success!', data: worktracks });
   } catch (error) {
-    return res.status(404).json({message: 'Not Found!', error: error.message});
+    return res.status(404).json({ message: 'Not Found!', error: error.message });
   }
 };
 
 const getByKpiNornAndUserId = async (req, res) => {
-  const {kpiNorm_id, user_id} = req.params;
+  const { kpiNorm_id, user_id } = req.params;
   try {
     const worktracks = await worktrackService.findWorkTrackByKpiNormAndUser(kpiNorm_id, user_id);
     if (!worktracks) {
       throw new ApiError(404, 'Not Found');
     }
-    return res.status(200).json({message: 'Success!', data: worktracks});
+    return res.status(200).json({ message: 'Success!', data: worktracks });
   } catch (error) {
-    return res.status(404).json({message: 'Not Found!', error: error.message});
+    return res.status(404).json({ message: 'Not Found!', error: error.message });
   }
 };
 
 const addWorkTrack = async (req, res) => {
   try {
-    const {user_id} = req.body;
+    const { user_id } = req.body;
     const findUser = await userService.findUser(user_id);
     const workTrack = await worktrackService.createResource(req.body);
     const userCreate = await worktrackService.findUser(req.user.id);
     if (findUser) {
-      const addUser = await workTrack.addUser(findUser, {through: {isResponsible: true}});
-      const addUserCreate = await workTrack.addUser(userCreate, {through: {isCreated: true}});
+      const addUser = await workTrack.addUser(findUser, { through: { isResponsible: true } });
+      const addUserCreate = await workTrack.addUser(userCreate, { through: { isCreated: true } });
       if (!addUser || !addUserCreate) {
         throw new ApiError(400, 'Bad Request');
       }
@@ -431,69 +431,72 @@ const addWorkTrack = async (req, res) => {
     //         }
     //     });
     // }
-    return res.status(200).json({message: 'Create Success!', data: workTrack});
+    return res.status(200).json({ message: 'Create Success!', data: workTrack });
   } catch (error) {
-    return res.status(404).json({message: 'Error!', error: error.message});
+    return res.status(404).json({ message: 'Error!', error: error.message });
   }
 };
 
 const updateWorkTrackById = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   try {
     const getWorkTrackById = await worktrackService.getResourceById(id);
     await worktrackService.updateResourceById(id, req.body);
-    const findUser = await worktrackService.findUser(req.body.user_id);
+    let findUser;
+    if (req.body.users && Array.isArray(req.body.data.users)) {
+      findUser = req.body.users[0].id;
+    }
     if (findUser) {
       await worktrackService.deleteWorkTrackUser(getWorkTrackById.users[0]?.id, id);
-      await getWorkTrackById.addUser(findUser, {through: {isResponsible: true}});
+      await getWorkTrackById.addUser(findUser, { through: { isResponsible: true } });
     }
     const newWorkTrack = await worktrackService.getResourceById(id);
-    return res.status(200).json({message: 'Update Success!', data: newWorkTrack});
+    return res.status(200).json({ message: 'Update Success!', data: newWorkTrack });
   } catch (error) {
-    return res.status(404).json({message: 'Error!', error: error.message});
+    return res.status(404).json({ message: 'Error!', error: error.message });
   }
 };
 
 const updateStatusWorkTrackById = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   try {
     await worktrackService.updateStatusWorktrack(id, req.body.status);
     const newWorkTrack = await worktrackService.getResourceById(id);
-    return res.status(200).json({message: 'Update Success!', data: newWorkTrack});
+    return res.status(200).json({ message: 'Update Success!', data: newWorkTrack });
   } catch (error) {
-    return res.status(404).json({message: 'Error!', error: error.message});
+    return res.status(404).json({ message: 'Error!', error: error.message });
   }
 };
 
 const deleteById = async (req, res) => {
-  const {id} = req.params;
+  const { id } = req.params;
   try {
     const worktrack = await worktrackService.deleteResourceById(id);
-    return res.status(200).json({message: 'Delete Success!', data: worktrack});
+    return res.status(200).json({ message: 'Delete Success!', data: worktrack });
   } catch (error) {
-    return res.status(404).json({message: 'Error!', error: error.message});
+    return res.status(404).json({ message: 'Error!', error: error.message });
   }
 };
 
 const getWorkTrackByStatus = async (req, res) => {
-  const {status} = req.query;
+  const { status } = req.query;
   try {
     if (req.user.role === 'admin') {
       const workTrack = await worktrackService.getWorkTrackByStatus(status);
-      return res.status(200).json({message: 'Success!', data: workTrack});
+      return res.status(200).json({ message: 'Success!', data: workTrack });
     }
 
     if (req.user.role === 'manager') {
       const workTrack = await worktrackService.getWorkTrackByDepartment(status, req.user.department_id);
-      return res.status(200).json({message: 'Success!', data: workTrack});
+      return res.status(200).json({ message: 'Success!', data: workTrack });
     }
   } catch (error) {
-    return res.status(400).json({message: 'Error!', error: error.message});
+    return res.status(400).json({ message: 'Error!', error: error.message });
   }
 };
 
 const reportWorktrack = async (req, res) => {
-  const {startDate, endDate, workTrackId} = req.query;
+  const { startDate, endDate, workTrackId } = req.query;
   try {
     // if (req.user.role === 'admin') {
     //     const workTrack = await worktrackService.getWorkTrackByStatus(status);
@@ -507,15 +510,15 @@ const reportWorktrack = async (req, res) => {
 
     if (req.user.role === 'user') {
       const workTrack = await worktrackService.reportWorktrackUser(workTrackId, startDate, endDate);
-      return res.status(200).json({message: 'Success!', data: workTrack});
+      return res.status(200).json({ message: 'Success!', data: workTrack });
     }
   } catch (error) {
-    return res.status(400).json({message: 'Error!', error: error.message});
+    return res.status(400).json({ message: 'Error!', error: error.message });
   }
 };
 
 const reportWorktrackAll = async (req, res) => {
-  const {startDate, endDate} = req.query;
+  const { startDate, endDate } = req.query;
   const userId = req.user.id;
   try {
     // if (req.user.role === 'admin') {
@@ -530,16 +533,18 @@ const reportWorktrackAll = async (req, res) => {
 
     if (req.user.role === 'user') {
       const workTrack = await worktrackService.reportAllWorktrackUser(userId, startDate, endDate);
-      return res.status(200).json({message: 'Success!', data: workTrack});
+      return res.status(200).json({ message: 'Success!', data: workTrack });
     }
   } catch (error) {
-    return res.status(400).json({message: 'Error!', error: error.message});
+    return res.status(400).json({ message: 'Error!', error: error.message });
   }
 };
 
 const exportExcel = async (req, res) => {
-  const {startDate, endDate, user_id} = req.query;
+  const { startDate, endDate, user_id } = req.query;
   const userId = user_id || req.user.id;
+
+
   // const dayList = days();
   try {
     const worktracks = await worktrackService.getAllResourceByUserId(userId, startDate, endDate);
@@ -549,13 +554,12 @@ const exportExcel = async (req, res) => {
     // const monthsArray = dayList.map((str) => (
     //     { header: str, key: str, width: 5 }
     // ));
-
     // worksheet thông tin
     worksheet.columns = [
-      {header: 'STT', key: 'stt', width: 5},
-      {header: 'Tên nhiệm vụ', key: 'name', width: 50},
-      {header: 'Số lượng', key: 'quantity', width: 10},
-      {header: 'Tổng điểm KPI', key: 'kpi_value', width: 15},
+      { header: 'STT', key: 'stt', width: 5 },
+      { header: 'Tên nhiệm vụ', key: 'name', width: 50 },
+      { header: 'Số lượng', key: 'quantity', width: 10 },
+      { header: 'Tổng điểm KPI', key: 'kpi_value', width: 15 },
     ];
 
     const workLogs = [];
@@ -580,10 +584,10 @@ const exportExcel = async (req, res) => {
     // worksheet log
 
     worksheetLog.columns = [
-      {header: 'STT', key: 'stt', width: 5},
-      {header: 'Tên nhiệm vụ', key: 'name', width: 50},
-      {header: 'Số lượng', key: 'quantity', width: 10},
-      {header: 'Gi chú', key: 'note', width: 15},
+      { header: 'STT', key: 'stt', width: 5 },
+      { header: 'Tên nhiệm vụ', key: 'name', width: 50 },
+      { header: 'Số lượng', key: 'quantity', width: 10 },
+      { header: 'Gi chú', key: 'note', width: 15 },
     ];
 
     workLogs?.sort((a, b) => a.workTrack_id - b.workTrack_id)?.map((item) => ({
@@ -598,7 +602,7 @@ const exportExcel = async (req, res) => {
     await workbook.xlsx.writeFile('Báo cáo nhiệm vụ tháng.xlsx');
     res.download('Báo cáo nhiệm vụ tháng.xlsx');
   } catch (error) {
-    return res.status(404).json({message: 'Error!', error: error.message});
+    return res.status(404).json({ message: 'Error!', error: error.message });
   }
 };
 

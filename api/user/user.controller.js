@@ -38,7 +38,7 @@ exports.updateInformation = async (req, res) => {
         const updateInfo = await userService.updateUserById(req.user.id, req.body);
         if (updateInfo) {
             const result = await userService.findUser(req.user.id);
-            return res.status(200).json({ msg: 'Update Profile success!!', data: result });
+            return res.status(200).json({ msg: 'Update infomation success!!', data: result });
           }
     } catch (error) {
         return res.status(404).json({ message: 'Error!', error: error.message });
@@ -176,3 +176,13 @@ exports.exportExcel = async (req, res) => {
         return res.status(404).json({ message: 'Error!', error: error.message });
     }
 };
+
+exports.getAllByDepartmentId = async(req, res) => {
+    try {
+        const gettingResult = await userService.getUserByDepartmentId(req.params.department_id);
+        res.status(200).json({message: 'Success', gettingResult});
+    } catch (error) {
+        console.log('err', error);
+        res.status(500).json({message: 'ERROR!', error})
+    }
+}
