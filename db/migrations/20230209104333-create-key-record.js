@@ -21,12 +21,12 @@ module.exports = {
       value: {
         type: Sequelize.TEXT
       },
-      dailyWorkLogId: {
+      targetLogId: {
         type: Sequelize.INTEGER,
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
         references: {
-          model: 'DailyWorkLogs',
+          model: 'TargetLog',
           key: 'id'
         }
       },
