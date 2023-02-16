@@ -1,7 +1,8 @@
 const model = require('../../models/index')
 
-const getAllRecordsByReportId = async (keyReportId) => {
-    const data = await model.keyRecord.findAll({ where: { keyReportId } });
+const getAllRecordsByTargetLogId = async (targetLogId) => {
+    const data = await model.keyRecord.findAll({ where: { targetLogId } });
+    console.log(data);
     return { data };
 }
 
@@ -11,6 +12,6 @@ const addNewRecord = async (data) => {
 }
 
 module.exports = {
-    getAllRecordsByReportId,
+    getAllRecordsByTargetLogId,
     addNewRecord
 }
