@@ -1,9 +1,9 @@
 const model = require('../../models/index');
 const keyRecordServices = require('./keyRecord.service');
 
-const getAllByReportId = async(req, res) => {
+const getAllByTargetLogId = async(req, res) => {
     try {
-        const result = await keyRecordServices.getAllRecordsByReportId(req.params.keyReportId);
+        const result = await keyRecordServices.getAllRecordsByTargetLogId(req.params.targetLogId);
         res.status(200).json({message: 'Successfully', result});
     } catch (error) {
         console.log('err', error);
@@ -22,6 +22,6 @@ const addRecord = async(req, res) => {
 }
 
 module.exports = {
-    getAllByReportId,
+    getAllByTargetLogId,
     addRecord
 }
