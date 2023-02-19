@@ -14,6 +14,7 @@ const taskRoutes = require('./api/task/task.routes');
 const keyRoutes = require('./api/key/key.routes');
 const fileReportRoutes = require('./api/fileReport/fileReport.routes');
 const targetRoutes = require('./api/target/target.routes');
+const reportRoutes = require('./api/report/report.routes');
 const router = express.Router();
 
 router.use('/departments', departmentRoutes);
@@ -32,5 +33,6 @@ router.use('/keys', keyRoutes);
 router.use('/file', fileReportRoutes);
 router.use('/targets', targetRoutes);
 router.use('/dailyWorks', require('./api/dailyWork/dailyWork.routes'));
-
+router.use('/reports', reportRoutes);
+router.use('/upload', require('./api/upload/upload.routes'));
 module.exports = router;

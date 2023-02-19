@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      TargetLog.belongsTo(models.Target, {foreignKey: 'targetId', targetKey: 'id'});
+      TargetLog.belongsTo(models.TargetInfos, {foreignKey: 'targetInfoId', targetKey: 'id'});
     }
   }
 
@@ -23,10 +23,11 @@ module.exports = (sequelize, DataTypes) => {
     noticedStatus: DataTypes.STRING,
     noticedDate: DataTypes.DATEONLY,
     reportDate: DataTypes.DATEONLY,
-    targetId: {
+    targetInfoId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    }
+    },
+    deletedAt: DataTypes.DATE,
   }, {
     sequelize,
     modelName: 'TargetLog',

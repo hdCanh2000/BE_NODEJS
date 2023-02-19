@@ -9,14 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Target.belongsTo(models.users, { foreignKey: 'userId', targetKey: 'id' })
-      Target.belongsTo(models.units, { foreignKey: 'unitId', targetKey: 'id' })
       Target.belongsTo(models.positions, { foreignKey: 'positionId', targetKey: 'id' })
-      Target.hasMany(models.TargetLog, {
-        targetKey: 'id',
-        foreignKey: 'targetId',
-        onDelete: 'SET NULL',
-      })
     }
   }
 
@@ -30,39 +23,13 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: true,
       },
-      deadline: {
-        type: DataTypes.DATE,
-        allowNull: true,
-      },
-      managerId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      quantity: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
       executionPlan: DataTypes.TEXT,
       manDay: DataTypes.DOUBLE,
-      recentManDay: DataTypes.DOUBLE,
-      managerComment: DataTypes.TEXT,
-      status: DataTypes.STRING,
-      unitId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      positionId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
-      userId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-      },
       deletedAt: {
         type: DataTypes.DATE,
         allowNull: true,
       },
+      positionId: DataTypes.INTEGER,
     },
     {
       sequelize,
