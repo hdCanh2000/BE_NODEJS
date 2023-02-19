@@ -7,7 +7,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       keyReportId: {
         type: Sequelize.INTEGER,
@@ -15,32 +15,32 @@ module.exports = {
         onUpdate: 'CASCADE',
         references: {
           model: 'keyReports',
-          key: 'id'
-        }
+          key: 'id',
+        },
       },
       value: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
       },
       targetLogId: {
         type: Sequelize.INTEGER,
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
         references: {
-          model: 'TargetLog',
-          key: 'id'
-        }
+          model: 'TargetLogs',
+          key: 'id',
+        },
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.dropTable('keyRecords');
-  }
+  },
 };
