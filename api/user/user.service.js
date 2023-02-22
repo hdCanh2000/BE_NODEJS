@@ -1,11 +1,14 @@
 const bcrypt = require('bcrypt');
 const { Op } = require('sequelize');
 const sequelize = require('sequelize');
+const { Sequelize } = require('../../models/index');
 const model = require('../../models/index');
 const ApiError = require('../../utils/ApiError');
 
 exports.findUser = async (id) => {
+    let data;
     const findUser = await model.users.findOne({
+        data,
         where: { id },
         include: [model.departments, model.positions],
     });
@@ -96,10 +99,10 @@ exports.findAll = async ({ userId, query }) => {
                     model: model.positions,
                 },
                 {
-                    model: model.workTracks,
+                    model: model.Target,
                     include: [
                         {
-                            model: model.workTrackLogs,
+                            model: model.TargetLog
                         },
                     ],
                 },
@@ -131,10 +134,10 @@ exports.findAll = async ({ userId, query }) => {
                     model: model.positions,
                 },
                 {
-                    model: model.workTracks,
+                    model: model.Target,
                     include: [
                         {
-                            model: model.workTrackLogs,
+                            model: model.TargetLog,
                         },
                     ],
                 },
@@ -152,3 +155,4 @@ exports.findAll = async ({ userId, query }) => {
     }
     return null;
 };
+
