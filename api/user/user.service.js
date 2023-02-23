@@ -95,14 +95,14 @@ exports.findAll = async ({ userId, query }) => {
                 {
                     model: model.positions,
                 },
-                {
-                    model: model.Target,
-                    include: [
-                        {
-                            model: model.TargetLog
-                        },
-                    ],
-                },
+                // {
+                //     model: model.Target,
+                //     include: [
+                //         {
+                //             model: model.TargetLog
+                //         },
+                //     ],
+                // },
             ],
             where: {
                 isDelete: false,
@@ -130,14 +130,14 @@ exports.findAll = async ({ userId, query }) => {
                 {
                     model: model.positions,
                 },
-                {
-                    model: model.Target,
-                    include: [
-                        {
-                            model: model.TargetLog,
-                        },
-                    ],
-                },
+                // {
+                //     model: model.Target,
+                //     include: [
+                //         {
+                //             model: model.TargetLog,
+                //         },
+                //     ],
+                // },
             ],
             where: {
                 department_id: getUserById.department_id,
