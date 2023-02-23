@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
   keyRecord.init({
     keyReportId: DataTypes.INTEGER,
     value: DataTypes.INTEGER,
-    targetLogId: DataTypes.INTEGER
+    targetLogId: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'keyRecord',
