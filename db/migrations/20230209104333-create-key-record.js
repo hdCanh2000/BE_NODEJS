@@ -19,7 +19,7 @@ module.exports = {
         },
       },
       value: {
-        type: Sequelize.TEXT,
+        type: Sequelize.INTEGER,
       },
       targetLogId: {
         type: Sequelize.INTEGER,
