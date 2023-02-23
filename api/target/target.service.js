@@ -197,6 +197,9 @@ const searchTargetInfos = async query => {
         include: [
           {
             model: model.keyRecord,
+            include: [
+              {model: model.keyReport}
+            ]
           },
         ],
       },
