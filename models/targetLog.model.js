@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       TargetLog.belongsTo(models.TargetInfos, {foreignKey: 'targetInfoId', targetKey: 'id'});
-      TargetLog.hasMany(models.keyRecord, {foreignKey: 'targetLogId', targetKey: 'id', onDelete: 'SET NULL', onUpdate: 'CASCADE'});
+      TargetLog.hasMany(models.keyReport, {foreignKey: 'targetLogId', targetKey: 'id', onDelete: 'SET NULL', onUpdate: 'CASCADE'});
     }
   }
 

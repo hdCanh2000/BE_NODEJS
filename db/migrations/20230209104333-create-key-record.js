@@ -21,15 +21,6 @@ module.exports = {
       value: {
         type: Sequelize.INTEGER,
       },
-      targetLogId: {
-        type: Sequelize.INTEGER,
-        onDelete: 'SET NULL',
-        onUpdate: 'CASCADE',
-        references: {
-          model: 'TargetLogs',
-          key: 'id',
-        },
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

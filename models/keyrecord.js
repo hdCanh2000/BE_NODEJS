@@ -15,16 +15,12 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'keyReportId',
         targetKey: 'id'
       });
-      keyRecord.belongsTo(models.TargetLog, {
-        foreignKey: 'targetLogId',
-        targetKey: 'id'
-      });
     }
   }
   keyRecord.init({
     keyReportId: DataTypes.INTEGER,
     value: DataTypes.INTEGER,
-    targetLogId: DataTypes.INTEGER,
+
   }, {
     sequelize,
     modelName: 'keyRecord',
