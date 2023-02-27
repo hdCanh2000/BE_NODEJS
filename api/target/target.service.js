@@ -194,6 +194,14 @@ const searchTargetInfos = async query => {
       },
       {
         model: model.TargetLog,
+        include: [
+          {
+            model: model.keyReport,
+            include: [
+              {model: model.keyRecord}
+            ]
+          },
+        ],
       },
     ],
     //sort

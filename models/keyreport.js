@@ -15,8 +15,8 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'departmentId',
         targetKey: 'id'
       });
-      keyReport.belongsTo(models.DailyWork, {
-        foreignKey: 'dailyWorkId',
+      keyReport.belongsTo(models.TargetLog, {
+        foreignKey: 'targetLogId',
         targetKey: 'id'
       });
       keyReport.hasMany(models.keyRecord, {
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
   keyReport.init({
     name: DataTypes.STRING,
     departmentId: DataTypes.INTEGER,
-    dailyWorkId: DataTypes.INTEGER
+    targetLogId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'keyReport',

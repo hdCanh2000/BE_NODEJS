@@ -1,10 +1,10 @@
-const {Op} = require('sequelize');
+const { Op } = require('sequelize');
+const sequelize = require('sequelize');
 const ApiError = require('../../utils/ApiError');
 const model = require('../../models/index');
-const sequelize = require("sequelize");
 
 const getAllResource = async (id) => {
-  const getUserById = await model.users.findOne({where: {id}});
+  const getUserById = await model.users.findOne({ where: { id } });
   try {
     if (getUserById.role === 'admin') {
       const data = await model.workTracks.findAll({
@@ -53,7 +53,7 @@ const getAllResource = async (id) => {
   }
 };
 
-const getWorkTrackByAdmin = async (start, end, searchValue = "") => {
+const getWorkTrackByAdmin = async (start, end, searchValue = '') => {
   const conditions = [];
   const findConditions = [{
     [Op.or]: [
@@ -220,15 +220,15 @@ const findWorkTrackByKpiNormAndUser = async (kpiNorm_id, user_id) => {
     },
     include: {
       model: model.workTracks,
-      where: {kpiNorm_id},
-      include: {model: model.kpiNorms},
+      where: { kpiNorm_id },
+      include: { model: model.kpiNorms },
     },
   });
   return result;
 };
 
 const updateParentId = async (id, parentId) => {
-  const result = model.workTracks.update({parent_id: parentId}, {
+  const result = model.workTracks.update({ parent_id: parentId }, {
     where: {
       id,
     },
@@ -251,7 +251,7 @@ const updateResourceById = async (id, data) => {
 };
 
 const updateStatusWorktrack = async (id, status) => {
-  const result = await model.workTracks.update({status}, {
+  const result = await model.workTracks.update({ status }, {
     where: {
       id,
     },
@@ -276,7 +276,6 @@ const deleteResourceById = async (id) => {
 const createWorkTrackUser = async (data) => {
   try {
     const createWorkTrackUsers = await model.workTrackUsers.create(data);
-    console.log("data: ",data)
     if (!createWorkTrackUsers) {
       throw new ApiError(404, 'Not Found!');
     }
@@ -288,8 +287,8 @@ const createWorkTrackUser = async (data) => {
 
 const findUser = async (id) => {
   try {
-    let data ;
-    const findOneUser = await model.users.findOne(data, {where: {id}});
+    let data;
+    const findOneUser = await model.users.findOne(data, { where: { id } });
     if (!findOneUser) {
       throw new ApiError(404, 'Not Found!');
     }
@@ -301,7 +300,7 @@ const findUser = async (id) => {
 
 const deleteWorkTrackUser = async (user_id, workTrack_id) => {
   try {
-    const deleteWorkTrack = await model.workTrackUsers.destroy({where: {userId: user_id, workTrackId: workTrack_id}});
+    const deleteWorkTrack = await model.workTrackUsers.destroy({ where: { userId: user_id, workTrackId: workTrack_id } });
     return deleteWorkTrack;
   } catch (error) {
     return error;
@@ -311,7 +310,7 @@ const deleteWorkTrackUser = async (user_id, workTrack_id) => {
 const getWorkTrackByStatus = async (status) => {
   try {
     const workTrackByStatus = await model.workTracks.findAll({
-      where: {status},
+      where: { status },
       order: [
         ['id', 'ASC'],
       ],
@@ -341,7 +340,7 @@ const getWorkTrackByStatus = async (status) => {
 const getWorkTrackByDepartment = async (status, department_id) => {
   try {
     const workTrackByStatus = await model.workTracks.findAll({
-      where: {status},
+      where: { status },
       order: [
         ['id', 'ASC'],
       ],
@@ -351,7 +350,7 @@ const getWorkTrackByDepartment = async (status, department_id) => {
         },
         {
           model: model.users,
-          where: {department_id},
+          where: { department_id },
           include: {
             model: model.departments,
           },
@@ -394,7 +393,7 @@ const reportWorktrackUser = async (workTrackId, start, end) => {
         id: workTrackId,
       },
     });
-    if (worktrack) conditions.push({workTrack_id: workTrackId});
+    if (worktrack) conditions.push({ workTrack_id: workTrackId });
     const workTrackLogByWorktrackIds = await model.workTrackLogs.findAll({
       where: {
         [Op.and]: conditions,
@@ -407,7 +406,7 @@ const reportWorktrackUser = async (workTrackId, start, end) => {
       quantity: worktrack.quantity,
       total: totalQuantity,
       progress: percentCompleted,
-      workTrackLogs: workTrackLogByWorktrackIds
+      workTrackLogs: workTrackLogByWorktrackIds,
     };
   } catch (error) {
     return error;
@@ -443,7 +442,7 @@ const reportAllWorktrackUser = async (userId, startDate, endDate) => {
         return error;
       }
     });
-    return {quantity: 0, workTrackLogs: result};
+    return { quantity: 0, workTrackLogs: result };
   } catch (error) {
     return error;
   }

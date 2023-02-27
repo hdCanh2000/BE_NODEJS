@@ -1,7 +1,8 @@
 'use strict';
 const {
-  Model
+  Model,
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class TargetLog extends Model {
     /**
@@ -12,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       TargetLog.belongsTo(models.TargetInfos, {foreignKey: 'targetInfoId', targetKey: 'id'});
+      TargetLog.hasMany(models.keyReport, {foreignKey: 'targetLogId', targetKey: 'id', onDelete: 'SET NULL', onUpdate: 'CASCADE'});
     }
   }
 
